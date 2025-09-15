@@ -30,7 +30,7 @@ const Header = () => {
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/c6b13639-cb72-44be-adb5-2237ba2029c6.png" 
+                  src="/src/assets/logo-aje.svg" 
                   alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
                   className="w-12 h-12 object-contain"
                 />
