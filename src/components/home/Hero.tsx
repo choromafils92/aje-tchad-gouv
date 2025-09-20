@@ -10,11 +10,11 @@ const Hero = () => {
           <div className="space-y-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-16 h-16 flex items-center justify-center">
+                <div className="w-20 h-20 flex items-center justify-center">
                   <img 
                     src="/src/assets/logo-aje.svg" 
                     alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
-                    className="w-16 h-16 object-contain"
+                    className="w-20 h-20 object-contain"
                   />
                 </div>
                 <div>

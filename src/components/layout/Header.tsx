@@ -28,11 +28,11 @@ const Header = () => {
           {/* Logo and Title */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 flex items-center justify-center">
+              <div className="w-16 h-16 flex items-center justify-center">
                 <img 
                   src="/src/assets/logo-aje.svg" 
                   alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
-                  className="w-12 h-12 object-contain"
+                  className="w-16 h-16 object-contain"
                 />
               </div>
               <div className="flex flex-col">

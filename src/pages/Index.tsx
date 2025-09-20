@@ -4,6 +4,7 @@ import Hero from "@/components/home/Hero";
 import MissionCards from "@/components/home/MissionCards";
 import LatestNews from "@/components/home/LatestNews";
 import QuickAccess from "@/components/home/QuickAccess";
+import DirectorMessage from "@/components/home/DirectorMessage";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
+        <DirectorMessage />
         <MissionCards />
         <QuickAccess />
         <LatestNews />
