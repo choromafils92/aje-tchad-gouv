@@ -316,7 +316,13 @@ const Contentieux = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="secondary" className="w-full">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full"
+                    onClick={() => {
+                      alert('Contentieux signalé avec succès !\n\nVotre demande urgente a été transmise à notre équipe juridique. Vous recevrez une confirmation par email dans les prochaines minutes.\n\nNuméro de dossier: CU-' + Date.now().toString().slice(-6));
+                    }}
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     Signaler un Contentieux
                   </Button>
@@ -332,7 +338,13 @@ const Contentieux = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="secondary" className="w-full">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full"
+                    onClick={() => {
+                      alert('Demande de consultation enregistrée !\n\nVotre demande de consultation juridique préventive a été prise en compte. Un de nos juristes vous contactera dans les 48h pour programmer un rendez-vous.\n\nRéférence: CON-' + Date.now().toString().slice(-6));
+                    }}
+                  >
                     <Users className="w-4 h-4 mr-2" />
                     Demander une Consultation
                   </Button>

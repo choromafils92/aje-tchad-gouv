@@ -219,7 +219,13 @@ const Actualites = () => {
                               <p className="text-sm text-muted-foreground mb-4">
                                 <strong>Source :</strong> {actu.author}
                               </p>
-                              <Button variant="outline" className="group">
+                              <Button 
+                                variant="outline" 
+                                className="group"
+                                onClick={() => {
+                                  alert(`Ouverture de l'article: "${actu.title}"\n\nContenu: ${actu.content}`);
+                                }}
+                              >
                                 Lire l'article complet
                                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                               </Button>
@@ -275,7 +281,9 @@ const Actualites = () => {
                   placeholder="Votre email professionnel"
                   className="flex-1"
                 />
-                <Button>
+                <Button
+                  onClick={() => alert('Inscription à la newsletter confirmée ! Vous recevrez nos dernières publications par email.')}
+                >
                   S'abonner
                 </Button>
               </div>

@@ -57,16 +57,23 @@ const Hero = () => {
             <div className="relative">
               <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
                 <div className="text-center space-y-4">
-                  <div className="w-24 h-24 bg-primary-foreground/20 rounded-full flex items-center justify-center mx-auto">
-                    <svg className="w-12 h-12 text-primary-foreground" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z"/>
-                    </svg>
+                  <div className="flex items-center justify-center space-x-4 mb-6">
+                    <img 
+                      src="/src/assets/drapeau-tchad.png" 
+                      alt="Drapeau du Tchad"
+                      className="w-16 h-12 object-cover rounded shadow-md"
+                    />
+                    <img 
+                      src="/src/assets/armoirie-tchad.png" 
+                      alt="Armoirie du Tchad"
+                      className="w-16 h-16 object-contain"
+                    />
                   </div>
                   <h3 className="text-xl font-semibold opacity-90">
                     République du Tchad
                   </h3>
-                  <p className="text-sm opacity-75">
-                    Justice • Travail • Progrès
+                  <p className="text-sm opacity-75 font-medium">
+                    Unité • Travail • Progrès
                   </p>
                 </div>
               </div>

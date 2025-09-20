@@ -8,6 +8,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const navigationItems = [
+    { href: "/", label: "Accueil" },
     { href: "/missions", label: "Missions & Rôle" },
     { href: "/textes", label: "Textes & Références" },
     { href: "/actualites", label: "Actualités" },
@@ -28,13 +29,13 @@ const Header = () => {
           {/* Logo and Title */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="w-16 h-16 flex items-center justify-center">
-                <img 
-                  src="/src/assets/logo-aje.svg" 
-                  alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
-                  className="w-16 h-16 object-contain"
-                />
-              </div>
+        <div className="lg:w-16 h-16 flex items-center justify-center">
+          <img 
+            src="/src/assets/logo-aje.svg" 
+            alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
+            className="w-16 h-16 object-contain"
+          />
+        </div>
               <div className="flex flex-col">
                 <h1 className="text-lg font-bold text-primary">
                   Agence Judiciaire de l'État
@@ -93,15 +94,30 @@ const Header = () => {
 
             {/* Language Switcher */}
             <div className="hidden md:flex items-center space-x-1 text-sm">
-              <Button variant="ghost" size="sm" className="text-accent font-medium">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-accent font-medium"
+                onClick={() => alert('Langue française sélectionnée')}
+              >
                 FR
               </Button>
               <span className="text-muted-foreground">|</span>
-              <Button variant="ghost" size="sm" className="text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-muted-foreground hover:text-accent"
+                onClick={() => alert('Fonctionnalité de traduction arabe en cours de développement')}
+              >
                 AR
               </Button>
               <span className="text-muted-foreground">|</span>
-              <Button variant="ghost" size="sm" className="text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-muted-foreground hover:text-accent"
+                onClick={() => alert('English translation feature coming soon')}
+              >
                 EN
               </Button>
             </div>
@@ -137,13 +153,28 @@ const Header = () => {
                   </nav>
 
                   <div className="flex items-center justify-center space-x-4 pt-4 border-t">
-                    <Button variant="ghost" size="sm" className="text-accent font-medium">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-accent font-medium"
+                      onClick={() => alert('Langue française sélectionnée')}
+                    >
                       FR
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-muted-foreground hover:text-accent"
+                      onClick={() => alert('Fonctionnalité de traduction arabe en cours de développement')}
+                    >
                       AR
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-muted-foreground hover:text-accent"
+                      onClick={() => alert('English translation feature coming soon')}
+                    >
                       EN
                     </Button>
                   </div>

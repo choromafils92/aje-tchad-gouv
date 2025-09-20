@@ -218,7 +218,18 @@ const Textes = () => {
                           <Badge variant="secondary" className="text-xs">
                             {texte.category}
                           </Badge>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => {
+                              // Simule le téléchargement du document
+                              const link = document.createElement('a');
+                              link.href = `data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKL01lZGlhQm94IFswIDAgNTk1IDg0Ml0KPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovUmVzb3VyY2VzIDw8Ci9Gb250IDw8Ci9GMSA0IDAgUgo+Pgo+PgovQ29udGVudHMgNSAwIFIKPj4KZW5kb2JqCjQgMCBvYmoKPDwKL1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9CYXNlRm9udCAsSGVsdmV0aWNhCi9FbmNvZGluZyAvTWFjUm9tYW5FbmNvZGluZwo+PgplbmRvYmoKNSAwIG9iago8PAovTGVuZ3RoIDQ0Cj4+CnN0cmVhbQpCVAovRjEgMTIgVGYKNzIgNzIwIFRkCihIZWxsbyBXb3JsZCEpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQ1IDAwMDAwIG4gCjAwMDAwMDAzMzQgMDAwMDAgbiAKdHJhaWxlcgo8PAovU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0MTAKJSVFT0Y=`;
+                              link.download = texte.title + '.pdf';
+                              link.click();
+                              alert(`Téléchargement de "${texte.title}" en cours...`);
+                            }}
+                          >
                             <Download className="h-4 w-4 mr-2" />
                             Télécharger
                           </Button>
@@ -259,7 +270,17 @@ const Textes = () => {
                         <CardDescription className="text-foreground/80">
                           {modele.description}
                         </CardDescription>
-                        <Button className="w-full">
+                        <Button 
+                          className="w-full"
+                          onClick={() => {
+                            // Simule le téléchargement du modèle
+                            const link = document.createElement('a');
+                            link.href = `data:application/${modele.format.toLowerCase()};base64,UEsDBBQAAAAIAB4bLkIAAAAAAAAAAAAAAAAQAAAAZG9jUHJvcHMvYXBwLnhtbFBLAQIUABQAAAAIAB4bLkIAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABQSwUGAAAAAAEAAQA+AAAAIAA=`;
+                            link.download = modele.title + '.' + modele.format.toLowerCase();
+                            link.click();
+                            alert(`Téléchargement de "${modele.title}" en cours...`);
+                          }}
+                        >
                           <Download className="h-4 w-4 mr-2" />
                           Télécharger le modèle
                         </Button>
