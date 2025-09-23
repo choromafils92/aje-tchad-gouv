@@ -56,21 +56,6 @@ const DirectorMessage = () => {
                     </p>
                   </div>
 
-                  <div className="clear-both pt-8 mt-8 border-t">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
-                        <img 
-                          src="/src/assets/logo-aje.svg" 
-                          alt="Logo AJE"
-                          className="w-10 h-10 object-contain"
-                        />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-primary">Agence Judiciaire de l'État</p>
-                        <p className="text-sm text-muted-foreground">République du Tchad</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </CardContent>

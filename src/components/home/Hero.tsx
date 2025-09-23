@@ -9,22 +9,13 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-20 h-20 flex items-center justify-center">
-                  <img 
-                    src="/src/assets/logo-aje.svg" 
-                    alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
-                    className="w-20 h-20 object-contain"
-                  />
-                </div>
-                <div>
-                  <h1 className="text-3xl lg:text-5xl font-bold leading-tight">
-                    Agence Judiciaire de l'État
-                  </h1>
-                  <p className="text-lg opacity-90 uppercase tracking-wide mt-2">
-                    Justice – Équité – Honneur
-                  </p>
-                </div>
+              <div>
+                <h1 className="text-2xl lg:text-3xl font-bold leading-tight">
+                  Agence Judiciaire de l'État
+                </h1>
+                <p className="text-lg opacity-90 uppercase tracking-wide mt-2">
+                  Justice – Équité – Honneur
+                </p>
               </div>
             </div>
             
@@ -59,7 +50,7 @@ const Hero = () => {
                 <div className="text-center space-y-4">
                   <div className="flex items-center justify-center space-x-4 mb-6">
                     <img 
-                      src="/src/assets/drapeau-tchad.png" 
+                      src="/src/assets/drapeau-tchad.jpg" 
                       alt="Drapeau du Tchad"
                       className="w-16 h-12 object-cover rounded shadow-md"
                     />
