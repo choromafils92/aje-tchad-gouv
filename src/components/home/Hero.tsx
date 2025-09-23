@@ -50,7 +50,7 @@ const Hero = () => {
                 <div className="text-center space-y-4">
                   <div className="flex items-center justify-center space-x-4 mb-6">
                     <img 
-                      src="/src/assets/drapeau-tchad.jpg" 
+                      src="/src/assets/drapeau-tchad.png" 
                       alt="Drapeau du Tchad"
                       className="w-16 h-12 object-cover rounded shadow-md"
                     />

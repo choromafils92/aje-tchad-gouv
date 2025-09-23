@@ -9,12 +9,6 @@ const DirectorMessage = () => {
           <Card className="overflow-hidden">
             <CardContent className="p-8 lg:p-12">
               <div className="space-y-8">
-                {/* En-tête */}
-                <div className="text-center lg:text-left">
-                  <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-2">
-                    Mot du Directeur
-                  </h2>
-                </div>
 
                 {/* Contenu principal avec photo flottante */}
                 <div className="relative">
@@ -31,8 +25,8 @@ const DirectorMessage = () => {
                       <h3 className="text-xl font-semibold text-primary">
                         MAHAMAT TADJADINE
                       </h3>
-                      <p className="text-sm text-muted-foreground uppercase tracking-wide mt-1">
-                        Directeur Général de l'AJE
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Directeur de l'Agence judiciaire de l'Etat
                       </p>
                     </div>
                   </div>
