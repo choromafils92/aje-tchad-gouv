@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
+import drapeauTchad from "@/assets/drapeau-tchad.png";
+import armoirieTchad from "@/assets/armoirie-tchad.png";
 
 const Hero = () => {
   return (
@@ -50,12 +52,12 @@ const Hero = () => {
                 <div className="text-center space-y-4">
                   <div className="flex items-center justify-center space-x-4 mb-6">
                     <img 
-                      src="/src/assets/drapeau-tchad.png" 
+                      src={drapeauTchad} 
                       alt="Drapeau du Tchad"
                       className="w-16 h-12 object-cover rounded shadow-md"
                     />
                     <img 
-                      src="/src/assets/armoirie-tchad.png" 
+                      src={armoirieTchad} 
                       alt="Armoirie du Tchad"
                       className="w-16 h-16 object-contain"
                     />
