@@ -22,6 +22,9 @@ const DirectorMessage = () => {
                       />
                     </div>
                     <div className="mt-4 text-center">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Agent Judiciaire de l'État
+                      </p>
                       <h3 className="text-xl font-semibold text-primary">
                         MAHAMAT TADJADINE
                       </h3>
