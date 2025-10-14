@@ -42,7 +42,7 @@ const Header = () => {
                   Agence Judiciaire de l'État
                 </h1>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                  Justice – Équité – Honneur
+                  Conseiller-Defendre-Proteger
                 </p>
               </div>
             </div>

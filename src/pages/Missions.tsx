@@ -73,7 +73,7 @@ const Missions = () => {
               </p>
               <div className="flex items-center justify-center space-x-2 text-lg">
                 <Shield className="h-6 w-6" />
-                <span>Justice – Équité – Honneur</span>
+                <span>Conseiller-Defendre-Proteger</span>
               </div>
             </div>
           </div>

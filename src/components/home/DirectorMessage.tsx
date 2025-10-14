@@ -42,7 +42,7 @@ const DirectorMessage = () => {
                     </p>
                     
                     <p>
-                      "Notre équipe de juristes expérimentés met son expertise au service de la protection du patrimoine public et de la défense de la souveraineté nationale. Nous restons déterminés à servir notre pays avec <strong>Justice, Équité et Honneur</strong>."
+                      "Notre équipe de juristes expérimentés met son expertise au service de la protection du patrimoine public et de la défense de la souveraineté nationale. Nous restons déterminés à servir notre pays avec <strong>Conseiller-Defendre-Proteger</strong>."
                     </p>
                     
                     <p className="italic">

@@ -16,7 +16,7 @@ const Hero = () => {
                   Agence Judiciaire de l'État
                 </h1>
                 <p className="text-lg opacity-90 uppercase tracking-wide mt-2">
-                  Justice – Équité – Honneur
+                  Conseiller-Defendre-Proteger
                 </p>
               </div>
             </div>
