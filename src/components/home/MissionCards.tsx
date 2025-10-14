@@ -6,22 +6,22 @@ const MissionCards = () => {
   const missions = [
     {
       icon: Scale,
-      title: "Représentation juridique",
+      title: "Représentation juridique et judiciaire",
       description: "Plaider pour l'État, en demande comme en défense, devant juridictions nationales, internationales et arbitrales.",
       link: "/missions#representation",
       color: "text-accent"
     },
     {
       icon: Users,
-      title: "Conseil aux administrations",
+      title: "Conseil et assistance juridique",
       description: "Avis juridiques, prévention des litiges, sécurisation des contrats et conventions publiques.",
       link: "/missions#conseil",
       color: "text-primary"
     },
     {
       icon: FileText,
-      title: "Gestion du contentieux",
-      description: "Centralisation, suivi et exécution des décisions ; protection des intérêts financiers et patrimoniaux de l'État.",
+      title: "Recouvrement de créance contentieuse",
+      description: "Assurer le recouvrement effectif des créances de l'État par des actions contentieuses et suivi rigoureux des procédures d'exécution.",
       link: "/missions#contentieux",
       color: "text-accent"
     }
