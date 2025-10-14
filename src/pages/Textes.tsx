@@ -17,7 +17,7 @@ const Textes = () => {
       title: "Décret n° 1205/PR/PM/MJ/2019 portant organisation de l'AJE",
       type: "Décret",
       date: "2019-03-20",
-      description: "Organisation interne et attributions spécifiques des services de l'AJE",
+      description: "Creation, organisation interne et attributions spécifiques des services de l'AJE",
       downloadUrl: "#",
       category: "Organisation"
     }
