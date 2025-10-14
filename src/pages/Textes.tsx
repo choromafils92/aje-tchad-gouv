@@ -157,11 +157,11 @@ const Textes = () => {
                     Textes fondamentaux
                   </h2>
                   <p className="text-lg text-muted-foreground">
-                    Lois, décrets, codes et conventions régissant l'action de l'AJE
+                    Décrets, codes et conventions régissant l'action de l'AJE
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="max-w-2xl mx-auto">
                   {filteredTextes.map((texte, index) => (
                     <Card key={index} className="hover:shadow-lg transition-shadow">
                       <CardHeader className="pb-4">
