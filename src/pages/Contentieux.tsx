@@ -81,6 +81,28 @@ const Contentieux = () => {
         "Commerce international"
       ],
       statistiques: "10% des dossiers"
+    },
+    {
+      categorie: "Contentieux Pénal",
+      description: "Défense des intérêts de l'État dans les affaires pénales",
+      affaires: [
+        "Constitution de partie civile",
+        "Infractions contre les biens publics",
+        "Blanchiment et fraude fiscale",
+        "Crimes économiques et financiers"
+      ],
+      statistiques: "5% des dossiers"
+    },
+    {
+      categorie: "Contentieux Social",
+      description: "Litiges relatifs au droit du travail et de la sécurité sociale",
+      affaires: [
+        "Agents de l'État et fonctionnaires",
+        "Accidents de service",
+        "Sécurité sociale et pensions",
+        "Conflits collectifs du travail"
+      ],
+      statistiques: "8% des dossiers"
     }
   ];
 
@@ -199,7 +221,7 @@ const Contentieux = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Domaines d'Intervention</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
               {typesContentieux.map((type, index) => (
                 <Card key={index} className="h-full">
                   <CardHeader>
