@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logoAje from "@/assets/logo-aje.svg";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -31,7 +32,7 @@ const Header = () => {
             <div className="flex items-center space-x-3">
         <div className="lg:w-16 h-16 flex items-center justify-center">
           <img 
-            src="/src/assets/logo-aje.svg" 
+            src={logoAje} 
             alt="Logo AJE - Agence Judiciaire de l'État du Tchad"
             className="w-16 h-16 object-contain"
           />
