@@ -13,22 +13,22 @@ const DirectorMessage = () => {
                 {/* Contenu principal avec photo flottante */}
                 <div className="relative">
                   {/* Photo du Directeur - Flottante */}
-                  <div className="float-left mr-8 mb-6 w-64 h-80 flex-shrink-0">
-                    <div className="relative w-full h-full bg-gradient-to-br from-primary/5 to-accent/5 rounded-lg overflow-hidden shadow-lg">
+                  <div className="float-left mr-8 mb-6 w-64 flex-shrink-0">
+                    <div className="relative w-full h-80 bg-gradient-to-br from-primary/5 to-accent/5 rounded-lg overflow-hidden shadow-lg">
                       <img
                         src={directeurImage}
                         alt="MAHAMAT TADJADINE - Directeur de l'Agence Judiciaire de l'État"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="mt-4 text-center">
-                      <p className="text-sm font-medium text-foreground mb-2">
+                    <div className="mt-4 text-center space-y-2">
+                      <p className="text-sm font-medium text-foreground">
                         Agent Judiciaire de l'État
                       </p>
                       <h3 className="text-2xl font-bold text-foreground">
                         MAHAMAT TADJADINE
                       </h3>
-                      <p className="text-sm font-medium text-foreground/80 mt-2">
+                      <p className="text-sm font-medium text-foreground/80">
                         Directeur de l'Agence judiciaire de l'Etat
                       </p>
                     </div>
