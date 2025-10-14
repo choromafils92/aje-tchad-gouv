@@ -14,44 +14,12 @@ const Textes = () => {
 
   const textesFoundamentaux = [
     {
-      title: "Loi n° 027/PR/2018 portant création de l'Agence Judiciaire de l'État",
-      type: "Loi",
-      date: "2018-12-15",
-      description: "Texte fondateur créant l'AJE et définissant ses missions principales",
-      downloadUrl: "#",
-      category: "Création"
-    },
-    {
       title: "Décret n° 1205/PR/PM/MJ/2019 portant organisation de l'AJE",
       type: "Décret",
       date: "2019-03-20",
       description: "Organisation interne et attributions spécifiques des services de l'AJE",
       downloadUrl: "#",
       category: "Organisation"
-    },
-    {
-      title: "Code de procédure civile du Tchad",
-      type: "Code",
-      date: "2017-01-01",
-      description: "Règles de procédure applicables devant les juridictions civiles",
-      downloadUrl: "#",
-      category: "Procédure"
-    },
-    {
-      title: "Loi n° 037/PR/2016 sur les marchés publics",
-      type: "Loi",
-      date: "2016-09-12",
-      description: "Réglementation des marchés publics et des délégations de service public",
-      downloadUrl: "#",
-      category: "Marchés publics"
-    },
-    {
-      title: "Convention de Vienne sur le droit des traités",
-      type: "Convention",
-      date: "1969-05-23",
-      description: "Droit international des traités ratifié par le Tchad",
-      downloadUrl: "#",
-      category: "International"
     }
   ];
 
