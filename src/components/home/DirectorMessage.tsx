@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import directeurImage from "@/assets/directeur-aje.jpg";
+import directeurImage from "@/assets/directeur-aje.png";
 
 const DirectorMessage = () => {
   return (
