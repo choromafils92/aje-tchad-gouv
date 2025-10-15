@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Clock, CheckCircle, Download, Send, AlertCircle, Phone, Mail } from "lucide-react";
+import { Users, FileText, Clock, CheckCircle, Download, Send, AlertCircle, Phone, Mail, Scale, Building, Briefcase, Gavel, UserCheck } from "lucide-react";
 
 const Services = () => {
   const servicesOfferts = [
@@ -40,6 +40,69 @@ const Services = () => {
       delai: "Continu",
       criteres: ["Abonnement newsletter", "Accès documentation", "Alertes réglementaires"],
       icon: AlertCircle
+    }
+  ];
+
+  const typesContentieux = [
+    {
+      categorie: "Contentieux Administratif",
+      description: "Litiges impliquant l'administration publique",
+      affaires: [
+        "Marchés publics",
+        "Fonction publique", 
+        "Urbanisme et domaine public",
+        "Fiscalité et douanes"
+      ],
+      statistiques: "67% des dossiers",
+      icon: Building
+    },
+    {
+      categorie: "Contentieux Civil",
+      description: "Litiges de droit privé impliquant l'État",
+      affaires: [
+        "Responsabilité civile de l'État",
+        "Contrats de droit privé",
+        "Propriété et biens publics",
+        "Assurances et indemnisations"
+      ],
+      statistiques: "23% des dossiers",
+      icon: Scale
+    },
+    {
+      categorie: "Contentieux Commercial", 
+      description: "Litiges économiques et commerciaux",
+      affaires: [
+        "Partenariats public-privé",
+        "Concessions et délégations",
+        "Investissements publics",
+        "Commerce international"
+      ],
+      statistiques: "10% des dossiers",
+      icon: Briefcase
+    },
+    {
+      categorie: "Contentieux Pénal",
+      description: "Défense des intérêts de l'État dans les affaires pénales",
+      affaires: [
+        "Constitution de partie civile",
+        "Infractions contre les biens publics",
+        "Blanchiment et fraude fiscale",
+        "Crimes économiques et financiers"
+      ],
+      statistiques: "5% des dossiers",
+      icon: Gavel
+    },
+    {
+      categorie: "Contentieux Social",
+      description: "Litiges relatifs au droit du travail et de la sécurité sociale",
+      affaires: [
+        "Agents de l'État et fonctionnaires",
+        "Accidents de service",
+        "Sécurité sociale et pensions",
+        "Conflits collectifs du travail"
+      ],
+      statistiques: "8% des dossiers",
+      icon: UserCheck
     }
   ];
 
@@ -136,6 +199,57 @@ const Services = () => {
                             <div key={idx} className="flex items-center space-x-2">
                               <CheckCircle className="h-4 w-4 text-accent" />
                               <span className="text-sm text-foreground/80">{critere}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {/* Types de Contentieux */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
+                Domaines de Contentieux
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                L'AJE intervient dans tous les types de contentieux impliquant l'État et les administrations publiques.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {typesContentieux.map((contentieux, index) => {
+                const IconComponent = contentieux.icon;
+                return (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-12 h-12 bg-accent/10 text-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <CardTitle className="text-lg text-primary mb-2">
+                            {contentieux.categorie}
+                          </CardTitle>
+                          <Badge variant="secondary" className="text-xs">
+                            {contentieux.statistiques}
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <CardDescription className="text-foreground/80 leading-relaxed">
+                        {contentieux.description}
+                      </CardDescription>
+                      <div>
+                        <h4 className="font-medium text-primary mb-2 text-sm">Types d'affaires :</h4>
+                        <div className="space-y-1.5">
+                          {contentieux.affaires.map((affaire, idx) => (
+                            <div key={idx} className="flex items-center space-x-2">
+                              <CheckCircle className="h-3.5 w-3.5 text-accent flex-shrink-0" />
+                              <span className="text-sm text-foreground/80">{affaire}</span>
                             </div>
                           ))}
                         </div>
