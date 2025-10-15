@@ -189,15 +189,12 @@ const Textes = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => {
-                              const link = document.createElement('a');
-                              link.href = texte.downloadUrl;
-                              link.download = texte.title + '.pdf';
-                              link.click();
-                            }}
+                            asChild
                           >
-                            <Download className="h-4 w-4 mr-2" />
-                            Télécharger
+                            <a href={texte.downloadUrl} download={texte.title + '.pdf'}>
+                              <Download className="h-4 w-4 mr-2" />
+                              Télécharger
+                            </a>
                           </Button>
                         </div>
                       </CardContent>
@@ -238,16 +235,12 @@ const Textes = () => {
                         </CardDescription>
                         <Button 
                           className="w-full"
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = modele.downloadUrl;
-                            link.download = modele.title + '.' + modele.format.toLowerCase();
-                            link.target = '_blank';
-                            link.click();
-                          }}
+                          asChild
                         >
-                          <Download className="h-4 w-4 mr-2" />
-                          Télécharger le modèle
+                          <a href={modele.downloadUrl} target="_blank" rel="noopener noreferrer">
+                            <Download className="h-4 w-4 mr-2" />
+                            Visualiser le modèle
+                          </a>
                         </Button>
                       </CardContent>
                     </Card>
