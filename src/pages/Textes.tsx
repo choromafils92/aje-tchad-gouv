@@ -14,7 +14,7 @@ const Textes = () => {
 
   const textesFoundamentaux = [
     {
-      title: "Décret n° 1205/PR/PM/MJ/2019 portant organisation de l'AJE",
+      title: "Decert N0 2155/PT/PM/MFBCP/2023 portant creation de l'Agence Judiciaire de l'Etat",
       type: "Décret",
       date: "2019-03-20",
       description: "Creation, organisation interne et attributions spécifiques des services de l'AJE",
