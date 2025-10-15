@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Menu, X, ShieldCheck } from "lucide-react";
+import { Search, Menu, X, ShieldCheck, LogIn } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoAje from "@/assets/logo-aje.svg";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,8 +19,11 @@ const Header = () => {
     { href: "/services", label: "Services" },
     { href: "/contentieux", label: "Contentieux" },
     { href: "/contact", label: "Contact" },
-    ...(isAdmin ? [{ href: "/admin", label: "Admin", icon: ShieldCheck }] : []),
   ];
+
+  const authItem = isAdmin 
+    ? { href: "/admin", label: "Admin", icon: ShieldCheck }
+    : { href: "/auth", label: "Connexion", icon: LogIn };
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50">
@@ -54,15 +58,21 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             {navigationItems.map((item) => (
-              <a
+              <Link
                 key={item.href}
-                href={item.href}
+                to={item.href}
                 className="text-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center gap-1"
               >
-                {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
                 {item.label}
-              </a>
+              </Link>
             ))}
+            <Link
+              to={authItem.href}
+              className="text-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center gap-1"
+            >
+              <authItem.icon className="h-4 w-4" />
+              {authItem.label}
+            </Link>
           </nav>
 
           {/* Search and Language Switcher */}
@@ -147,15 +157,21 @@ const Header = () => {
                   
                   <nav className="flex flex-col space-y-2">
                     {navigationItems.map((item) => (
-                      <a
+                      <Link
                         key={item.href}
-                        href={item.href}
+                        to={item.href}
                         className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors flex items-center gap-2"
                       >
-                        {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
                         {item.label}
-                      </a>
+                      </Link>
                     ))}
+                    <Link
+                      to={authItem.href}
+                      className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors flex items-center gap-2"
+                    >
+                      <authItem.icon className="h-4 w-4" />
+                      {authItem.label}
+                    </Link>
                   </nav>
 
                   <div className="flex items-center justify-center space-x-4 pt-4 border-t">
