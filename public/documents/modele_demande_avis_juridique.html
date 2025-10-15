@@ -11,6 +11,22 @@
             margin: 40px auto;
             padding: 20px;
             line-height: 1.6;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background-image: url('logo-aje.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.08;
+            z-index: -1;
         }
         .header {
             text-align: center;
@@ -18,10 +34,40 @@
             border-bottom: 2px solid #003366;
             padding-bottom: 20px;
         }
+        .logo-image {
+            width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+        }
         .logo {
             font-weight: bold;
             font-size: 24px;
             color: #003366;
+        }
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .print-button:hover {
+            background-color: #004488;
+        }
+        @media print {
+            body {
+                margin: 0;
+            }
+            .print-button {
+                display: none;
+            }
         }
         h1 {
             color: #003366;
@@ -68,15 +114,13 @@
         .signature-box {
             width: 45%;
         }
-        @media print {
-            body {
-                margin: 0;
-            }
-        }
     </style>
 </head>
 <body>
+    <button class="print-button" onclick="window.print()">📄 Télécharger en PDF</button>
+    
     <div class="header">
+        <img src="logo-aje.svg" alt="Logo AJE" class="logo-image">
         <div class="logo">RÉPUBLIQUE DU TCHAD</div>
         <div>Agence Judiciaire de l'État</div>
     </div>
