@@ -6,30 +6,32 @@ import { Search, Menu, X, ShieldCheck, LogIn } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoAje from "@/assets/logo-aje.svg";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isAdmin } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
 
   const navigationItems = [
-    { href: "/", label: "Accueil" },
-    { href: "/missions", label: "Missions & Rôle" },
-    { href: "/textes", label: "Textes & Références" },
-    { href: "/actualites", label: "Actualités" },
-    { href: "/services", label: "Services" },
-    { href: "/contentieux", label: "Contentieux" },
-    { href: "/contact", label: "Contact" },
+    { href: "/", label: t("header.nav.home") },
+    { href: "/missions", label: t("header.nav.missions") },
+    { href: "/textes", label: t("header.nav.texts") },
+    { href: "/actualites", label: t("header.nav.news") },
+    { href: "/services", label: t("header.nav.services") },
+    { href: "/contentieux", label: t("header.nav.litigation") },
+    { href: "/contact", label: t("header.nav.contact") },
   ];
 
   const authItem = isAdmin 
-    ? { href: "/admin", label: "Admin", icon: ShieldCheck }
-    : { href: "/auth", label: "Connexion", icon: LogIn };
+    ? { href: "/admin", label: t("header.nav.admin"), icon: ShieldCheck }
+    : { href: "/auth", label: t("header.nav.login"), icon: LogIn };
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50">
       {/* Optional alert banner */}
       <div className="bg-primary text-primary-foreground px-4 py-2 text-center text-sm">
-        <strong>Information importante :</strong> Consultez nos dernières notes officielles dans la section Actualités
+        {t("header.banner")}
       </div>
       
       <div className="container mx-auto px-4">
@@ -46,10 +48,10 @@ const Header = () => {
         </div>
               <div className="flex flex-col">
                 <h1 className="text-lg font-bold text-primary">
-                  Agence Judiciaire de l'État
+                  {t("header.title")}
                 </h1>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                  Conseiller-Defendre-Proteger
+                  {t("header.tagline")}
                 </p>
               </div>
             </div>
@@ -83,7 +85,7 @@ const Header = () => {
                 <div className="flex items-center space-x-2">
                   <Input
                     type="search"
-                    placeholder="Rechercher..."
+                    placeholder={t("header.search")}
                     className="w-64"
                     autoFocus
                   />
@@ -112,8 +114,8 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-accent font-medium"
-                onClick={() => alert('Langue française sélectionnée')}
+                className={language === 'fr' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                onClick={() => setLanguage('fr')}
               >
                 FR
               </Button>
@@ -121,8 +123,8 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-muted-foreground hover:text-accent"
-                onClick={() => alert('Fonctionnalité de traduction arabe en cours de développement')}
+                className={language === 'ar' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                onClick={() => setLanguage('ar')}
               >
                 AR
               </Button>
@@ -130,8 +132,8 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-muted-foreground hover:text-accent"
-                onClick={() => alert('English translation feature coming soon')}
+                className={language === 'en' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                onClick={() => setLanguage('en')}
               >
                 EN
               </Button>
@@ -149,7 +151,7 @@ const Header = () => {
                   <div className="relative">
                     <Input
                       type="search"
-                      placeholder="Rechercher..."
+                      placeholder={t("header.search")}
                       className="w-full"
                     />
                     <Search className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -178,24 +180,24 @@ const Header = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-accent font-medium"
-                      onClick={() => alert('Langue française sélectionnée')}
+                      className={language === 'fr' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                      onClick={() => setLanguage('fr')}
                     >
                       FR
                     </Button>
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-muted-foreground hover:text-accent"
-                      onClick={() => alert('Fonctionnalité de traduction arabe en cours de développement')}
+                      className={language === 'ar' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                      onClick={() => setLanguage('ar')}
                     >
                       AR
                     </Button>
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-muted-foreground hover:text-accent"
-                      onClick={() => alert('English translation feature coming soon')}
+                      className={language === 'en' ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}
+                      onClick={() => setLanguage('en')}
                     >
                       EN
                     </Button>

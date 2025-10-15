@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "State Judicial Agency",
+    "tagline": "Advise-Defend-Protect",
+    "banner": "Important information: Check our latest official notes in the News section",
+    "search": "Search...",
+    "nav": {
+      "home": "Home",
+      "missions": "Missions & Role",
+      "texts": "Texts & References",
+      "news": "News",
+      "services": "Services",
+      "litigation": "Litigation",
+      "contact": "Contact",
+      "admin": "Admin",
+      "login": "Login"
+    }
+  },
+  "hero": {
+    "title": "State Judicial Agency",
+    "tagline": "Advise-Defend-Protect",
+    "description": "The official body responsible for defending and representing the State of Chad in all legal and contentious matters, assisting administrations with legal counsel, and ensuring centralized management of State litigation.",
+    "discoverBtn": "Discover our missions",
+    "textsBtn": "Consult the texts",
+    "republic": "Republic of Chad",
+    "motto": "Unity • Work • Progress"
+  },
+  "footer": {
+    "contact": "Contact",
+    "address": "N'Djamena, Chad",
+    "phone": "+235 XX XX XX XX",
+    "email": "contact@aje.td",
+    "quickLinks": "Quick links",
+    "services": "Services",
+    "newsletter": "Newsletter",
+    "newsletterText": "Stay informed about the latest news from AJE",
+    "emailPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "followUs": "Follow us",
+    "legal": "Legal notice",
+    "privacy": "Privacy policy",
+    "accessibility": "Accessibility",
+    "sitemap": "Sitemap",
+    "rss": "RSS Feed",
+    "copyright": "State Judicial Agency - Republic of Chad. All rights reserved."
+  }
+}

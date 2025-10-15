@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
 import armoirieTchad from "@/assets/armoirie-tchad.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
+  const { t } = useLanguage();
+  
   return (
     <section className="relative bg-gradient-to-br from-primary to-accent text-primary-foreground overflow-hidden">
       <div className="absolute inset-0 bg-black/10"></div>
@@ -13,17 +16,17 @@ const Hero = () => {
             <div className="space-y-4">
               <div>
                 <h1 className="text-2xl lg:text-3xl font-bold leading-tight">
-                  Agence Judiciaire de l'État
+                  {t("hero.title")}
                 </h1>
                 <p className="text-lg opacity-90 uppercase tracking-wide mt-2">
-                  Conseiller-Defendre-Proteger
+                  {t("hero.tagline")}
                 </p>
               </div>
             </div>
             
             <div className="space-y-6">
               <p className="text-lg lg:text-xl leading-relaxed opacity-95">
-                L'organe officiel chargé de défendre et représenter l'État du Tchad dans toutes les affaires juridiques et contentieuses, d'assister les administrations par le conseil juridique, et d'assurer la gestion centralisée du contentieux de l'État.
+                {t("hero.description")}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -32,7 +35,7 @@ const Hero = () => {
                   variant="secondary"
                   className="text-primary hover:text-primary"
                 >
-                  Découvrir nos missions
+                  {t("hero.discoverBtn")}
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button 
@@ -40,7 +43,7 @@ const Hero = () => {
                   variant="outline"
                   className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
                 >
-                  Consulter les textes
+                  {t("hero.textsBtn")}
                 </Button>
               </div>
             </div>
@@ -63,10 +66,10 @@ const Hero = () => {
                     />
                   </div>
                   <h3 className="text-xl font-semibold opacity-90">
-                    République du Tchad
+                    {t("hero.republic")}
                   </h3>
                   <p className="text-sm opacity-75 font-medium">
-                    Unité • Travail • Progrès
+                    {t("hero.motto")}
                   </p>
                 </div>
               </div>

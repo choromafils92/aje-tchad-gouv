@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Agence Judiciaire de l'État",
+    "tagline": "Conseiller-Defendre-Proteger",
+    "banner": "Information importante : Consultez nos dernières notes officielles dans la section Actualités",
+    "search": "Rechercher...",
+    "nav": {
+      "home": "Accueil",
+      "missions": "Missions & Rôle",
+      "texts": "Textes & Références",
+      "news": "Actualités",
+      "services": "Services",
+      "litigation": "Contentieux",
+      "contact": "Contact",
+      "admin": "Admin",
+      "login": "Connexion"
+    }
+  },
+  "hero": {
+    "title": "Agence Judiciaire de l'État",
+    "tagline": "Conseiller-Defendre-Proteger",
+    "description": "L'organe officiel chargé de défendre et représenter l'État du Tchad dans toutes les affaires juridiques et contentieuses, d'assister les administrations par le conseil juridique, et d'assurer la gestion centralisée du contentieux de l'État.",
+    "discoverBtn": "Découvrir nos missions",
+    "textsBtn": "Consulter les textes",
+    "republic": "République du Tchad",
+    "motto": "Unité • Travail • Progrès"
+  },
+  "footer": {
+    "contact": "Contact",
+    "address": "N'Djamena, Tchad",
+    "phone": "+235 XX XX XX XX",
+    "email": "contact@aje.td",
+    "quickLinks": "Liens rapides",
+    "services": "Services",
+    "newsletter": "Newsletter",
+    "newsletterText": "Restez informé des dernières actualités de l'AJE",
+    "emailPlaceholder": "Votre email",
+    "subscribe": "S'abonner",
+    "followUs": "Suivez-nous",
+    "legal": "Mentions légales",
+    "privacy": "Données personnelles",
+    "accessibility": "Accessibilité",
+    "sitemap": "Plan du site",
+    "rss": "Flux RSS",
+    "copyright": "Agence Judiciaire de l'État - République du Tchad. Tous droits réservés."
+  }
+}
