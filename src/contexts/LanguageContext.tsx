@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import translationsFr from '@/locales/fr.json';
+import translationsAr from '@/locales/ar.json';
+import translationsEn from '@/locales/en.json';
 
 type Language = 'fr' | 'ar' | 'en';
 
@@ -35,7 +38,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   }, [language]);
 
   const t = (key: string): string => {
-    const translations = require(`@/locales/${language}.json`);
+    const translationsMap = {
+      fr: translationsFr,
+      ar: translationsAr,
+      en: translationsEn,
+    };
+    
+    const translations = translationsMap[language];
     const keys = key.split('.');
     let value: any = translations;
     
