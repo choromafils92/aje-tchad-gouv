@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, ShieldCheck } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoAje from "@/assets/logo-aje.svg";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { isAdmin } = useAuth();
 
   const navigationItems = [
     { href: "/", label: "Accueil" },
@@ -16,6 +18,7 @@ const Header = () => {
     { href: "/services", label: "Services" },
     { href: "/contentieux", label: "Contentieux" },
     { href: "/contact", label: "Contact" },
+    ...(isAdmin ? [{ href: "/admin", label: "Admin", icon: ShieldCheck }] : []),
   ];
 
   return (
@@ -54,8 +57,9 @@ const Header = () => {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-foreground hover:text-accent transition-colors duration-200 text-sm font-medium"
+                className="text-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center gap-1"
               >
+                {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
                 {item.label}
               </a>
             ))}
@@ -146,8 +150,9 @@ const Header = () => {
                       <a
                         key={item.href}
                         href={item.href}
-                        className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors"
+                        className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors flex items-center gap-2"
                       >
+                        {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
                         {item.label}
                       </a>
                     ))}
