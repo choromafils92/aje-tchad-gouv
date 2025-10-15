@@ -1,93 +1,85 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { MapPin, Navigation, ExternalLink } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const Map = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [mapInitialized, setMapInitialized] = useState(false);
+  const ajeLocation = {
+    name: "Agence Judiciaire de l'État",
+    address: "Avenue Félix Éboué, Quartier administratif",
+    city: "N'Djamena, République du Tchad",
+    lat: 12.1067,
+    lng: 15.0444
+  };
 
-  useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || mapInitialized) return;
-
-    try {
-      // Initialize map with N'Djamena coordinates
-      mapboxgl.accessToken = mapboxToken;
-      
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: [15.0444, 12.1067], // N'Djamena coordinates [lng, lat]
-        zoom: 15,
-        pitch: 45,
-      });
-
-      // Add navigation controls
-      map.current.addControl(
-        new mapboxgl.NavigationControl({
-          visualizePitch: true,
-        }),
-        'top-right'
-      );
-
-      // Add marker for AJE location
-      new mapboxgl.Marker({ color: '#0066cc' })
-        .setLngLat([15.0444, 12.1067])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 })
-            .setHTML(
-              '<h3 style="font-weight: bold; margin-bottom: 8px;">Agence Judiciaire de l\'État</h3>' +
-              '<p style="margin: 0;">Avenue Félix Éboué<br/>Quartier administratif<br/>N\'Djamena, Tchad</p>'
-            )
-        )
-        .addTo(map.current);
-
-      setMapInitialized(true);
-
-      // Cleanup
-      return () => {
-        map.current?.remove();
-      };
-    } catch (error) {
-      console.error('Erreur lors de l\'initialisation de la carte:', error);
-    }
-  }, [mapboxToken, mapInitialized]);
+  const openInGoogleMaps = () => {
+    const query = encodeURIComponent(`${ajeLocation.name}, ${ajeLocation.address}, ${ajeLocation.city}`);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+  };
 
   return (
-    <div className="w-full space-y-4">
-      {!mapInitialized && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Configuration de la carte</CardTitle>
-            <CardDescription>
-              Entrez votre clé publique Mapbox pour afficher la carte interactive.
-              Obtenez-la gratuitement sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">mapbox.com</a>
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="mapbox-token">Mapbox Public Token</Label>
-              <Input
-                id="mapbox-token"
-                type="text"
-                placeholder="pk.eyJ1..."
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-              />
+    <Card className="overflow-hidden">
+      <CardContent className="p-0">
+        <div className="relative h-[500px] bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20">
+          {/* Decorative grid background */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="h-full w-full" style={{
+              backgroundImage: 'linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)',
+              backgroundSize: '50px 50px'
+            }} />
+          </div>
+
+          {/* Center marker */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center space-y-6 z-10">
+              <div className="relative">
+                <div className="w-24 h-24 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+                  <MapPin className="w-12 h-12" />
+                </div>
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-2 bg-primary/30 rounded-full blur-sm" />
+              </div>
+              
+              <div className="bg-background/95 backdrop-blur-sm p-6 rounded-lg shadow-xl max-w-md">
+                <h3 className="text-xl font-bold text-primary mb-2">
+                  Agence Judiciaire de l'État
+                </h3>
+                <p className="text-foreground/80 mb-1">
+                  Avenue Félix Éboué
+                </p>
+                <p className="text-foreground/80 mb-1">
+                  Quartier administratif
+                </p>
+                <p className="text-foreground/80 mb-4">
+                  N'Djamena, République du Tchad
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Coordonnées: {ajeLocation.lat}° N, {ajeLocation.lng}° E
+                </p>
+                
+                <Button onClick={openInGoogleMaps} className="w-full">
+                  <Navigation className="w-4 h-4 mr-2" />
+                  Ouvrir dans Google Maps
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-      
-      <div 
-        ref={mapContainer} 
-        className={`w-full rounded-lg shadow-lg ${mapInitialized ? 'h-[500px]' : 'h-0'}`}
-      />
-    </div>
+          </div>
+
+          {/* Corner decorations */}
+          <div className="absolute top-4 left-4 text-primary/20">
+            <MapPin className="w-8 h-8" />
+          </div>
+          <div className="absolute top-4 right-4 text-primary/20">
+            <Navigation className="w-8 h-8" />
+          </div>
+          <div className="absolute bottom-4 left-4 text-primary/20">
+            <Navigation className="w-8 h-8 transform rotate-180" />
+          </div>
+          <div className="absolute bottom-4 right-4 text-primary/20">
+            <MapPin className="w-8 h-8" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
