@@ -6,6 +6,8 @@ import { Scale, Users, FileText, ArrowRight, CheckCircle, Shield, BookOpen } fro
 import { Link } from "react-router-dom";
 
 const Missions = () => {
+  console.log("Page Missions chargée - Routes disponibles: /services/demande-avis et /textes/faq");
+  
   const missions = [
     {
       id: "representation",
