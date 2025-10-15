@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scale, Users, FileText, ArrowRight, CheckCircle, Shield, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Missions = () => {
   const missions = [
@@ -235,16 +236,16 @@ const Missions = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
-                  <a href="/services/demande-avis">
+                  <Link to="/services/demande-avis">
                     Demander un avis juridique
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <a href="/textes/faq">
+                  <Link to="/textes/faq">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Consulter la FAQ
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
