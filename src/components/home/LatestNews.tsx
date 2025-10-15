@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, ArrowRight, FileText, AlertTriangle, Megaphone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const LatestNews = () => {
   // Mock data - in real app this would come from a CMS
@@ -57,9 +58,11 @@ const LatestNews = () => {
               Consultez nos derniers communiqués, notes et annonces officielles
             </p>
           </div>
-          <Button variant="outline" size="lg">
-            Toutes les actualités
-            <ArrowRight className="ml-2 h-5 w-5" />
+          <Button variant="outline" size="lg" asChild>
+            <Link to="/actualites">
+              Toutes les actualités
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
 
@@ -93,9 +96,11 @@ const LatestNews = () => {
                         year: 'numeric'
                       })}
                     </div>
-                    <Button variant="ghost" size="sm" className="text-accent hover:text-accent-foreground hover:bg-accent">
-                      Lire plus
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                    <Button variant="ghost" size="sm" className="text-accent hover:text-accent-foreground hover:bg-accent" asChild>
+                      <Link to="/actualites">
+                        Lire plus
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>
