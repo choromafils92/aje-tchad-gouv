@@ -25,10 +25,10 @@ const Contact = () => {
 
   const services = [
     {
-      nom: "Direction Générale",
+      nom: "Agent judiciaire de l'État",
       telephone: "+235 22 XX XX XX",
       email: "direction@aje.td",
-      responsable: "Directeur Général"
+      responsable: "Agent judiciaire de l'État"
     },
     {
       nom: "Sous-Direction du Contentieux Judiciaire",
@@ -313,7 +313,7 @@ const Contact = () => {
                                 <SelectValue placeholder="Choisissez une sous-direction" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="direction">Direction Générale</SelectItem>
+                                <SelectItem value="direction">Agent judiciaire de l'État</SelectItem>
                                 <SelectItem value="contentieux-judiciaire">Sous-Direction du Contentieux Judiciaire</SelectItem>
                                 <SelectItem value="contentieux-administratif">Sous-Direction du Contentieux Administratif</SelectItem>
                                 <SelectItem value="conseil-etudes">Sous-Direction du Conseil et des Etudes Juridiques</SelectItem>
