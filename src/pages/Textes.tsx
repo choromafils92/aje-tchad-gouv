@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Search, Download, FileText, Scale, BookOpen, HelpCircle, Calendar, Filter } from "lucide-react";
+import { Search, Download, FileText, Scale, BookOpen, HelpCircle, Calendar, Filter, Eye } from "lucide-react";
 import { useState } from "react";
 
 const Textes = () => {
@@ -233,15 +233,27 @@ const Textes = () => {
                         <CardDescription className="text-foreground/80">
                           {modele.description}
                         </CardDescription>
-                        <Button 
-                          className="w-full"
-                          asChild
-                        >
-                          <a href={modele.downloadUrl} target="_blank" rel="noopener noreferrer">
-                            <Download className="h-4 w-4 mr-2" />
-                            Visualiser le modèle
-                          </a>
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button 
+                            className="flex-1"
+                            variant="outline"
+                            asChild
+                          >
+                            <a href={modele.downloadUrl} target="_blank" rel="noopener noreferrer">
+                              <Eye className="h-4 w-4 mr-2" />
+                              Visualiser
+                            </a>
+                          </Button>
+                          <Button 
+                            className="flex-1"
+                            asChild
+                          >
+                            <a href={modele.downloadUrl} download={modele.title + '.html'}>
+                              <Download className="h-4 w-4 mr-2" />
+                              Télécharger
+                            </a>
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
