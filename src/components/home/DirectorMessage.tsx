@@ -32,7 +32,7 @@ const DirectorMessage = () => {
                   </div>
 
                   {/* Message du Directeur */}
-                  <div className="text-muted-foreground leading-relaxed space-y-4">
+                  <div className="text-foreground leading-relaxed space-y-4">
                     <p className="text-lg">
                       "L'Agence Judiciaire de l'État du Tchad s'engage résolument dans sa mission de défense des intérêts de notre nation avec la plus grande rigueur et le plus haut niveau de professionnalisme."
                     </p>
