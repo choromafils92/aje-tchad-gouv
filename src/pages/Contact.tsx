@@ -31,22 +31,28 @@ const Contact = () => {
       responsable: "Directeur Général"
     },
     {
-      nom: "Service Contentieux",
+      nom: "Sous-Direction du Contentieux Judiciaire",
       telephone: "+235 22 XX XX XX",
-      email: "contentieux@aje.td",
-      responsable: "Chef de Service Contentieux"
+      email: "contentieux.judiciaire@aje.td",
+      responsable: "Sous-Directeur du Contentieux Judiciaire"
     },
     {
-      nom: "Service Conseil Juridique",
+      nom: "Sous-Direction du Contentieux Administratif",
       telephone: "+235 22 XX XX XX",
-      email: "conseil@aje.td",
-      responsable: "Chef de Service Conseil"
+      email: "contentieux.administratif@aje.td",
+      responsable: "Sous-Directeur du Contentieux Administratif"
     },
     {
-      nom: "Service Formation",
+      nom: "Sous-Direction du Conseil et des Etudes Juridiques",
       telephone: "+235 22 XX XX XX",
-      email: "formation@aje.td",
-      responsable: "Responsable Formation"
+      email: "conseil.etudes@aje.td",
+      responsable: "Sous-Directeur du Conseil et des Etudes Juridiques"
+    },
+    {
+      nom: "Sous-Direction du Recouvrement de Créances Contentieuses",
+      telephone: "+235 22 XX XX XX",
+      email: "recouvrement@aje.td",
+      responsable: "Sous-Directeur du Recouvrement de Créances Contentieuses"
     }
   ];
 
@@ -151,7 +157,7 @@ const Contact = () => {
               {/* Services spécialisés */}
               <div>
                 <h2 className="text-3xl font-bold text-primary mb-8">
-                  Contacts par service
+                  Contactez par sous-direction
                 </h2>
                 
                 <div className="space-y-4">
@@ -301,16 +307,17 @@ const Contact = () => {
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="service-rdv">Service concerné *</Label>
+                            <Label htmlFor="service-rdv">Sous-direction concernée *</Label>
                             <Select>
                               <SelectTrigger>
-                                <SelectValue placeholder="Choisissez un service" />
+                                <SelectValue placeholder="Choisissez une sous-direction" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="direction">Direction Générale</SelectItem>
-                                <SelectItem value="contentieux">Service Contentieux</SelectItem>
-                                <SelectItem value="conseil">Service Conseil Juridique</SelectItem>
-                                <SelectItem value="formation">Service Formation</SelectItem>
+                                <SelectItem value="contentieux-judiciaire">Sous-Direction du Contentieux Judiciaire</SelectItem>
+                                <SelectItem value="contentieux-administratif">Sous-Direction du Contentieux Administratif</SelectItem>
+                                <SelectItem value="conseil-etudes">Sous-Direction du Conseil et des Etudes Juridiques</SelectItem>
+                                <SelectItem value="recouvrement">Sous-Direction du Recouvrement de Créances Contentieuses</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
