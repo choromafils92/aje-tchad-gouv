@@ -246,12 +246,25 @@ const Textes = () => {
                           </Button>
                           <Button 
                             className="flex-1"
-                            asChild
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(modele.downloadUrl);
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = modele.title + '.html';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Erreur lors du téléchargement:', error);
+                              }
+                            }}
                           >
-                            <a href={modele.downloadUrl} download={modele.title + '.html'}>
-                              <Download className="h-4 w-4 mr-2" />
-                              Télécharger
-                            </a>
+                            <Download className="h-4 w-4 mr-2" />
+                            Télécharger
                           </Button>
                         </div>
                       </CardContent>
