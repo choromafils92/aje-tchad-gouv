@@ -1,110 +1,93 @@
-import { MapPin, Navigation } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Map = () => {
-  const ajeLocation = {
-    name: "Agence Judiciaire de l'État",
-    address: "Avenue Félix Éboué, Quartier administratif",
-    city: "N'Djamena, République du Tchad",
-    coordinates: "12.1067° N, 15.0444° E"
-  };
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [mapboxToken, setMapboxToken] = useState('');
+  const [mapInitialized, setMapInitialized] = useState(false);
 
-  const openInGoogleMaps = () => {
-    const query = encodeURIComponent(`${ajeLocation.name}, ${ajeLocation.address}, ${ajeLocation.city}`);
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
-  };
+  useEffect(() => {
+    if (!mapContainer.current || !mapboxToken || mapInitialized) return;
+
+    try {
+      // Initialize map with N'Djamena coordinates
+      mapboxgl.accessToken = mapboxToken;
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [15.0444, 12.1067], // N'Djamena coordinates [lng, lat]
+        zoom: 15,
+        pitch: 45,
+      });
+
+      // Add navigation controls
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: true,
+        }),
+        'top-right'
+      );
+
+      // Add marker for AJE location
+      new mapboxgl.Marker({ color: '#0066cc' })
+        .setLngLat([15.0444, 12.1067])
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 })
+            .setHTML(
+              '<h3 style="font-weight: bold; margin-bottom: 8px;">Agence Judiciaire de l\'État</h3>' +
+              '<p style="margin: 0;">Avenue Félix Éboué<br/>Quartier administratif<br/>N\'Djamena, Tchad</p>'
+            )
+        )
+        .addTo(map.current);
+
+      setMapInitialized(true);
+
+      // Cleanup
+      return () => {
+        map.current?.remove();
+      };
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation de la carte:', error);
+    }
+  }, [mapboxToken, mapInitialized]);
 
   return (
-    <section className="py-16 bg-secondary">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary mb-4">
-              Notre Localisation
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Trouvez-nous dans le quartier administratif de N'Djamena
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Carte visuelle */}
-            <Card className="overflow-hidden">
-              <CardContent className="p-0">
-                <div className="relative h-96 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                  <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-                  <div className="text-center space-y-4 z-10">
-                    <div className="w-20 h-20 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto">
-                      <MapPin className="w-10 h-10" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary">
-                      N'Djamena, Tchad
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Quartier administratif
-                    </p>
-                    <Button onClick={openInGoogleMaps} className="mt-4">
-                      <Navigation className="w-4 h-4 mr-2" />
-                      Voir sur Google Maps
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Informations de contact */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <MapPin className="w-5 h-5 text-primary" />
-                  <span>Informations de Contact</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Adresse Principale</h4>
-                  <div className="space-y-1 text-muted-foreground">
-                    <p>{ajeLocation.name}</p>
-                    <p>{ajeLocation.address}</p>
-                    <p>{ajeLocation.city}</p>
-                    <p className="text-sm">Coordonnées: {ajeLocation.coordinates}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Horaires d'ouverture</h4>
-                  <div className="space-y-1 text-muted-foreground text-sm">
-                    <p>Lundi - Jeudi: 7h30 - 15h30</p>
-                    <p>Vendredi: 7h30 - 12h30</p>
-                    <p>Samedi - Dimanche: Fermé</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Contact d'urgence</h4>
-                  <div className="space-y-1 text-muted-foreground text-sm">
-                    <p>📞 +235 22 51 44 19</p>
-                    <p>✉️ urgence@aje.td</p>
-                    <p className="text-xs italic">Service 24h/24 pour les urgences contentieuses</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Accès</h4>
-                  <div className="text-muted-foreground text-sm">
-                    <p>• Proche de la Présidence de la République</p>
-                    <p>• À 5 minutes du Ministère de la Justice</p>
-                    <p>• Parking disponible pour les visiteurs officiels</p>
-                    <p>• Accès PMR (Personnes à Mobilité Réduite)</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="w-full space-y-4">
+      {!mapInitialized && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Configuration de la carte</CardTitle>
+            <CardDescription>
+              Entrez votre clé publique Mapbox pour afficher la carte interactive.
+              Obtenez-la gratuitement sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">mapbox.com</a>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Label htmlFor="mapbox-token">Mapbox Public Token</Label>
+              <Input
+                id="mapbox-token"
+                type="text"
+                placeholder="pk.eyJ1..."
+                value={mapboxToken}
+                onChange={(e) => setMapboxToken(e.target.value)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
+      <div 
+        ref={mapContainer} 
+        className={`w-full rounded-lg shadow-lg ${mapInitialized ? 'h-[500px]' : 'h-0'}`}
+      />
+    </div>
   );
 };
 

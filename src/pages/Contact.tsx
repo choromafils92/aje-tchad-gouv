@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Phone, Mail, Clock, Send, Calendar, Users, Navigation } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Calendar } from "lucide-react";
+import Map from "@/components/Map";
 
 const Contact = () => {
   const coordonnees = {
@@ -406,57 +407,7 @@ const Contact = () => {
             </div>
 
             <div className="max-w-4xl mx-auto">
-              <Card>
-                <CardContent className="p-0">
-                  <div className="bg-secondary/50 h-96 flex items-center justify-center rounded-lg">
-                    <div className="text-center space-y-4">
-                      <Navigation className="h-16 w-16 text-muted-foreground mx-auto" />
-                      <div>
-                        <h3 className="font-semibold text-primary mb-2">Carte interactive</h3>
-                        <p className="text-muted-foreground">
-                          Intégration OpenStreetMap à venir
-                        </p>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          {coordonnees.adresse}<br />
-                          {coordonnees.ville}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <Card className="text-center">
-                <CardContent className="p-6">
-                  <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="font-semibold text-primary mb-2">Accueil public</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Rez-de-chaussée, bureau 101
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardContent className="p-6">
-                  <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="font-semibold text-primary mb-2">Horaires étendus</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Permanence téléphonique jusqu'à 17h
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardContent className="p-6">
-                  <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="font-semibold text-primary mb-2">Parking</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Parking gratuit pour les visiteurs
-                  </p>
-                </CardContent>
-              </Card>
+              <Map />
             </div>
           </div>
         </section>
