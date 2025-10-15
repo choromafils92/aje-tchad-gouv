@@ -27,30 +27,30 @@ const Textes = () => {
     {
       title: "Modèle de demande d'avis juridique",
       description: "Formulaire type pour saisir l'AJE en demande d'avis",
-      format: "DOCX",
+      format: "HTML",
       size: "45 KB",
-      downloadUrl: "#"
+      downloadUrl: "/documents/modele_demande_avis_juridique.html"
     },
     {
       title: "Modèle de clause de règlement des différends",
       description: "Clauses types pour les contrats publics",
-      format: "PDF",
+      format: "HTML",
       size: "120 KB",
-      downloadUrl: "#"
+      downloadUrl: "/documents/modele_clause_reglement_differends.html"
     },
     {
       title: "Check-list pré-contentieuse",
       description: "Liste de vérification avant engagement d'une procédure",
-      format: "PDF",
+      format: "HTML",
       size: "80 KB",
-      downloadUrl: "#"
+      downloadUrl: "/documents/checklist_pre_contentieuse.html"
     },
     {
       title: "Modèle de transaction administrative",
       description: "Cadre type pour les accords transactionnels",
-      format: "DOCX",
+      format: "HTML",
       size: "55 KB",
-      downloadUrl: "#"
+      downloadUrl: "/documents/modele_transaction_administrative.html"
     }
   ];
 
@@ -239,12 +239,11 @@ const Textes = () => {
                         <Button 
                           className="w-full"
                           onClick={() => {
-                            // Simule le téléchargement du modèle
                             const link = document.createElement('a');
-                            link.href = `data:application/${modele.format.toLowerCase()};base64,UEsDBBQAAAAIAB4bLkIAAAAAAAAAAAAAAAAQAAAAZG9jUHJvcHMvYXBwLnhtbFBLAQIUABQAAAAIAB4bLkIAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABQSwUGAAAAAAEAAQA+AAAAIAA=`;
+                            link.href = modele.downloadUrl;
                             link.download = modele.title + '.' + modele.format.toLowerCase();
+                            link.target = '_blank';
                             link.click();
-                            alert(`Téléchargement de "${modele.title}" en cours...`);
                           }}
                         >
                           <Download className="h-4 w-4 mr-2" />

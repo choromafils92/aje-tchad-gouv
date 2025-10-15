@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-list Pré-contentieuse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 20px;
+        }
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            color: #003366;
+        }
+        h1 {
+            color: #003366;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .intro {
+            background-color: #e7f3ff;
+            border-left: 4px solid #003366;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section-title {
+            background-color: #003366;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .checklist-item {
+            padding: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .checklist-item:hover {
+            background-color: #f0f0f0;
+        }
+        .checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #003366;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .item-text {
+            display: inline-block;
+            width: calc(100% - 40px);
+            vertical-align: middle;
+        }
+        .sub-items {
+            margin-left: 40px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .sub-item {
+            margin: 5px 0;
+            color: #555;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .critical {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin: 30px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #003366;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        @media print {
+            body {
+                margin: 0;
+            }
+            .checklist-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">RÉPUBLIQUE DU TCHAD</div>
+        <div>Agence Judiciaire de l'État</div>
+    </div>
+
+    <h1>CHECK-LIST PRÉ-CONTENTIEUSE</h1>
+
+    <div class="intro">
+        <strong>Objectif :</strong> Cette check-list a pour but d'assurer une préparation optimale avant l'engagement 
+        de toute procédure contentieuse. Elle permet de vérifier que tous les éléments nécessaires sont réunis et que 
+        les voies amiables ont été épuisées.
+    </div>
+
+    <div class="warning-box critical">
+        <strong>⚠️ ATTENTION :</strong> Avant d'engager toute action en justice, il est <strong>OBLIGATOIRE</strong> 
+        de saisir l'Agence Judiciaire de l'État pour avis et autorisation.
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section">
+        <div class="section-title">I. ANALYSE PRÉLIMINAIRE DE LA SITUATION</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Nature du différend clairement identifiée</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Contractuel</div>
+                <div class="sub-item">☐ Délictuel / Quasi-délictuel</div>
+                <div class="sub-item">☐ Administratif</div>
+                <div class="sub-item">☐ Commercial</div>
+                <div class="sub-item">☐ Autre (préciser) : _____________</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Parties au litige identifiées avec précision</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Nom ou raison sociale complète</div>
+                <div class="sub-item">☐ Adresse exacte et moyens de contact</div>
+                <div class="sub-item">☐ Statut juridique (personne physique/morale)</div>
+                <div class="sub-item">☐ Représentants légaux identifiés</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Chronologie des faits établie</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Dates clés répertoriées</div>
+                <div class="sub-item">☐ Séquence des événements claire</div>
+                <div class="sub-item">☐ Correspondances antérieures recensées</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Enjeux évalués (financiers, stratégiques, réputationnels)</strong></span>
+        </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+        <div class="section-title">II. VÉRIFICATION DES DÉLAIS ET PRESCRIPTIONS</div>
+        
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Délais de prescription vérifiés</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Date de départ du délai identifiée</div>
+                <div class="sub-item">☐ Durée de prescription applicable déterminée</div>
+                <div class="sub-item">☐ Actes interruptifs ou suspensifs recensés</div>
+            </div>
+        </div>
+
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Délais de recours administratifs préalables respectés</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Délais contractuels de réclamation observés</strong></span>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Point critique :</strong> Les délais de prescription et de recours sont d'ordre public. 
+            Leur non-respect entraîne l'irrecevabilité de l'action.
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+        <div class="section-title">III. CONSTITUTION DU DOSSIER DOCUMENTAIRE</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Documents contractuels</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Contrat principal et annexes</div>
+                <div class="sub-item">☐ Avenants et modifications</div>
+                <div class="sub-item">☐ Cahier des charges</div>
+                <div class="sub-item">☐ Conditions générales et particulières</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Correspondances</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Échanges de courriers (papier et électroniques)</div>
+                <div class="sub-item">☐ Mises en demeure</div>
+                <div class="sub-item">☐ Comptes-rendus de réunion</div>
+                <div class="sub-item">☐ Procès-verbaux de constat</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Preuves et justificatifs</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Factures et décomptes</div>
+                <div class="sub-item">☐ Bons de commande / livraison</div>
+                <div class="sub-item">☐ Attestations et certificats</div>
+                <div class="sub-item">☐ Expertises et rapports techniques</div>
+                <div class="sub-item">☐ Photos, vidéos, plans</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Documents administratifs</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Autorisations et agréments</div>
+                <div class="sub-item">☐ Décisions administratives</div>
+                <div class="sub-item">☐ Registres et extraits officiels</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Textes juridiques applicables</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Lois et règlements pertinents</div>
+                <div class="sub-item">☐ Jurisprudence applicable</div>
+                <div class="sub-item">☐ Doctrine (si nécessaire)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+        <div class="section-title">IV. TENTATIVES DE RÈGLEMENT AMIABLE</div>
+        
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Mise en demeure envoyée</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Date d'envoi : _____________</div>
+                <div class="sub-item">☐ Mode d'envoi (recommandé AR, huissier) : _____________</div>
+                <div class="sub-item">☐ Copie de l'AR ou attestation de remise</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Négociations amiables menées</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Nombre et dates des rencontres : _____________</div>
+                <div class="sub-item">☐ Comptes-rendus établis</div>
+                <div class="sub-item">☐ Propositions formulées et réponses reçues</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Médiation ou conciliation tentée (si applicable)</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Médiateur désigné : _____________</div>
+                <div class="sub-item">☐ Procès-verbal de non-conciliation</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Échec des tentatives amiables constaté</strong></span>
+        </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section">
+        <div class="section-title">V. ANALYSE JURIDIQUE</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Fondement juridique de la demande établi</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Base légale identifiée</div>
+                <div class="sub-item">☐ Articles de loi applicables référencés</div>
+                <div class="sub-item">☐ Jurisprudence pertinente recensée</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Chances de succès évaluées</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Forces du dossier analysées</div>
+                <div class="sub-item">☐ Faiblesses identifiées</div>
+                <div class="sub-item">☐ Risques évalués</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Moyens de défense adverses anticipés</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Juridiction compétente identifiée</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Compétence matérielle déterminée</div>
+                <div class="sub-item">☐ Compétence territoriale fixée</div>
+                <div class="sub-item">☐ Clauses contractuelles de juridiction vérifiées</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section">
+        <div class="section-title">VI. ASPECTS FINANCIERS ET STRATÉGIQUES</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Montant des prétentions chiffré</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Préjudice principal : _____________</div>
+                <div class="sub-item">☐ Intérêts et pénalités : _____________</div>
+                <div class="sub-item">☐ Dommages et intérêts : _____________</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Coûts de la procédure estimés</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Frais de justice</div>
+                <div class="sub-item">☐ Honoraires d'avocat</div>
+                <div class="sub-item">☐ Frais d'expertise éventuels</div>
+                <div class="sub-item">☐ Durée estimée de la procédure</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Rapport coût/bénéfice analysé</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Impact stratégique évalué</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Conséquences sur les relations commerciales</div>
+                <div class="sub-item">☐ Effets sur l'image de l'État</div>
+                <div class="sub-item">☐ Précédent jurisprudentiel potentiel</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Solvabilité de la partie adverse vérifiée</strong></span>
+        </div>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section">
+        <div class="section-title">VII. PROCÉDURES CONSERVATOIRES ET D'URGENCE</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Nécessité de mesures conservatoires évaluée</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Saisie conservatoire</div>
+                <div class="sub-item">☐ Référé provision</div>
+                <div class="sub-item">☐ Référé suspension</div>
+                <div class="sub-item">☐ Autre mesure d'urgence</div>
+            </div>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Conditions d'urgence réunies (si applicable)</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Garanties et sûretés envisagées</strong></span>
+        </div>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section">
+        <div class="section-title">VIII. SAISINE DE L'AGENCE JUDICIAIRE DE L'ÉTAT</div>
+        
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Dossier complet transmis à l'AJE</strong></span>
+        </div>
+
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Formulaire de saisine rempli</strong></span>
+        </div>
+
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Note de synthèse rédigée</strong></span>
+            <div class="sub-items">
+                <div class="sub-item">☐ Exposé des faits</div>
+                <div class="sub-item">☐ Prétentions formulées</div>
+                <div class="sub-item">☐ Arguments juridiques</div>
+                <div class="sub-item">☐ Recommandations</div>
+            </div>
+        </div>
+
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Avis de l'AJE obtenu</strong></span>
+        </div>
+
+        <div class="checklist-item critical">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Autorisation de procéder délivrée</strong></span>
+        </div>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section">
+        <div class="section-title">IX. VALIDATION FINALE</div>
+        
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Tous les points ci-dessus vérifiés</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Autorité compétente informée</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Budget alloué et disponible</strong></span>
+        </div>
+
+        <div class="checklist-item">
+            <span class="checkbox">☐</span>
+            <span class="item-text"><strong>Stratégie contentieuse définie avec l'AJE</strong></span>
+        </div>
+    </div>
+
+    <!-- Tableau récapitulatif -->
+    <div class="section">
+        <h2 style="color: #003366; margin-top: 40px;">RÉCAPITULATIF DES INFORMATIONS</h2>
+        <table>
+            <tr>
+                <th>Élément</th>
+                <th>Information</th>
+            </tr>
+            <tr>
+                <td><strong>Administration concernée</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Partie adverse</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Nature du litige</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Montant en jeu</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Date limite d'action</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Juridiction compétente</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Responsable du dossier</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><strong>Contact</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="info-section" style="margin-top: 40px;">
+        <h3 style="color: #003366; margin-top: 0;">SIGNATURES ET VALIDATIONS</h3>
+        <div style="margin-top: 30px;">
+            <table style="border: none;">
+                <tr style="background: none;">
+                    <td style="border: none; width: 50%;">
+                        <strong>Chef de service :</strong><br><br>
+                        Date : ______________<br><br>
+                        Signature :
+                    </td>
+                    <td style="border: none; width: 50%;">
+                        <strong>Agence Judiciaire de l'État :</strong><br><br>
+                        Date : ______________<br><br>
+                        Avis et signature :
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="warning-box" style="margin-top: 30px;">
+        <strong>📞 Contact :</strong><br>
+        Pour toute question ou assistance dans le remplissage de cette check-list :<br>
+        <strong>Agence Judiciaire de l'État</strong><br>
+        Email : contact@aje.td<br>
+        Téléphone : +235 22 XX XX XX
+    </div>
+</body>
+</html>
