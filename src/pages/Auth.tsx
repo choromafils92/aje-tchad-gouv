@@ -112,6 +112,11 @@ const Auth = () => {
         title: 'Inscription réussie',
         description: 'Veuillez vérifier votre email pour confirmer votre compte.',
       });
+      
+      // Reset form fields after successful signup
+      setEmail('');
+      setPassword('');
+      setFullName('');
     } catch (error) {
       console.error('Signup error:', error);
       toast({
