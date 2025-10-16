@@ -9,7 +9,7 @@ const QuickAccess = () => {
       title: "Textes fondamentaux",
       description: "Consultez les lois, décrets et conventions qui régissent l'action de l'AJE",
       action: "Consulter",
-      link: "/textes/fondamentaux",
+      link: "/textes",
       color: "bg-primary/10 text-primary"
     },
     {

@@ -15,6 +15,7 @@ import FAQ from "./pages/FAQ";
 import DemandeAvis from "./pages/DemandeAvis";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Modeles from "./pages/Modeles";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => {
               <Route path="/textes/faq" element={<FAQ />} />
               <Route path="/actualites" element={<Actualites />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/services/modeles" element={<Modeles />} />
               <Route path="/services/demande-avis" element={<DemandeAvis />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/contentieux" element={<Contentieux />} />
