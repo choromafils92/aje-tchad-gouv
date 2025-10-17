@@ -16,6 +16,9 @@ import DemandeAvis from "./pages/DemandeAvis";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Modeles from "./pages/Modeles";
+import RendezVous from "./pages/RendezVous";
+import Carrieres from "./pages/Carrieres";
+import Medias from "./pages/Medias";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +45,9 @@ const App = () => {
               <Route path="/contentieux" element={<Contentieux />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/contact/rendez-vous" element={<RendezVous />} />
+              <Route path="/carrieres" element={<Carrieres />} />
+              <Route path="/medias" element={<Medias />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
