@@ -38,12 +38,12 @@ export default function DemandesAvisManagement() {
   const fetchDemandes = async () => {
     try {
       const { data, error } = await supabase
-        .from('demandes_avis')
+        .from('demandes_avis' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setDemandes(data || []);
+      setDemandes((data as unknown as DemandeAvis[]) || []);
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -60,7 +60,7 @@ export default function DemandesAvisManagement() {
 
     try {
       const { error } = await supabase
-        .from('demandes_avis')
+        .from('demandes_avis' as any)
         .update({
           statut,
           reponse: reponse || null,

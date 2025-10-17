@@ -32,12 +32,12 @@ export default function ContactsManagement() {
   const fetchContacts = async () => {
     try {
       const { data, error } = await supabase
-        .from('contacts')
+        .from('contacts' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setContacts(data || []);
+      setContacts((data as unknown as Contact[]) || []);
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -52,7 +52,7 @@ export default function ContactsManagement() {
   const updateStatus = async (id: string, statut: string) => {
     try {
       const { error } = await supabase
-        .from('contacts')
+        .from('contacts' as any)
         .update({ statut })
         .eq('id', id);
 

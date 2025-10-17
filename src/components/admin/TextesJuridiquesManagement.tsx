@@ -46,12 +46,12 @@ export default function TextesJuridiquesManagement() {
   const fetchTextes = async () => {
     try {
       const { data, error } = await supabase
-        .from('textes_juridiques')
+        .from('textes_juridiques' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTextes(data || []);
+      setTextes((data as unknown as TexteJuridique[]) || []);
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -67,6 +67,9 @@ export default function TextesJuridiquesManagement() {
     e.preventDefault();
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non authentifié");
+
       const dataToSend = {
         ...formData,
         date_publication: formData.date_publication || null,
@@ -74,7 +77,7 @@ export default function TextesJuridiquesManagement() {
 
       if (editingId) {
         const { error } = await supabase
-          .from('textes_juridiques')
+          .from('textes_juridiques' as any)
           .update(dataToSend)
           .eq('id', editingId);
 
@@ -86,8 +89,8 @@ export default function TextesJuridiquesManagement() {
         });
       } else {
         const { error } = await supabase
-          .from('textes_juridiques')
-          .insert([dataToSend]);
+          .from('textes_juridiques' as any)
+          .insert([{ ...dataToSend, created_by: user.id }]);
 
         if (error) throw error;
 
@@ -135,7 +138,7 @@ export default function TextesJuridiquesManagement() {
 
     try {
       const { error } = await supabase
-        .from('textes_juridiques')
+        .from('textes_juridiques' as any)
         .delete()
         .eq('id', id);
 

@@ -41,12 +41,12 @@ export default function FAQManagement() {
   const fetchFAQs = async () => {
     try {
       const { data, error } = await supabase
-        .from('faq')
+        .from('faq' as any)
         .select('*')
         .order('ordre', { ascending: true });
 
       if (error) throw error;
-      setFaqs(data || []);
+      setFaqs((data as unknown as FAQ[]) || []);
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -62,9 +62,12 @@ export default function FAQManagement() {
     e.preventDefault();
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non authentifié");
+
       if (editingId) {
         const { error } = await supabase
-          .from('faq')
+          .from('faq' as any)
           .update(formData)
           .eq('id', editingId);
 
@@ -76,8 +79,8 @@ export default function FAQManagement() {
         });
       } else {
         const { error } = await supabase
-          .from('faq')
-          .insert([formData]);
+          .from('faq' as any)
+          .insert([{ ...formData, created_by: user.id }]);
 
         if (error) throw error;
 
@@ -121,7 +124,7 @@ export default function FAQManagement() {
 
     try {
       const { error } = await supabase
-        .from('faq')
+        .from('faq' as any)
         .delete()
         .eq('id', id);
 

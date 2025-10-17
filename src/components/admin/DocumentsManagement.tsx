@@ -43,12 +43,12 @@ export default function DocumentsManagement() {
   const fetchDocuments = async () => {
     try {
       const { data, error } = await supabase
-        .from('documents')
+        .from('documents' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setDocuments(data || []);
+      setDocuments((data as unknown as Document[]) || []);
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -64,9 +64,12 @@ export default function DocumentsManagement() {
     e.preventDefault();
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non authentifié");
+
       if (editingId) {
         const { error } = await supabase
-          .from('documents')
+          .from('documents' as any)
           .update(formData)
           .eq('id', editingId);
 
@@ -78,8 +81,8 @@ export default function DocumentsManagement() {
         });
       } else {
         const { error } = await supabase
-          .from('documents')
-          .insert([formData]);
+          .from('documents' as any)
+          .insert([{ ...formData, created_by: user.id }]);
 
         if (error) throw error;
 
@@ -123,7 +126,7 @@ export default function DocumentsManagement() {
 
     try {
       const { error } = await supabase
-        .from('documents')
+        .from('documents' as any)
         .delete()
         .eq('id', id);
 
