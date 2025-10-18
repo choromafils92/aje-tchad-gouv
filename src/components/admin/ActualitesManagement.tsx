@@ -65,6 +65,8 @@ const ActualitesManagement = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [videos, setVideos] = useState<string[]>([]);
   const [pdfs, setPdfs] = useState<string[]>([]);
+  
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     fetchActualites();
@@ -198,6 +200,40 @@ const ActualitesManagement = () => {
     } else {
       setPdfs(pdfs.filter((_, i) => i !== index));
     }
+  };
+
+  // Drag & Drop handlers
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (targetIndex: number, type: 'photos' | 'videos' | 'pdfs') => {
+    if (draggedIndex === null) return;
+
+    const reorder = (list: string[]) => {
+      const result = [...list];
+      const [removed] = result.splice(draggedIndex, 1);
+      result.splice(targetIndex, 0, removed);
+      return result;
+    };
+
+    if (type === 'photos') {
+      setPhotos(reorder(photos));
+    } else if (type === 'videos') {
+      setVideos(reorder(videos));
+    } else {
+      setPdfs(reorder(pdfs));
+    }
+
+    setDraggedIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -453,24 +489,43 @@ const ActualitesManagement = () => {
                       disabled={uploadingPhotos}
                     />
                     {photos.length > 0 && (
-                      <div className="grid grid-cols-4 gap-2">
-                        {photos.map((url, index) => (
-                          <div key={index} className="relative group">
-                            <img 
-                              src={url} 
-                              alt={`Photo ${index + 1}`} 
-                              className="w-full h-24 object-cover rounded"
-                            />
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100"
-                              onClick={() => removeMedia('photos', index)}
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          Glissez-déposez pour réordonner les photos
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {photos.map((url, index) => (
+                            <div
+                              key={index}
+                              draggable
+                              onDragStart={() => handleDragStart(index)}
+                              onDragOver={handleDragOver}
+                              onDrop={() => handleDrop(index, 'photos')}
+                              onDragEnd={handleDragEnd}
+                              className={`relative group cursor-move transition-opacity ${
+                                draggedIndex === index ? 'opacity-50' : ''
+                              }`}
                             >
-                              <X className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        ))}
+                              <img 
+                                src={url} 
+                                alt={`Photo ${index + 1}`} 
+                                className="w-full h-24 object-cover rounded border-2 border-dashed border-transparent hover:border-primary"
+                              />
+                              <div className="absolute top-1 left-1 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                                {index + 1}
+                              </div>
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => removeMedia('photos', index)}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -502,10 +557,29 @@ const ActualitesManagement = () => {
                     />
                     {videos.length > 0 && (
                       <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          Glissez-déposez pour réordonner les vidéos
+                        </p>
                         {videos.map((url, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 border rounded">
-                            <span className="text-sm truncate flex-1">Vidéo {index + 1}</span>
+                          <div
+                            key={index}
+                            draggable
+                            onDragStart={() => handleDragStart(index)}
+                            onDragOver={handleDragOver}
+                            onDrop={() => handleDrop(index, 'videos')}
+                            onDragEnd={handleDragEnd}
+                            className={`flex items-center justify-between p-3 border-2 rounded cursor-move transition-all ${
+                              draggedIndex === index 
+                                ? 'opacity-50 border-dashed' 
+                                : 'border-solid hover:border-primary'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Video className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-sm font-medium">Vidéo {index + 1}</span>
+                            </div>
                             <Button
+                              type="button"
                               variant="ghost"
                               size="sm"
                               onClick={() => removeMedia('videos', index)}
@@ -545,10 +619,29 @@ const ActualitesManagement = () => {
                     />
                     {pdfs.length > 0 && (
                       <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          Glissez-déposez pour réordonner les PDFs
+                        </p>
                         {pdfs.map((url, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 border rounded">
-                            <span className="text-sm truncate flex-1">PDF {index + 1}</span>
+                          <div
+                            key={index}
+                            draggable
+                            onDragStart={() => handleDragStart(index)}
+                            onDragOver={handleDragOver}
+                            onDrop={() => handleDrop(index, 'pdfs')}
+                            onDragEnd={handleDragEnd}
+                            className={`flex items-center justify-between p-3 border-2 rounded cursor-move transition-all ${
+                              draggedIndex === index 
+                                ? 'opacity-50 border-dashed' 
+                                : 'border-solid hover:border-primary'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-sm font-medium">PDF {index + 1}</span>
+                            </div>
                             <Button
+                              type="button"
                               variant="ghost"
                               size="sm"
                               onClick={() => removeMedia('pdfs', index)}

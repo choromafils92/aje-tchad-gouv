@@ -1,5 +1,7 @@
--- Script SQL pour rendre le contenu dynamique
--- À exécuter dans Supabase SQL Editor
+-- ====================================
+-- MIGRATION: Création de site_settings
+-- À EXÉCUTER dans Supabase SQL Editor
+-- ====================================
 
 -- Create site_settings table for dynamic content management
 CREATE TABLE IF NOT EXISTS public.site_settings (
@@ -97,31 +99,53 @@ INSERT INTO public.site_settings (key, value, category, label, description) VALU
       "title": "Droit du Travail",
       "description": "Contentieux de la fonction publique"
     }
-  ]'::jsonb, 'contentieux', 'Domaines de Contentieux', 'Liste des domaines de contentieux');
+  ]'::jsonb, 'contentieux', 'Domaines de Contentieux', 'Liste des domaines de contentieux')
+ON CONFLICT (key) DO NOTHING;
 
 -- Create storage bucket for director photos
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('director-photos', 'director-photos', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Storage RLS policies
-DROP POLICY IF EXISTS "Anyone can view director photos" ON storage.objects;
-CREATE POLICY "Anyone can view director photos"
-  ON storage.objects FOR SELECT
-  USING (bucket_id = 'director-photos');
+-- Storage RLS policies for director photos
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' 
+    AND tablename = 'objects' 
+    AND policyname = 'Anyone can view director photos'
+  ) THEN
+    CREATE POLICY "Anyone can view director photos"
+      ON storage.objects FOR SELECT
+      USING (bucket_id = 'director-photos');
+  END IF;
 
-DROP POLICY IF EXISTS "Admins can upload director photos" ON storage.objects;
-CREATE POLICY "Admins can upload director photos"
-  ON storage.objects FOR INSERT
-  WITH CHECK (
-    bucket_id = 'director-photos' AND
-    has_role(auth.uid(), 'admin'::app_role)
-  );
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' 
+    AND tablename = 'objects' 
+    AND policyname = 'Admins can upload director photos'
+  ) THEN
+    CREATE POLICY "Admins can upload director photos"
+      ON storage.objects FOR INSERT
+      WITH CHECK (
+        bucket_id = 'director-photos' AND
+        has_role(auth.uid(), 'admin'::app_role)
+      );
+  END IF;
 
-DROP POLICY IF EXISTS "Admins can delete director photos" ON storage.objects;
-CREATE POLICY "Admins can delete director photos"
-  ON storage.objects FOR DELETE
-  USING (
-    bucket_id = 'director-photos' AND
-    has_role(auth.uid(), 'admin'::app_role)
-  );
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' 
+    AND tablename = 'objects' 
+    AND policyname = 'Admins can delete director photos'
+  ) THEN
+    CREATE POLICY "Admins can delete director photos"
+      ON storage.objects FOR DELETE
+      USING (
+        bucket_id = 'director-photos' AND
+        has_role(auth.uid(), 'admin'::app_role)
+      );
+  END IF;
+END $$;
