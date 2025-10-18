@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, X, FileText, Image as ImageIcon, Video } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -34,6 +34,9 @@ interface Actualite {
   urgent: boolean;
   published: boolean;
   created_at: string;
+  photos?: string[];
+  videos?: string[];
+  pdfs?: string[];
 }
 
 const ActualitesManagement = () => {
@@ -50,6 +53,18 @@ const ActualitesManagement = () => {
     urgent: false,
     published: false,
   });
+  
+  const [enablePhotos, setEnablePhotos] = useState(false);
+  const [enableVideos, setEnableVideos] = useState(false);
+  const [enablePdfs, setEnablePdfs] = useState(false);
+  
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [uploadingVideos, setUploadingVideos] = useState(false);
+  const [uploadingPdfs, setUploadingPdfs] = useState(false);
+  
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [videos, setVideos] = useState<string[]>([]);
+  const [pdfs, setPdfs] = useState<string[]>([]);
 
   useEffect(() => {
     fetchActualites();
@@ -76,16 +91,132 @@ const ActualitesManagement = () => {
     }
   };
 
+  const handleFileUpload = async (file: File, type: 'photos' | 'videos' | 'pdfs') => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${type}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('actualites-media')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('actualites-media')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
+  const handlePhotosUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setUploadingPhotos(true);
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of Array.from(e.target.files)) {
+        const url = await handleFileUpload(file, 'photos');
+        uploadedUrls.push(url);
+      }
+      setPhotos([...photos, ...uploadedUrls]);
+      toast({
+        title: 'Photos uploadées',
+        description: `${uploadedUrls.length} photo(s) ajoutée(s) avec succès.`,
+      });
+    } catch (error) {
+      console.error('Error uploading photos:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'uploader les photos.',
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingPhotos(false);
+    }
+  };
+
+  const handleVideosUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setUploadingVideos(true);
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of Array.from(e.target.files)) {
+        const url = await handleFileUpload(file, 'videos');
+        uploadedUrls.push(url);
+      }
+      setVideos([...videos, ...uploadedUrls]);
+      toast({
+        title: 'Vidéos uploadées',
+        description: `${uploadedUrls.length} vidéo(s) ajoutée(s) avec succès.`,
+      });
+    } catch (error) {
+      console.error('Error uploading videos:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'uploader les vidéos.',
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingVideos(false);
+    }
+  };
+
+  const handlePdfsUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setUploadingPdfs(true);
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of Array.from(e.target.files)) {
+        const url = await handleFileUpload(file, 'pdfs');
+        uploadedUrls.push(url);
+      }
+      setPdfs([...pdfs, ...uploadedUrls]);
+      toast({
+        title: 'PDFs uploadés',
+        description: `${uploadedUrls.length} PDF(s) ajouté(s) avec succès.`,
+      });
+    } catch (error) {
+      console.error('Error uploading pdfs:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'uploader les PDFs.',
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingPdfs(false);
+    }
+  };
+
+  const removeMedia = (type: 'photos' | 'videos' | 'pdfs', index: number) => {
+    if (type === 'photos') {
+      setPhotos(photos.filter((_, i) => i !== index));
+    } else if (type === 'videos') {
+      setVideos(videos.filter((_, i) => i !== index));
+    } else {
+      setPdfs(pdfs.filter((_, i) => i !== index));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!user) return;
 
     try {
+      const dataToSave = {
+        ...formData,
+        photos: enablePhotos ? photos : [],
+        videos: enableVideos ? videos : [],
+        pdfs: enablePdfs ? pdfs : [],
+      };
+
       if (editingId) {
         const { error } = await supabase
           .from('actualites')
-          .update(formData)
+          .update(dataToSave)
           .eq('id', editingId);
 
         if (error) throw error;
@@ -97,7 +228,7 @@ const ActualitesManagement = () => {
       } else {
         const { error } = await supabase
           .from('actualites')
-          .insert({ ...formData, created_by: user.id });
+          .insert({ ...dataToSave, created_by: user.id });
 
         if (error) throw error;
 
@@ -129,6 +260,19 @@ const ActualitesManagement = () => {
       urgent: actualite.urgent,
       published: actualite.published,
     });
+    
+    // Charger les médias existants
+    const hasPhotos = actualite.photos && actualite.photos.length > 0;
+    const hasVideos = actualite.videos && actualite.videos.length > 0;
+    const hasPdfs = actualite.pdfs && actualite.pdfs.length > 0;
+    
+    setEnablePhotos(hasPhotos);
+    setEnableVideos(hasVideos);
+    setEnablePdfs(hasPdfs);
+    
+    setPhotos(actualite.photos || []);
+    setVideos(actualite.videos || []);
+    setPdfs(actualite.pdfs || []);
   };
 
   const handleDelete = async (id: string) => {
@@ -188,6 +332,12 @@ const ActualitesManagement = () => {
       urgent: false,
       published: false,
     });
+    setEnablePhotos(false);
+    setEnableVideos(false);
+    setEnablePdfs(false);
+    setPhotos([]);
+    setVideos([]);
+    setPdfs([]);
   };
 
   if (loading) {
@@ -272,6 +422,145 @@ const ActualitesManagement = () => {
                   onCheckedChange={(checked) => setFormData({ ...formData, published: checked })}
                 />
                 <Label htmlFor="published">Publié</Label>
+              </div>
+            </div>
+
+            {/* Section Galerie Médias */}
+            <div className="border-t pt-4 space-y-4">
+              <h3 className="text-lg font-semibold">Galerie Médias</h3>
+              
+              {/* Photos */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="enable-photos"
+                    checked={enablePhotos}
+                    onCheckedChange={setEnablePhotos}
+                  />
+                  <Label htmlFor="enable-photos" className="flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4" />
+                    Ajouter des photos
+                  </Label>
+                </div>
+                
+                {enablePhotos && (
+                  <div className="space-y-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handlePhotosUpload}
+                      disabled={uploadingPhotos}
+                    />
+                    {photos.length > 0 && (
+                      <div className="grid grid-cols-4 gap-2">
+                        {photos.map((url, index) => (
+                          <div key={index} className="relative group">
+                            <img 
+                              src={url} 
+                              alt={`Photo ${index + 1}`} 
+                              className="w-full h-24 object-cover rounded"
+                            />
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100"
+                              onClick={() => removeMedia('photos', index)}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Vidéos */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="enable-videos"
+                    checked={enableVideos}
+                    onCheckedChange={setEnableVideos}
+                  />
+                  <Label htmlFor="enable-videos" className="flex items-center gap-2">
+                    <Video className="h-4 w-4" />
+                    Ajouter des vidéos
+                  </Label>
+                </div>
+                
+                {enableVideos && (
+                  <div className="space-y-2">
+                    <Input
+                      type="file"
+                      accept="video/*"
+                      multiple
+                      onChange={handleVideosUpload}
+                      disabled={uploadingVideos}
+                    />
+                    {videos.length > 0 && (
+                      <div className="space-y-2">
+                        {videos.map((url, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 border rounded">
+                            <span className="text-sm truncate flex-1">Vidéo {index + 1}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeMedia('videos', index)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* PDFs */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="enable-pdfs"
+                    checked={enablePdfs}
+                    onCheckedChange={setEnablePdfs}
+                  />
+                  <Label htmlFor="enable-pdfs" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Ajouter des PDFs
+                  </Label>
+                </div>
+                
+                {enablePdfs && (
+                  <div className="space-y-2">
+                    <Input
+                      type="file"
+                      accept="application/pdf"
+                      multiple
+                      onChange={handlePdfsUpload}
+                      disabled={uploadingPdfs}
+                    />
+                    {pdfs.length > 0 && (
+                      <div className="space-y-2">
+                        {pdfs.map((url, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 border rounded">
+                            <span className="text-sm truncate flex-1">PDF {index + 1}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeMedia('pdfs', index)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
