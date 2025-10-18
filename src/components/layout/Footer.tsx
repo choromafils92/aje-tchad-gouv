@@ -21,7 +21,7 @@ const Footer = () => {
 
   const fetchContactInfo = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("site_settings")
         .select("key, value")
         .in("key", ["contact_address", "contact_phone", "contact_email", "contact_hours"]);
@@ -29,19 +29,19 @@ const Footer = () => {
       if (error) throw error;
 
       const newInfo = { ...contactInfo };
-      data?.forEach((setting) => {
+      data?.forEach((setting: any) => {
         switch (setting.key) {
           case "contact_address":
-            newInfo.address = setting.value;
+            newInfo.address = setting.value as string;
             break;
           case "contact_phone":
-            newInfo.phone = setting.value;
+            newInfo.phone = setting.value as string;
             break;
           case "contact_email":
-            newInfo.email = setting.value;
+            newInfo.email = setting.value as string;
             break;
           case "contact_hours":
-            newInfo.hours = setting.value;
+            newInfo.hours = setting.value as string;
             break;
         }
       });

@@ -18,7 +18,7 @@ const DirectorMessage = () => {
 
   const fetchDirectorInfo = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("site_settings")
         .select("key, value")
         .in("key", ["director_name", "director_title", "director_grade", "director_photo", "director_message"]);
@@ -28,19 +28,20 @@ const DirectorMessage = () => {
       data?.forEach((setting) => {
         switch (setting.key) {
           case "director_name":
-            setDirectorName(setting.value);
+            setDirectorName(setting.value as string);
             break;
           case "director_title":
-            setDirectorTitle(setting.value);
+            setDirectorTitle(setting.value as string);
             break;
           case "director_grade":
-            setDirectorGrade(setting.value);
+            setDirectorGrade(setting.value as string);
             break;
           case "director_photo":
-            setDirectorPhoto(setting.value);
+            setDirectorPhoto(setting.value as string);
             break;
           case "director_message":
-            setDirectorMessage(setting.value);
+            const messageValue = setting.value;
+            setDirectorMessage(Array.isArray(messageValue) ? messageValue : []);
             break;
         }
       });
