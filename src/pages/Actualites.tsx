@@ -6,95 +6,51 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Search, Filter, Megaphone, FileText, AlertTriangle, Users, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
+
+interface Actualite {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  created_at: string;
+  urgent: boolean;
+}
 
 const Actualites = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [actualites, setActualites] = useState<Actualite[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const actualites = [
-    {
-      id: 1,
-      type: "Communiqué",
-      category: "Réglementation",
-      title: "Nouvelle procédure de saisine de l'AJE pour les contrats publics supérieurs à 100 millions FCFA",
-      description: "À compter du 1er février 2024, toutes les administrations publiques devront obligatoirement saisir l'AJE pour validation juridique préalable de leurs projets de contrats publics d'une valeur supérieure à 100 millions de francs CFA. Cette mesure vise à renforcer la sécurité juridique des engagements de l'État.",
-      content: "Cette nouvelle procédure, instituée par la circulaire n° 001/PR/AJE/2024, s'inscrit dans le cadre de la modernisation de l'action publique et de la prévention des contentieux. Les administrations disposent désormais d'un délai de 15 jours ouvrables pour recevoir l'avis de l'AJE. Un formulaire dématérialisé sera prochainement mis en ligne pour faciliter les démarches.",
-      date: "2024-01-25",
-      urgent: false,
-      icon: FileText,
-      author: "Direction de l'AJE"
-    },
-    {
-      id: 2,
-      type: "Note au public",
-      category: "Procédure",
-      title: "Rappel important : Délais de prescription en matière de contentieux administratif",
-      description: "Suite à plusieurs cas de forclusion observés, l'AJE rappelle aux administrations et aux justiciables les délais impératifs de recours gracieux (2 mois) et contentieux (4 mois) applicables aux décisions administratives. Ces délais courent à compter de la notification ou de la publication de la décision.",
-      content: "Il est essentiel de respecter ces délais pour préserver les droits de l'État et des administrés. L'AJE recommande la mise en place d'un système de suivi des délais dans chaque administration. Des formations sur la gestion des délais contentieux seront organisées au premier trimestre 2024.",
-      date: "2024-01-20",
-      urgent: true,
-      icon: AlertTriangle,
-      author: "Service Contentieux"
-    },
-    {
-      id: 3,
-      type: "Annonce",
-      category: "Formation",
-      title: "Lancement du programme de formation juridique continue pour les administrations",
-      description: "L'AJE annonce le lancement de son programme de formation juridique continue destiné aux cadres des administrations publiques. Ces formations porteront sur la rédaction des actes administratifs, la prévention des contentieux et la gestion des marchés publics.",
-      content: "Le programme comprend 12 modules thématiques répartis sur l'année 2024. Les inscriptions sont ouvertes jusqu'au 15 février. Priorité sera donnée aux administrations ayant eu le plus de contentieux en 2023. Certificat de formation délivré en fin de parcours.",
-      date: "2024-01-18",
-      urgent: false,
-      icon: Users,
-      author: "Direction des Affaires Juridiques"
-    },
-    {
-      id: 4,
-      type: "Communiqué",
-      category: "Résultats",
-      title: "Bilan 2023 : L'AJE enregistre un taux de succès de 87% dans ses contentieux",
-      description: "L'Agence Judiciaire de l'État présente un bilan positif pour l'exercice 2023 avec 2,847 dossiers traités et un taux de succès de 87% dans les affaires contentieuses. Ces résultats témoignent de l'efficacité de l'action juridique menée au service de l'État.",
-      content: "Les domaines les plus actifs ont été les marchés publics (34% des dossiers), le contentieux fiscal (28%) et les différends fonciers (19%). L'AJE a également fourni 1,250 avis juridiques préventifs, contribuant à éviter de nombreux contentieux. Le montant total des enjeux financiers préservés s'élève à 15,7 milliards FCFA.",
-      date: "2024-01-15",
-      urgent: false,
-      icon: FileText,
-      author: "Direction Générale AJE"
-    },
-    {
-      id: 5,
-      type: "Note au public",
-      category: "Information",
-      title: "Mise à jour des coordonnées de contact de l'AJE",
-      description: "L'AJE informe ses partenaires de la mise à jour de ses coordonnées de contact suite au déménagement de certains services dans les nouveaux locaux du quartier administratif.",
-      content: "Nouvelles coordonnées : Siège social - Avenue Félix Éboué, Quartier administratif, N'Djamena. Téléphone : +235 22 XX XX XX. Email : contact@aje.td. Les horaires d'ouverture restent inchangés : 7h30-15h30 du lundi au jeudi, 7h30-12h30 le vendredi.",
-      date: "2024-01-12",
-      urgent: false,
-      icon: Megaphone,
-      author: "Secrétariat Général"
-    },
-    {
-      id: 6,
-      type: "Communiqué",
-      category: "Jurisprudence",
-      title: "Victoire importante de l'État dans l'affaire du contentieux électoral de 2021",
-      description: "La Cour Suprême a confirmé la validité des décisions de la Commission Électorale Nationale Indépendante, donnant raison aux arguments développés par l'AJE. Cette décision fait jurisprudence en matière de contentieux électoral.",
-      content: "Cette victoire juridique, obtenue après 18 mois de procédure, confirme la solidité de l'argumentation juridique développée par l'équipe de l'AJE. Elle établit des précédents importants pour les futures consultations électorales et renforce la sécurité juridique du processus démocratique tchadien.",
-      date: "2024-01-08",
-      urgent: false,
-      icon: FileText,
-      author: "Service Contentieux Constitutionnel"
-    }
-  ];
+  useEffect(() => {
+    const fetchActualites = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("actualites")
+          .select("id, type, title, description, created_at, urgent")
+          .eq("published", true)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        setActualites(data || []);
+      } catch (error) {
+        console.error("Error fetching actualites:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActualites();
+  }, []);
 
   const categories = [
     { value: "all", label: "Toutes les catégories" },
-    { value: "Réglementation", label: "Réglementation" },
-    { value: "Procédure", label: "Procédure" },
-    { value: "Formation", label: "Formation" },
-    { value: "Résultats", label: "Résultats" },
-    { value: "Information", label: "Information" },
-    { value: "Jurisprudence", label: "Jurisprudence" }
+    { value: "Communiqué", label: "Communiqué" },
+    { value: "Note au public", label: "Note au public" },
+    { value: "Annonce", label: "Annonce" }
   ];
 
   const getTypeColor = (type: string, urgent: boolean) => {
@@ -107,12 +63,33 @@ const Actualites = () => {
     }
   };
 
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "Communiqué": return FileText;
+      case "Note au public": return AlertTriangle;
+      case "Annonce": return Megaphone;
+      default: return FileText;
+    }
+  };
+
   const filteredActualites = actualites.filter(actu => {
     const matchesSearch = actu.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          actu.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || actu.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || actu.type === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="flex items-center justify-center py-20">
+          <p className="text-lg text-muted-foreground">Chargement des actualités...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -183,7 +160,7 @@ const Actualites = () => {
 
               <div className="space-y-8">
                 {filteredActualites.map((actu) => {
-                  const IconComponent = actu.icon;
+                  const IconComponent = getTypeIcon(actu.type);
                   return (
                     <Card key={actu.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
@@ -194,13 +171,10 @@ const Actualites = () => {
                                 <Badge variant={getTypeColor(actu.type, actu.urgent)} className="text-xs">
                                   {actu.urgent && "🔴 "}{actu.type}
                                 </Badge>
-                                <Badge variant="outline" className="text-xs">
-                                  {actu.category}
-                                </Badge>
                               </div>
                               <div className="flex items-center text-sm text-muted-foreground">
                                 <Calendar className="h-4 w-4 mr-2" />
-                                {new Date(actu.date).toLocaleDateString('fr-FR', {
+                                {new Date(actu.created_at).toLocaleDateString('fr-FR', {
                                   day: 'numeric',
                                   month: 'long',
                                   year: 'numeric'
@@ -216,18 +190,15 @@ const Actualites = () => {
                               {actu.description}
                             </CardDescription>
                             <div className="pt-4 border-t">
-                              <p className="text-sm text-muted-foreground mb-4">
-                                <strong>Source :</strong> {actu.author}
-                              </p>
                               <Button 
                                 variant="outline" 
                                 className="group"
-                                onClick={() => {
-                                  alert(`Ouverture de l'article: "${actu.title}"\n\nContenu: ${actu.content}`);
-                                }}
+                                asChild
                               >
-                                Lire l'article complet
-                                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                <Link to={`/actualites/${actu.id}`}>
+                                  Lire l'article complet
+                                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                </Link>
                               </Button>
                             </div>
                           </CardContent>
