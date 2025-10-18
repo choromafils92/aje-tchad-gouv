@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
 import armoirieTchad from "@/assets/armoirie-tchad.png";
+import logoAje from "@/assets/logo-aje-color.svg";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
@@ -52,25 +53,32 @@ const Hero = () => {
           <div className="hidden lg:block">
             <div className="relative">
               <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                <div className="text-center space-y-4">
-                  <div className="flex items-center justify-center space-x-4 mb-6">
+                <div className="text-center space-y-6">
+                  <div className="space-y-3">
+                    <h3 className="text-2xl font-semibold opacity-90">
+                      {t("hero.republic")}
+                    </h3>
+                    <p className="text-base opacity-75 font-medium">
+                      {t("hero.motto")}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center space-x-6">
                     <img 
                       src={drapeauTchad} 
                       alt="Drapeau du Tchad"
-                      className="w-16 h-12 object-cover rounded shadow-md"
+                      className="w-24 h-18 object-cover rounded shadow-md"
                     />
                     <img 
                       src={armoirieTchad} 
                       alt="Armoirie du Tchad"
-                      className="w-16 h-16 object-contain"
+                      className="w-24 h-24 object-contain"
+                    />
+                    <img 
+                      src={logoAje} 
+                      alt="Logo AJE"
+                      className="w-24 h-24 object-contain"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold opacity-90">
-                    {t("hero.republic")}
-                  </h3>
-                  <p className="text-sm opacity-75 font-medium">
-                    {t("hero.motto")}
-                  </p>
                 </div>
               </div>
             </div>

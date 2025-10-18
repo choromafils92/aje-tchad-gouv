@@ -74,12 +74,15 @@ const DirectorMessage = () => {
                       />
                     </div>
                     <div className="mt-4 text-center space-y-2">
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-base font-medium text-foreground">
                         {directorTitle}
                       </p>
                       <h3 className="text-2xl font-bold text-foreground whitespace-nowrap">
                         {directorName}
                       </h3>
+                      <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                        (Magistrat)
+                      </p>
                     </div>
                   </div>
 
