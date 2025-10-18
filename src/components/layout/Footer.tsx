@@ -1,10 +1,57 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
   const { t } = useLanguage();
+  const [loading, setLoading] = useState(true);
+  const [contactInfo, setContactInfo] = useState({
+    address: "Avenue Félix Éboué, Quartier administratif\nN'Djamena, République du Tchad",
+    phone: "+235 22 XX XX XX",
+    email: "contact@aje.td",
+    hours: "Lundi au Jeudi : 7h30 - 15h30\nVendredi : 7h30 - 12h30\nWeekend : Fermé"
+  });
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, []);
+
+  const fetchContactInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("key, value")
+        .in("key", ["contact_address", "contact_phone", "contact_email", "contact_hours"]);
+
+      if (error) throw error;
+
+      const newInfo = { ...contactInfo };
+      data?.forEach((setting) => {
+        switch (setting.key) {
+          case "contact_address":
+            newInfo.address = setting.value;
+            break;
+          case "contact_phone":
+            newInfo.phone = setting.value;
+            break;
+          case "contact_email":
+            newInfo.email = setting.value;
+            break;
+          case "contact_hours":
+            newInfo.hours = setting.value;
+            break;
+        }
+      });
+      setContactInfo(newInfo);
+    } catch (error) {
+      console.error("Error fetching contact info:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -24,22 +71,28 @@ const Footer = () => {
               </div>
             </div>
             
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start space-x-2">
-                <MapPin className="h-4 w-4 mt-0.5 opacity-75" />
-                <div>
-                  <p>{t("footer.address")}</p>
+            {loading ? (
+              <div className="flex justify-center py-4">
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </div>
+            ) : (
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start space-x-2">
+                  <MapPin className="h-4 w-4 mt-0.5 opacity-75" />
+                  <div>
+                    <p className="whitespace-pre-line">{contactInfo.address}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4 opacity-75" />
+                  <p>{contactInfo.phone}</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4 opacity-75" />
+                  <p>{contactInfo.email}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 opacity-75" />
-                <p>{t("footer.phone")}</p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 opacity-75" />
-                <p>{t("footer.email")}</p>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Quick Links */}

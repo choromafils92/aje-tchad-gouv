@@ -8,6 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminManagement from '@/components/admin/AdminManagement';
 import ActualitesManagement from '@/components/admin/ActualitesManagement';
+import DocumentsManagement from '@/components/admin/DocumentsManagement';
+import FAQManagement from '@/components/admin/FAQManagement';
+import TextesJuridiquesManagement from '@/components/admin/TextesJuridiquesManagement';
+import SiteSettingsManagement from '@/components/admin/SiteSettingsManagement';
+import DemandesAvisManagement from '@/components/admin/DemandesAvisManagement';
+import ContactsManagement from '@/components/admin/ContactsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -55,13 +61,43 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="actualites" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
             <TabsTrigger value="actualites">Actualités</TabsTrigger>
-            <TabsTrigger value="admins">Administrateurs</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
+            <TabsTrigger value="textes">Textes</TabsTrigger>
+            <TabsTrigger value="faq">FAQ</TabsTrigger>
+            <TabsTrigger value="avis">Avis</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="parametres">Paramètres</TabsTrigger>
+            <TabsTrigger value="admins">Admins</TabsTrigger>
           </TabsList>
           
           <TabsContent value="actualites" className="mt-6">
             <ActualitesManagement />
+          </TabsContent>
+          
+          <TabsContent value="documents" className="mt-6">
+            <DocumentsManagement />
+          </TabsContent>
+          
+          <TabsContent value="textes" className="mt-6">
+            <TextesJuridiquesManagement />
+          </TabsContent>
+          
+          <TabsContent value="faq" className="mt-6">
+            <FAQManagement />
+          </TabsContent>
+          
+          <TabsContent value="avis" className="mt-6">
+            <DemandesAvisManagement />
+          </TabsContent>
+          
+          <TabsContent value="contacts" className="mt-6">
+            <ContactsManagement />
+          </TabsContent>
+          
+          <TabsContent value="parametres" className="mt-6">
+            <SiteSettingsManagement />
           </TabsContent>
           
           <TabsContent value="admins" className="mt-6">
