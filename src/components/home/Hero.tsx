@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
 import armoirieTchad from "@/assets/armoirie-tchad.png";
-import logoAje from "@/assets/logo-aje-color.svg";
+import logoAje from "@/assets/logo-arrondi-vf.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
@@ -73,13 +73,11 @@ const Hero = () => {
                       alt="Armoirie du Tchad"
                       className="w-28 h-28 object-contain"
                     />
-                    <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden">
-                      <img 
-                        src={logoAje} 
-                        alt="Logo AJE"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                    <img 
+                      src={logoAje} 
+                      alt="Logo AJE"
+                      className="w-28 h-28 object-contain"
+                    />
                   </div>
                 </div>
               </div>
