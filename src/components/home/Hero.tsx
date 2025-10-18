@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
 import armoirieTchad from "@/assets/armoirie-tchad.png";
-import logoAje from "@/assets/logo-arrondi-vf.png";
+import logoAje from "@/assets/logo-aje-final.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
@@ -66,7 +66,7 @@ const Hero = () => {
                     <img 
                       src={drapeauTchad} 
                       alt="Drapeau du Tchad"
-                      className="w-28 h-20 object-cover rounded shadow-md"
+                      className="w-28 h-28 object-cover rounded shadow-md"
                     />
                     <img 
                       src={armoirieTchad} 
