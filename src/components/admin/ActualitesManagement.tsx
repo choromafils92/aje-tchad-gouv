@@ -659,11 +659,11 @@ const ActualitesManagement = () => {
 
             <div className="flex gap-2">
               <Button type="submit">
-                {editingId ? 'Modifier' : 'Ajouter'}
+                {editingId ? 'Sauvegarder l\'actualité' : 'Ajouter une nouvelle actualité'}
               </Button>
               {editingId && (
                 <Button type="button" variant="outline" onClick={resetForm}>
-                  Annuler
+                  Annuler la modification
                 </Button>
               )}
             </div>
