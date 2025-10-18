@@ -73,11 +73,11 @@ const Hero = () => {
                       alt="Armoirie du Tchad"
                       className="w-28 h-28 object-contain"
                     />
-                    <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg p-3">
+                    <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                       <img 
                         src={logoAje} 
                         alt="Logo AJE"
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
