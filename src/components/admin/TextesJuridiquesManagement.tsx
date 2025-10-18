@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Trash2, Edit } from 'lucide-react';
+import { Trash2, Edit, Upload } from 'lucide-react';
 
 interface TexteJuridique {
   id: string;
@@ -27,6 +27,8 @@ export default function TextesJuridiquesManagement() {
   const [textes, setTextes] = useState<TexteJuridique[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -63,6 +65,36 @@ export default function TextesJuridiquesManagement() {
     }
   };
 
+  const handleFileUpload = async (file: File): Promise<string | null> => {
+    try {
+      setUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('textes-juridiques-files')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('textes-juridiques-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error: any) {
+      toast({
+        title: 'Erreur d\'upload',
+        description: error.message,
+        variant: 'destructive',
+      });
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -70,8 +102,17 @@ export default function TextesJuridiquesManagement() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Non authentifié");
 
+      let uploadedFileUrl = formData.file_url;
+
+      if (selectedFile) {
+        const uploadedUrl = await handleFileUpload(selectedFile);
+        if (!uploadedUrl) return;
+        uploadedFileUrl = uploadedUrl;
+      }
+
       const dataToSend = {
         ...formData,
+        file_url: uploadedFileUrl || null,
         date_publication: formData.date_publication || null,
       };
 
@@ -110,6 +151,7 @@ export default function TextesJuridiquesManagement() {
         published: true,
       });
       setEditingId(null);
+      setSelectedFile(null);
       fetchTextes();
     } catch (error: any) {
       toast({
@@ -131,6 +173,7 @@ export default function TextesJuridiquesManagement() {
       file_url: texte.file_url || '',
       published: texte.published,
     });
+    setSelectedFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -223,22 +266,38 @@ export default function TextesJuridiquesManagement() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="content">Contenu</Label>
+              <Label htmlFor="content">Contenu (optionnel)</Label>
               <Textarea
                 id="content"
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={6}
+                placeholder="Texte intégral ou résumé..."
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="file_url">URL du fichier PDF</Label>
+              <Label htmlFor="file">
+                <Upload className="inline mr-2 h-4 w-4" />
+                Fichier PDF (optionnel)
+              </Label>
               <Input
-                id="file_url"
-                value={formData.file_url}
-                onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
+                id="file"
+                type="file"
+                accept=".pdf"
+                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                disabled={uploading}
               />
+              {selectedFile && (
+                <p className="text-sm text-green-600 mt-1">
+                  Fichier sélectionné: {selectedFile.name}
+                </p>
+              )}
+              {editingId && formData.file_url && !selectedFile && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Fichier actuel conservé (choisissez un nouveau fichier pour le remplacer)
+                </p>
+              )}
             </div>
 
             <div className="flex items-center space-x-2">
@@ -251,8 +310,8 @@ export default function TextesJuridiquesManagement() {
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? 'Mettre à jour' : 'Ajouter'}
+              <Button type="submit" disabled={uploading}>
+                {uploading ? 'Upload en cours...' : editingId ? 'Mettre à jour' : 'Ajouter'}
               </Button>
               {editingId && (
                 <Button
@@ -260,6 +319,7 @@ export default function TextesJuridiquesManagement() {
                   variant="outline"
                   onClick={() => {
                     setEditingId(null);
+                    setSelectedFile(null);
                     setFormData({
                       title: '',
                       reference: '',

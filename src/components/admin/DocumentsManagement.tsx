@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Trash2, Edit, Plus } from 'lucide-react';
+import { Trash2, Edit, Upload } from 'lucide-react';
 
 interface Document {
   id: string;
@@ -26,6 +26,8 @@ export default function DocumentsManagement() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -60,6 +62,36 @@ export default function DocumentsManagement() {
     }
   };
 
+  const handleFileUpload = async (file: File): Promise<string | null> => {
+    try {
+      setUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('documents-files')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('documents-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error: any) {
+      toast({
+        title: 'Erreur d\'upload',
+        description: error.message,
+        variant: 'destructive',
+      });
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -67,10 +99,32 @@ export default function DocumentsManagement() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Non authentifié");
 
+      let uploadedFileUrl = formData.file_url;
+
+      if (selectedFile) {
+        const uploadedUrl = await handleFileUpload(selectedFile);
+        if (!uploadedUrl) return;
+        uploadedFileUrl = uploadedUrl;
+      }
+
+      if (!uploadedFileUrl && !editingId) {
+        toast({
+          title: 'Erreur',
+          description: 'Veuillez sélectionner un fichier',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      const dataToSubmit = {
+        ...formData,
+        file_url: uploadedFileUrl,
+      };
+
       if (editingId) {
         const { error } = await supabase
           .from('documents' as any)
-          .update(formData)
+          .update(dataToSubmit)
           .eq('id', editingId);
 
         if (error) throw error;
@@ -82,7 +136,7 @@ export default function DocumentsManagement() {
       } else {
         const { error } = await supabase
           .from('documents' as any)
-          .insert([{ ...formData, created_by: user.id }]);
+          .insert([{ ...dataToSubmit, created_by: user.id }]);
 
         if (error) throw error;
 
@@ -100,6 +154,7 @@ export default function DocumentsManagement() {
         published: true,
       });
       setEditingId(null);
+      setSelectedFile(null);
       fetchDocuments();
     } catch (error: any) {
       toast({
@@ -119,6 +174,7 @@ export default function DocumentsManagement() {
       category: doc.category,
       published: doc.published,
     });
+    setSelectedFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -181,13 +237,27 @@ export default function DocumentsManagement() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="file_url">URL du fichier</Label>
+              <Label htmlFor="file">
+                <Upload className="inline mr-2 h-4 w-4" />
+                Fichier (PDF, DOCX, etc.)
+              </Label>
               <Input
-                id="file_url"
-                value={formData.file_url}
-                onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
-                required
+                id="file"
+                type="file"
+                accept=".pdf,.doc,.docx,.xls,.xlsx"
+                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                disabled={uploading}
               />
+              {selectedFile && (
+                <p className="text-sm text-green-600 mt-1">
+                  Fichier sélectionné: {selectedFile.name}
+                </p>
+              )}
+              {editingId && formData.file_url && !selectedFile && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Fichier actuel conservé (choisissez un nouveau fichier pour le remplacer)
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -218,8 +288,8 @@ export default function DocumentsManagement() {
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? 'Mettre à jour' : 'Ajouter'}
+              <Button type="submit" disabled={uploading}>
+                {uploading ? 'Upload en cours...' : editingId ? 'Mettre à jour' : 'Ajouter'}
               </Button>
               {editingId && (
                 <Button
@@ -227,6 +297,7 @@ export default function DocumentsManagement() {
                   variant="outline"
                   onClick={() => {
                     setEditingId(null);
+                    setSelectedFile(null);
                     setFormData({
                       title: '',
                       description: '',
