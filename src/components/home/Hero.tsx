@@ -11,26 +11,26 @@ const Hero = () => {
   return (
     <section className="relative bg-gradient-to-br from-primary to-accent text-primary-foreground overflow-hidden">
       <div className="absolute inset-0 bg-black/10"></div>
-      <div className="relative container mx-auto px-4 py-20 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative container mx-auto px-4 py-12 md:py-20 lg:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold leading-tight">
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
                   {t("hero.title")}
                 </h1>
-                <p className="text-lg opacity-90 uppercase tracking-wide mt-2">
+                <p className="text-base md:text-lg opacity-90 uppercase tracking-wide mt-2">
                   {t("hero.tagline")}
                 </p>
               </div>
             </div>
             
             <div className="space-y-6">
-              <p className="text-lg lg:text-xl leading-relaxed opacity-95">
+              <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95">
                 {t("hero.description")}
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <Button 
                   size="lg" 
                   variant="secondary"
@@ -53,7 +53,7 @@ const Hero = () => {
           <div className="hidden lg:block">
             <div className="relative">
               <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                <div className="text-center space-y-6">
+                <div className="text-center space-y-6 px-4">
                   <div className="space-y-3">
                     <h3 className="text-2xl font-semibold opacity-90">
                       {t("hero.republic")}
@@ -66,18 +66,20 @@ const Hero = () => {
                     <img 
                       src={drapeauTchad} 
                       alt="Drapeau du Tchad"
-                      className="w-24 h-18 object-cover rounded shadow-md"
+                      className="w-28 h-20 object-cover rounded shadow-md"
                     />
                     <img 
                       src={armoirieTchad} 
                       alt="Armoirie du Tchad"
-                      className="w-24 h-24 object-contain"
+                      className="w-28 h-28 object-contain"
                     />
-                    <img 
-                      src={logoAje} 
-                      alt="Logo AJE"
-                      className="w-24 h-24 object-contain"
-                    />
+                    <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg p-3">
+                      <img 
+                        src={logoAje} 
+                        alt="Logo AJE"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
