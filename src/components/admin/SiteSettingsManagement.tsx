@@ -226,6 +226,15 @@ const SiteSettingsManagement = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>Grade du Directeur</Label>
+                <Input
+                  value={settings.director_grade || ""}
+                  onChange={(e) => setSettings({ ...settings, director_grade: e.target.value })}
+                  placeholder="Ex: MAGISTRAT"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label>Message du Directeur</Label>
                 {(settings.director_message || []).map((paragraph: string, index: number) => (
                   <div key={index} className="flex gap-2">
@@ -253,6 +262,7 @@ const SiteSettingsManagement = () => {
               <Button onClick={() => {
                 updateSetting("director_name", settings.director_name);
                 updateSetting("director_title", settings.director_title);
+                updateSetting("director_grade", settings.director_grade);
                 updateSetting("director_message", settings.director_message);
               }} disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
