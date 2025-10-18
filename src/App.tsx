@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Missions from "./pages/Missions";
 import Textes from "./pages/Textes";
 import Actualites from "./pages/Actualites";
+import ActualiteDetail from "./pages/ActualiteDetail";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Contentieux from "./pages/Contentieux";
@@ -38,6 +39,7 @@ const App = () => {
               <Route path="/textes" element={<Textes />} />
               <Route path="/textes/faq" element={<FAQ />} />
               <Route path="/actualites" element={<Actualites />} />
+              <Route path="/actualites/:id" element={<ActualiteDetail />} />
               <Route path="/services" element={<Services />} />
               <Route path="/services/modeles" element={<Modeles />} />
               <Route path="/services/demande-avis" element={<DemandeAvis />} />

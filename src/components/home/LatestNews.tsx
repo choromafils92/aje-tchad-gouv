@@ -1,40 +1,45 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, ArrowRight, FileText, AlertTriangle, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Actualite {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  created_at: string;
+  urgent: boolean;
+}
 
 const LatestNews = () => {
-  // Mock data - in real app this would come from a CMS
-  const news = [
-    {
-      id: 1,
-      type: "Communiqué",
-      title: "Nouvelle procédure de saisine de l'AJE pour les contrats publics",
-      description: "Les administrations doivent désormais suivre la procédure simplifiée pour soumettre leurs projets de contrats à l'analyse juridique préalable.",
-      date: "2024-01-15",
-      urgent: false,
-      icon: FileText
-    },
-    {
-      id: 2,
-      type: "Note au public",
-      title: "Rappel des délais de prescription en matière de contentieux administratif",
-      description: "Important rappel concernant les délais de recours gracieux et contentieux applicables aux décisions administratives.",
-      date: "2024-01-10",
-      urgent: true,
-      icon: AlertTriangle
-    },
-    {
-      id: 3,
-      type: "Annonce",
-      title: "Ouverture des consultations juridiques mensuelles",
-      description: "L'AJE organise des sessions de consultation juridique pour les administrations publiques tous les premiers mardis du mois.",
-      date: "2024-01-08",
-      urgent: false,
-      icon: Megaphone
-    }
-  ];
+  const [news, setNews] = useState<Actualite[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchActualites = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("actualites")
+          .select("id, type, title, description, created_at, urgent")
+          .eq("published", true)
+          .order("created_at", { ascending: false })
+          .limit(3);
+
+        if (error) throw error;
+        setNews(data || []);
+      } catch (error) {
+        console.error("Error fetching actualites:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActualites();
+  }, []);
 
   const getTypeColor = (type: string, urgent: boolean) => {
     if (urgent) return "destructive";
@@ -45,6 +50,38 @@ const LatestNews = () => {
       default: return "default";
     }
   };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "Communiqué": return FileText;
+      case "Note au public": return AlertTriangle;
+      case "Annonce": return Megaphone;
+      default: return FileText;
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-muted-foreground">Chargement des actualités...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (news.length === 0) {
+    return (
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4 text-center">
+            Dernières publications
+          </h2>
+          <p className="text-center text-muted-foreground">Aucune actualité disponible pour le moment.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-background">
@@ -68,7 +105,7 @@ const LatestNews = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {news.map((item) => {
-            const IconComponent = item.icon;
+            const IconComponent = getTypeIcon(item.type);
             return (
               <Card key={item.id} className="group hover:shadow-lg transition-all duration-300">
                 <CardHeader className="space-y-3">
@@ -90,14 +127,14 @@ const LatestNews = () => {
                   <div className="flex items-center justify-between pt-2 border-t">
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4 mr-2" />
-                      {new Date(item.date).toLocaleDateString('fr-FR', {
+                      {new Date(item.created_at).toLocaleDateString('fr-FR', {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric'
                       })}
                     </div>
                     <Button variant="ghost" size="sm" className="text-accent hover:text-accent-foreground hover:bg-accent" asChild>
-                      <Link to="/actualites">
+                      <Link to={`/actualites/${item.id}`}>
                         Lire plus
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
