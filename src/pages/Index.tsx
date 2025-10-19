@@ -16,8 +16,8 @@ const Index = () => {
         <DirectorMessage />
         <MissionCards />
         <QuickAccess />
-        <SubDirectors />
         <LatestNews />
+        <SubDirectors />
       </main>
       <Footer />
     </div>

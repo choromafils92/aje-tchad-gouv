@@ -154,11 +154,11 @@ const LatestNews = () => {
             Abonnez-vous à notre newsletter ou suivez notre flux RSS pour ne manquer aucune publication officielle
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default">
-              S'abonner à la newsletter
+            <Button variant="default" asChild>
+              <Link to="/rss">S'abonner à la newsletter</Link>
             </Button>
-            <Button variant="outline">
-              Flux RSS
+            <Button variant="outline" asChild>
+              <Link to="/rss">Flux RSS</Link>
             </Button>
           </div>
         </div>
