@@ -64,10 +64,6 @@ const Hero = () => {
             ) : (
               <>
                 <div className="space-y-6">
-                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95 text-center">
-                    {heroContent.description}
-                  </p>
-                  
                   <div className="flex flex-col items-center space-y-2">
                     <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-center ml-8">
                       {heroContent.title}
@@ -76,6 +72,10 @@ const Hero = () => {
                       {heroContent.tagline}
                     </p>
                   </div>
+                  
+                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95 text-center">
+                    {heroContent.description}
+                  </p>
                 </div>
                 
                 <div className="space-y-6">
