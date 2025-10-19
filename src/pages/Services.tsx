@@ -435,7 +435,13 @@ const Services = () => {
                           <CardDescription className="text-foreground/80">
                             {doc.description}
                           </CardDescription>
-                          <Button className="w-full">
+                          <Button 
+                            className="w-full"
+                            onClick={() => {
+                              const fileName = doc.nom.toLowerCase().replace(/\s+/g, '_');
+                              window.open(`/documents/${fileName}.pdf`, '_blank');
+                            }}
+                          >
                             <Download className="mr-2 h-4 w-4" />
                             Télécharger
                           </Button>

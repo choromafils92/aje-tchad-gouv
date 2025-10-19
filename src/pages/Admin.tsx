@@ -15,6 +15,10 @@ import SiteSettingsManagement from '@/components/admin/SiteSettingsManagement';
 import DemandesAvisManagement from '@/components/admin/DemandesAvisManagement';
 import ContactsManagement from '@/components/admin/ContactsManagement';
 import AnalyticsManagement from '@/components/admin/AnalyticsManagement';
+import ProceduresManagement from '@/components/admin/ProceduresManagement';
+import JurisprudenceManagement from '@/components/admin/JurisprudenceManagement';
+import SignalementsManagement from '@/components/admin/SignalementsManagement';
+import ConsultationsManagement from '@/components/admin/ConsultationsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -62,12 +66,16 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="actualites" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9">
+          <TabsList className="flex flex-wrap justify-start h-auto gap-1">
             <TabsTrigger value="actualites">Actualités</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="textes">Textes</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
             <TabsTrigger value="avis">Avis</TabsTrigger>
+            <TabsTrigger value="procedures">Procédures</TabsTrigger>
+            <TabsTrigger value="jurisprudences">Jurisprudences</TabsTrigger>
+            <TabsTrigger value="signalements">Signalements</TabsTrigger>
+            <TabsTrigger value="consultations">Consultations</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
@@ -92,6 +100,22 @@ const Admin = () => {
           
           <TabsContent value="avis" className="mt-6">
             <DemandesAvisManagement />
+          </TabsContent>
+          
+          <TabsContent value="procedures" className="mt-6">
+            <ProceduresManagement />
+          </TabsContent>
+          
+          <TabsContent value="jurisprudences" className="mt-6">
+            <JurisprudenceManagement />
+          </TabsContent>
+          
+          <TabsContent value="signalements" className="mt-6">
+            <SignalementsManagement />
+          </TabsContent>
+          
+          <TabsContent value="consultations" className="mt-6">
+            <ConsultationsManagement />
           </TabsContent>
           
           <TabsContent value="contacts" className="mt-6">

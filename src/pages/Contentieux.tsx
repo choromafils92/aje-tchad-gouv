@@ -4,6 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { 
   Scale, 
   FileText, 
@@ -17,6 +20,109 @@ import {
 } from "lucide-react";
 
 const Contentieux = () => {
+  const [procedures, setProcedures] = useState<any[]>([]);
+  const [jurisprudences, setJurisprudences] = useState<any[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [proceduresRes, jurisprudencesRes] = await Promise.all([
+        supabase.from("procedures_contentieux" as any).select("*").eq("published", true).order("ordre"),
+        supabase.from("jurisprudences" as any).select("*").eq("published", true).order("date", { ascending: false }).limit(3)
+      ]);
+
+      if (proceduresRes.data) setProcedures(proceduresRes.data);
+      if (jurisprudencesRes.data) setJurisprudences(jurisprudencesRes.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const handleSignalerContentieux = async () => {
+    const organisme = prompt("Nom de votre organisme:");
+    if (!organisme) return;
+    
+    const nom = prompt("Votre nom complet:");
+    if (!nom) return;
+    
+    const email = prompt("Votre email professionnel:");
+    if (!email) return;
+    
+    const telephone = prompt("Votre téléphone:");
+    const description = prompt("Description du contentieux urgent:");
+    if (!description) return;
+
+    try {
+      const numeroDossier = `CU-${Date.now().toString().slice(-6)}`;
+      const { error } = await supabase
+        .from("signalements_contentieux" as any)
+        .insert({
+          numero_dossier: numeroDossier,
+          organisme,
+          nom_demandeur: nom,
+          email,
+          telephone,
+          description,
+          priorite: "urgent"
+        });
+
+      if (error) throw error;
+      toast.success(`Contentieux signalé avec succès!\nNuméro de dossier: ${numeroDossier}`);
+    } catch (error: any) {
+      toast.error("Erreur lors du signalement");
+    }
+  };
+
+  const handleDemanderConsultation = async () => {
+    const organisme = prompt("Nom de votre organisme:");
+    if (!organisme) return;
+    
+    const nom = prompt("Votre nom complet:");
+    if (!nom) return;
+    
+    const fonction = prompt("Votre fonction:");
+    if (!fonction) return;
+    
+    const email = prompt("Votre email professionnel:");
+    if (!email) return;
+    
+    const telephone = prompt("Votre téléphone:");
+    if (!telephone) return;
+    
+    const objet = prompt("Objet de la consultation:");
+    if (!objet) return;
+    
+    const contexte = prompt("Contexte détaillé:");
+    if (!contexte) return;
+
+    try {
+      const numeroReference = `CON-${Date.now().toString().slice(-6)}`;
+      const { error } = await supabase
+        .from("consultations_juridiques" as any)
+        .insert({
+          numero_reference: numeroReference,
+          organisme,
+          nom_demandeur: nom,
+          fonction,
+          email,
+          telephone,
+          objet,
+          contexte
+        });
+
+      if (error) throw error;
+      toast.success(`Consultation enregistrée!\nRéférence: ${numeroReference}\nNous vous contacterons sous 48h.`);
+    } catch (error: any) {
+      toast.error("Erreur lors de l'enregistrement");
+    }
+  };
+
   const statistiques = [
     {
       titre: "Dossiers traités (2024)",
@@ -160,6 +266,60 @@ const Contentieux = () => {
     }
   ];
 
+  const defaultProcedures = [
+    {
+      etape: "1. Saisine",
+      description: "Réception et analyse de la demande",
+      delai: "2-5 jours",
+      documents: '["Dossier complet", "Pièces justificatives"]'
+    },
+    {
+      etape: "2. Instruction",
+      description: "Étude approfondie du dossier",
+      delai: "15-30 jours",
+      documents: '["Analyses juridiques", "Consultations"]'
+    },
+    {
+      etape: "3. Stratégie",
+      description: "Définition de la stratégie contentieuse",
+      delai: "5-10 jours",
+      documents: '["Plan d\'action", "Recommandations"]'
+    },
+    {
+      etape: "4. Action",
+      description: "Mise en œuvre et suivi",
+      delai: "Variable",
+      documents: '["Actes de procédure", "Rapports de suivi"]'
+    }
+  ];
+
+  const defaultJurisprudences = [
+    {
+      date: "2024-03-15",
+      juridiction: "Cour Suprême du Tchad",
+      affaire: "État du Tchad c. Société ALPHA",
+      domaine: "Marchés Publics",
+      resultat: "Favorable",
+      resume: "Annulation pour vice de procédure - Économie de 2,4 milliards FCFA"
+    },
+    {
+      date: "2024-02-08",
+      juridiction: "Tribunal Administratif de N'Djaména",
+      affaire: "Ministère des Finances c. Contribuable X",
+      domaine: "Fiscal",
+      resultat: "Favorable",
+      resume: "Confirmation du redressement fiscal - Recouvrement de 850 millions FCFA"
+    },
+    {
+      date: "2024-01-22",
+      juridiction: "Cour d'Appel de N'Djaména",
+      affaire: "État c. Société de Construction Y",
+      domaine: "Responsabilité",
+      resultat: "Transactionnel",
+      resume: "Accord amiable - Réduction de 60% de l'indemnisation demandée"
+    }
+  ];
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -266,7 +426,7 @@ const Contentieux = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {procedures.map((proc, index) => (
+                      {(procedures.length > 0 ? procedures : defaultProcedures).map((proc: any, index: number) => (
                         <div key={index} className="text-center">
                           <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                             {index + 1}
@@ -278,7 +438,7 @@ const Contentieux = () => {
                             {proc.delai}
                           </Badge>
                           <ul className="text-xs text-left space-y-1">
-                            {proc.documents.map((doc, i) => (
+                            {(Array.isArray(proc.documents) ? proc.documents : JSON.parse(proc.documents || '[]')).map((doc: string, i: number) => (
                               <li key={i} className="flex items-center">
                                 <FileText className="w-3 h-3 mr-1 text-muted-foreground" />
                                 {doc}
@@ -294,7 +454,7 @@ const Contentieux = () => {
 
               <TabsContent value="jurisprudences" className="mt-8">
                 <div className="space-y-4">
-                  {jurisprudences.map((jurisp, index) => (
+                  {(jurisprudences.length > 0 ? jurisprudences : defaultJurisprudences).map((jurisp: any, index: number) => (
                     <Card key={index}>
                       <CardHeader>
                         <div className="flex justify-between items-start">
@@ -341,9 +501,7 @@ const Contentieux = () => {
                   <Button 
                     variant="secondary" 
                     className="w-full"
-                    onClick={() => {
-                      alert('Contentieux signalé avec succès !\n\nVotre demande urgente a été transmise à notre équipe juridique. Vous recevrez une confirmation par email dans les prochaines minutes.\n\nNuméro de dossier: CU-' + Date.now().toString().slice(-6));
-                    }}
+                    onClick={handleSignalerContentieux}
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Signaler un Contentieux
@@ -363,9 +521,7 @@ const Contentieux = () => {
                   <Button 
                     variant="secondary" 
                     className="w-full"
-                    onClick={() => {
-                      alert('Demande de consultation enregistrée !\n\nVotre demande de consultation juridique préventive a été prise en compte. Un de nos juristes vous contactera dans les 48h pour programmer un rendez-vous.\n\nRéférence: CON-' + Date.now().toString().slice(-6));
-                    }}
+                    onClick={handleDemanderConsultation}
                   >
                     <Users className="w-4 h-4 mr-2" />
                     Demander une Consultation
