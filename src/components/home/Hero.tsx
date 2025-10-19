@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Loader2 } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
@@ -9,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [heroContent, setHeroContent] = useState({
     title: "Agence Judiciaire de l'État",
@@ -85,7 +87,7 @@ const Hero = () => {
                       size="lg" 
                       variant="secondary"
                       className="text-primary hover:text-primary"
-                      onClick={() => window.location.href = '/missions'}
+                      onClick={() => navigate('/missions')}
                     >
                       {t("hero.discoverBtn")}
                       <ChevronRight className="ml-2 h-5 w-5" />
@@ -94,7 +96,7 @@ const Hero = () => {
                       size="lg" 
                       variant="outline"
                       className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
-                      onClick={() => window.location.href = '/textes'}
+                      onClick={() => navigate('/textes')}
                     >
                       {t("hero.textsBtn")}
                     </Button>
