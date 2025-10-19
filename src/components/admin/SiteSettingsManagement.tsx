@@ -343,7 +343,35 @@ const SiteSettingsManagement = () => {
               </div>
 
               <div className="border-t pt-4 mt-6">
-                <h4 className="font-semibold mb-4">Coordonnées GPS</h4>
+                <h4 className="font-semibold mb-4">Configuration de la carte</h4>
+                
+                <div className="space-y-2 mb-4">
+                  <Label>Token API Mapbox</Label>
+                  <Input
+                    type="text"
+                    value={settings.mapbox_token || ""}
+                    onChange={(e) => setSettings({ ...settings, mapbox_token: e.target.value })}
+                    placeholder="pk.eyJ1IjoiZXhhbXBsZS11c2VyIiwiYSI6ImNsZTEyMzQ1NiJ9..."
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Obtenez votre token sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="underline text-primary">mapbox.com</a>
+                  </p>
+                </div>
+
+                <div className="space-y-2 mb-4">
+                  <Label>Google Place ID (optionnel)</Label>
+                  <Input
+                    type="text"
+                    value={settings.google_place_id || ""}
+                    onChange={(e) => setSettings({ ...settings, google_place_id: e.target.value })}
+                    placeholder="ChIJUe9wLGdhGREREQDExZ0_5kE"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    ID de lieu Google pour une localisation plus précise
+                  </p>
+                </div>
+                
+                <h4 className="font-semibold mb-4 mt-6">Coordonnées GPS</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Latitude</Label>
@@ -393,6 +421,8 @@ const SiteSettingsManagement = () => {
                 updateSetting("hero_title", settings.hero_title);
                 updateSetting("hero_tagline", settings.hero_tagline);
                 updateSetting("hero_description", settings.hero_description);
+                updateSetting("mapbox_token", settings.mapbox_token);
+                updateSetting("google_place_id", settings.google_place_id);
                 updateSetting("gps_latitude", settings.gps_latitude);
                 updateSetting("gps_longitude", settings.gps_longitude);
                 updateSetting("location_name", settings.location_name);

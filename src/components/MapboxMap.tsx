@@ -32,11 +32,13 @@ const MapboxMap = () => {
       const { data, error } = await (supabase as any)
         .from('site_settings')
         .select('key, value')
-        .in('key', ['gps_latitude', 'gps_longitude', 'location_name', 'location_address']);
+        .in('key', ['gps_latitude', 'gps_longitude', 'location_name', 'location_address', 'mapbox_token', 'google_place_id']);
 
       if (error) throw error;
 
       const newLocation = { ...location };
+      let token = '';
+      
       data?.forEach((setting: any) => {
         switch (setting.key) {
           case 'gps_latitude':
@@ -53,11 +55,21 @@ const MapboxMap = () => {
           case 'location_address':
             if (setting.value) newLocation.address = setting.value as string;
             break;
+          case 'mapbox_token':
+            if (setting.value) token = setting.value as string;
+            break;
         }
       });
+      
       setLocation(newLocation);
+      if (token) {
+        setMapboxToken(token);
+      } else {
+        setShowTokenInput(true);
+      }
     } catch (error) {
       console.error('Error fetching location data:', error);
+      setShowTokenInput(true);
     } finally {
       setLoading(false);
     }
