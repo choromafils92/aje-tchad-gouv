@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 
 const Contentieux = () => {
-  const [procedures, setProcedures] = useState<any[]>([]);
-  const [jurisprudences, setJurisprudences] = useState<any[]>([]);
+  const [proceduresDb, setProceduresDb] = useState<any[]>([]);
+  const [jurisprudencesDb, setJurisprudencesDb] = useState<any[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const Contentieux = () => {
         supabase.from("jurisprudences" as any).select("*").eq("published", true).order("date", { ascending: false }).limit(3)
       ]);
 
-      if (proceduresRes.data) setProcedures(proceduresRes.data);
-      if (jurisprudencesRes.data) setJurisprudences(jurisprudencesRes.data);
+      if (proceduresRes.data) setProceduresDb(proceduresRes.data);
+      if (jurisprudencesRes.data) setJurisprudencesDb(jurisprudencesRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -426,7 +426,7 @@ const Contentieux = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {(procedures.length > 0 ? procedures : defaultProcedures).map((proc: any, index: number) => (
+                      {(proceduresDb.length > 0 ? proceduresDb : defaultProcedures).map((proc: any, index: number) => (
                         <div key={index} className="text-center">
                           <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                             {index + 1}
@@ -454,7 +454,7 @@ const Contentieux = () => {
 
               <TabsContent value="jurisprudences" className="mt-8">
                 <div className="space-y-4">
-                  {(jurisprudences.length > 0 ? jurisprudences : defaultJurisprudences).map((jurisp: any, index: number) => (
+                  {(jurisprudencesDb.length > 0 ? jurisprudencesDb : defaultJurisprudences).map((jurisp: any, index: number) => (
                     <Card key={index}>
                       <CardHeader>
                         <div className="flex justify-between items-start">
