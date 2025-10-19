@@ -237,34 +237,26 @@ const Textes = () => {
                           <Button 
                             className="flex-1"
                             variant="outline"
-                            asChild
+                            onClick={() => window.open(modele.downloadUrl, '_blank')}
                           >
-                            <a href={modele.downloadUrl} target="_blank" rel="noopener noreferrer">
-                              <Eye className="h-4 w-4 mr-2" />
-                              Visualiser
-                            </a>
+                            <Eye className="h-4 w-4 mr-2" />
+                            Aperçu
                           </Button>
                           <Button 
                             className="flex-1"
-                            onClick={async () => {
-                              try {
-                                const response = await fetch(modele.downloadUrl);
-                                const blob = await response.blob();
-                                const url = window.URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = modele.title + '.html';
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                window.URL.revokeObjectURL(url);
-                              } catch (error) {
-                                console.error('Erreur lors du téléchargement:', error);
+                            onClick={() => {
+                              const printWindow = window.open(modele.downloadUrl, '_blank');
+                              if (printWindow) {
+                                printWindow.onload = () => {
+                                  setTimeout(() => {
+                                    printWindow.print();
+                                  }, 1000);
+                                };
                               }
                             }}
                           >
                             <Download className="h-4 w-4 mr-2" />
-                            Télécharger
+                            Imprimer PDF
                           </Button>
                         </div>
                       </CardContent>

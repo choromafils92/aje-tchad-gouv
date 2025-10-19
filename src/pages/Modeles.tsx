@@ -29,25 +29,21 @@ const Modeles = () => {
     }
   ];
 
-  const handleDownload = (file: string, title: string) => {
-    // Open in new window for printing to PDF
+  const handlePreview = (file: string) => {
+    window.open(file, '_blank');
+  };
+
+  const handleDownloadPDF = (file: string, title: string) => {
+    // Open in new window with print dialog for PDF generation
     const printWindow = window.open(file, '_blank');
     if (printWindow) {
       printWindow.onload = () => {
-        printWindow.print();
+        // Auto-trigger print dialog after 1 second
+        setTimeout(() => {
+          printWindow.print();
+        }, 1000);
       };
     }
-  };
-
-  const handleDirectDownload = (file: string, pdfFileName: string) => {
-    // Create a temporary link to download as PDF
-    const link = document.createElement('a');
-    link.href = file;
-    link.download = pdfFileName;
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -86,7 +82,7 @@ const Modeles = () => {
                         variant="default"
                         size="sm"
                         className="flex-1"
-                        onClick={() => handleDownload(modele.file, modele.title)}
+                        onClick={() => handlePreview(modele.file)}
                       >
                         <ExternalLink className="mr-2 h-4 w-4" />
                         Aperçu
@@ -95,10 +91,10 @@ const Modeles = () => {
                         variant="outline"
                         size="sm"
                         className="flex-1"
-                        onClick={() => handleDownload(modele.file, modele.title)}
+                        onClick={() => handleDownloadPDF(modele.file, modele.title)}
                       >
                         <Download className="mr-2 h-4 w-4" />
-                        PDF
+                        Imprimer PDF
                       </Button>
                     </div>
                   </CardContent>
@@ -122,7 +118,11 @@ const Modeles = () => {
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">•</span>
-                <span>Cliquez sur "PDF" pour télécharger directement, ou "Aperçu" pour visualiser avant téléchargement</span>
+                <span>Cliquez sur "Aperçu" pour visualiser le document, ou "Imprimer PDF" pour ouvrir la boîte de dialogue d'impression</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-primary mr-2">•</span>
+                <span>Dans la boîte d'impression, sélectionnez "Enregistrer en PDF" ou "Microsoft Print to PDF" comme imprimante de destination</span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">•</span>

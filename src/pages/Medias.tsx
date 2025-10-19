@@ -83,9 +83,11 @@ export default function Medias() {
   };
 
   const handleDownload = (fileUrl: string, filename: string) => {
+    // Créer un élément temporaire pour forcer le téléchargement
     const link = document.createElement('a');
     link.href = fileUrl;
     link.download = filename;
+    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -485,7 +485,15 @@ const Services = () => {
                                 {doc.pdf_url && (
                                   <Button 
                                     className="flex-1"
-                                    onClick={() => window.open(doc.pdf_url!, '_blank')}
+                                    onClick={() => {
+                                      const link = document.createElement('a');
+                                      link.href = doc.pdf_url!;
+                                      link.download = `${doc.title}.pdf`;
+                                      link.target = '_blank';
+                                      document.body.appendChild(link);
+                                      link.click();
+                                      document.body.removeChild(link);
+                                    }}
                                   >
                                     <Download className="mr-2 h-4 w-4" />
                                     PDF
@@ -495,7 +503,15 @@ const Services = () => {
                                   <Button 
                                     variant="outline"
                                     className="flex-1"
-                                    onClick={() => window.open(doc.word_url!, '_blank')}
+                                    onClick={() => {
+                                      const link = document.createElement('a');
+                                      link.href = doc.word_url!;
+                                      link.download = `${doc.title}.docx`;
+                                      link.target = '_blank';
+                                      document.body.appendChild(link);
+                                      link.click();
+                                      document.body.removeChild(link);
+                                    }}
                                   >
                                     <Download className="mr-2 h-4 w-4" />
                                     Word
