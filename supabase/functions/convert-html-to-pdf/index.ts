@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -31,8 +32,8 @@ serve(async (req) => {
       throw new Error('File not found');
     }
 
-    // Fetch the HTML file from the public directory
-    const baseUrl = req.headers.get('origin') || 'https://aupfurarzgbdocgtdomy.supabase.co';
+    // Fetch the HTML file
+    const baseUrl = req.headers.get('origin') || 'https://c741ce1c-fb18-4c82-ab7a-9b6164f8d5f9.lovableproject.com';
     const htmlUrl = `${baseUrl}${htmlPath}`;
     
     const htmlResponse = await fetch(htmlUrl);
@@ -42,27 +43,54 @@ serve(async (req) => {
 
     const htmlContent = await htmlResponse.text();
 
-    // Use Puppeteer to convert HTML to PDF
-    const browser = await Deno.Command.create("chromium-browser", {
+    // Use chrome-aws-lambda for PDF generation
+    // Import dynamically to reduce cold start time
+    const puppeteerCore = await import('https://deno.land/x/puppeteer@16.2.0/mod.ts');
+    
+    // Launch browser with minimal options for Deno Deploy
+    const browser = await puppeteerCore.default.launch({
       args: [
-        "--headless",
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
       ],
+      headless: true,
     });
 
-    // For now, return the HTML content with proper headers to trigger download
-    // In production, you would use a proper HTML-to-PDF conversion service
-    const response = new Response(htmlContent, {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'text/html',
-        'Content-Disposition': `attachment; filename="${fileName}.html"`,
-      },
-    });
+    try {
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, {
+        waitUntil: 'networkidle0',
+      });
 
-    return response;
+      // Generate PDF
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20px',
+          right: '20px',
+          bottom: '20px',
+          left: '20px',
+        },
+      });
+
+      await browser.close();
+
+      // Return PDF
+      return new Response(pdfBuffer, {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="${fileName}.pdf"`,
+        },
+      });
+    } catch (error) {
+      await browser.close();
+      throw error;
+    }
 
   } catch (error) {
     console.error('Error:', error);

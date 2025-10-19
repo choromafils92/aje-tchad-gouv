@@ -43,5 +43,20 @@
     "sitemap": "Sitemap",
     "rss": "RSS Feed",
     "copyright": "State Judicial Agency - Republic of Chad. All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "download": "Download",
+    "upload": "Upload",
+    "back": "Back"
   }
 }

@@ -146,8 +146,8 @@ const Header = () => {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
-                <div className="flex flex-col space-y-4 mt-8">
+              <SheetContent side="right" className="w-80 overflow-y-auto">
+                <div className="flex flex-col space-y-4 mt-8 pb-6">
                   <div className="relative">
                     <Input
                       type="search"
