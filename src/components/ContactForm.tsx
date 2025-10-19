@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Send, User, Mail, Phone, Building } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
 
 interface ContactFormData {
   nom: string;
@@ -20,7 +22,20 @@ interface ContactFormData {
   urgence: string;
 }
 
+const contactSchema = z.object({
+  nom: z.string().trim().min(1, "Le nom est requis").max(100, "Le nom ne peut pas dépasser 100 caractères"),
+  prenom: z.string().trim().min(1, "Le prénom est requis").max(100, "Le prénom ne peut pas dépasser 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email ne peut pas dépasser 255 caractères"),
+  telephone: z.string().trim().max(20, "Le téléphone ne peut pas dépasser 20 caractères").optional(),
+  organisation: z.string().trim().min(1, "L'organisation est requise").max(200, "L'organisation ne peut pas dépasser 200 caractères"),
+  poste: z.string().trim().max(100, "Le poste ne peut pas dépasser 100 caractères").optional(),
+  sujet: z.string().trim().min(1, "Le sujet est requis").max(200, "Le sujet ne peut pas dépasser 200 caractères"),
+  message: z.string().trim().min(10, "Le message doit contenir au moins 10 caractères").max(2000, "Le message ne peut pas dépasser 2000 caractères"),
+  urgence: z.enum(['normal', 'urgent', 'tres-urgent', 'immediat'])
+});
+
 const ContactForm = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<ContactFormData>({
     nom: "",
     prenom: "",
@@ -44,18 +59,34 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await (supabase as any).from('contacts').insert({
-        nom: `${formData.prenom} ${formData.nom}`,
+      // Validation côté client
+      const validatedData = contactSchema.parse({
+        nom: formData.nom,
+        prenom: formData.prenom,
         email: formData.email,
-        telephone: formData.telephone,
+        telephone: formData.telephone || undefined,
+        organisation: formData.organisation,
+        poste: formData.poste || undefined,
         sujet: formData.sujet,
         message: formData.message,
+        urgence: formData.urgence
+      });
+
+      const { error } = await (supabase as any).from('contacts').insert({
+        nom: `${validatedData.prenom} ${validatedData.nom}`,
+        email: validatedData.email,
+        telephone: validatedData.telephone,
+        sujet: validatedData.sujet,
+        message: validatedData.message,
         statut: 'nouveau'
       });
 
       if (error) throw error;
 
-      alert('Votre message a été envoyé avec succès !');
+      toast({
+        title: "Message envoyé",
+        description: "Votre message a été envoyé avec succès !",
+      });
       
       setFormData({
         nom: "",
@@ -69,8 +100,20 @@ const ContactForm = () => {
         urgence: "normal"
       });
     } catch (error) {
-      console.error('Error:', error);
-      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Erreur de validation",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Erreur lors de l'envoi. Veuillez réessayer.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

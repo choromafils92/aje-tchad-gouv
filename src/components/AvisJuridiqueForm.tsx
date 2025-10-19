@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Scale, FileText, Download, Calendar, AlertTriangle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
 
 interface AvisFormData {
   organisation: string;
@@ -25,7 +27,23 @@ interface AvisFormData {
   confirmationLecture: boolean;
 }
 
+const avisSchema = z.object({
+  organisation: z.string().trim().min(1, "L'organisation est requise").max(200, "L'organisation ne peut pas dépasser 200 caractères"),
+  demandeur: z.string().trim().min(1, "Le nom du demandeur est requis").max(100, "Le nom ne peut pas dépasser 100 caractères"),
+  fonction: z.string().trim().min(1, "La fonction est requise").max(100, "La fonction ne peut pas dépasser 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email ne peut pas dépasser 255 caractères"),
+  telephone: z.string().trim().max(20, "Le téléphone ne peut pas dépasser 20 caractères").optional(),
+  objet: z.string().trim().min(1, "L'objet est requis").max(300, "L'objet ne peut pas dépasser 300 caractères"),
+  contexte: z.string().trim().min(10, "Le contexte doit contenir au moins 10 caractères").max(5000, "Le contexte ne peut pas dépasser 5000 caractères"),
+  questionJuridique: z.string().trim().min(10, "La question juridique doit contenir au moins 10 caractères").max(3000, "La question ne peut pas dépasser 3000 caractères"),
+  urgence: z.enum(['normal', 'urgent', 'tres-urgent', 'immediat']),
+  delaiSouhaite: z.string().trim().max(100).optional(),
+  budgetEstime: z.string().trim().max(50).optional(),
+  confirmationLecture: z.boolean().refine(val => val === true, "Vous devez accepter les conditions")
+});
+
 const AvisJuridiqueForm = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<AvisFormData>({
     organisation: "",
     demandeur: "",
@@ -112,19 +130,39 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
     setIsSubmitting(true);
 
     try {
-      const { error } = await (supabase as any).from('demandes_avis').insert({
-        nom_complet: formData.demandeur,
+      // Validation côté client
+      const validatedData = avisSchema.parse({
+        organisation: formData.organisation,
+        demandeur: formData.demandeur,
+        fonction: formData.fonction,
         email: formData.email,
-        telephone: formData.telephone,
-        organisme: formData.organisation,
+        telephone: formData.telephone || undefined,
         objet: formData.objet,
-        description: `${formData.contexte}\n\nQuestion juridique: ${formData.questionJuridique}`,
+        contexte: formData.contexte,
+        questionJuridique: formData.questionJuridique,
+        urgence: formData.urgence,
+        delaiSouhaite: formData.delaiSouhaite || undefined,
+        budgetEstime: formData.budgetEstime || undefined,
+        confirmationLecture: formData.confirmationLecture
+      });
+
+      const { error } = await (supabase as any).from('demandes_avis').insert({
+        nom_complet: validatedData.demandeur,
+        email: validatedData.email,
+        telephone: validatedData.telephone,
+        organisme: validatedData.organisation,
+        objet: validatedData.objet,
+        description: `${validatedData.contexte}\n\nQuestion juridique: ${validatedData.questionJuridique}`,
         statut: 'en_attente'
       });
 
       if (error) throw error;
 
-      alert(`Votre demande d'avis juridique a été enregistrée avec succès !`);
+      toast({
+        title: "Demande enregistrée",
+        description: "Votre demande d'avis juridique a été enregistrée avec succès !",
+      });
+      
       generatePDF();
       
       setFormData({
@@ -143,8 +181,20 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
         confirmationLecture: false
       });
     } catch (error) {
-      console.error('Error:', error);
-      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Erreur de validation",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Erreur lors de l'envoi. Veuillez réessayer.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
