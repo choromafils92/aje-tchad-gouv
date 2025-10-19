@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Phone, Mail, Clock, Send, Calendar } from "lucide-react";
-import Map from "@/components/Map";
+import MapboxMap from "@/components/MapboxMap";
 
 const Contact = () => {
   const coordonnees = {
@@ -407,7 +407,7 @@ const Contact = () => {
             </div>
 
             <div className="max-w-4xl mx-auto">
-              <Map />
+              <MapboxMap />
             </div>
           </div>
         </section>

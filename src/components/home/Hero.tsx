@@ -79,24 +79,26 @@ const Hero = () => {
                     {heroContent.description}
                   </p>
               
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <Button 
-                  size="lg" 
-                  variant="secondary"
-                  className="text-primary hover:text-primary"
-                >
-                  {t("hero.discoverBtn")}
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
-                >
-                  {t("hero.textsBtn")}
-                </Button>
-              </div>
-            </div>
+                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                    <Button 
+                      size="lg" 
+                      variant="secondary"
+                      className="text-primary hover:text-primary"
+                    >
+                      {t("hero.discoverBtn")}
+                      <ChevronRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                    >
+                      {t("hero.textsBtn")}
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           
           <div className="hidden lg:block">
@@ -131,11 +133,9 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-                  </div>
-                </div>
-              </>
-            )}
           </div>
+        </div>
+      </div>
     </section>
   );
 };

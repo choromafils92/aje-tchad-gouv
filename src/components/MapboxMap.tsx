@@ -4,12 +4,17 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { MapPin, Navigation, ExternalLink, Loader2, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const MapboxMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mapboxToken, setMapboxToken] = useState('');
+  const [showTokenInput, setShowTokenInput] = useState(false);
   const [location, setLocation] = useState({
     name: "Agence Judiciaire de l'État",
     address: "Avenue Félix Éboué, Quartier administratif",
@@ -35,16 +40,18 @@ const MapboxMap = () => {
       data?.forEach((setting: any) => {
         switch (setting.key) {
           case 'gps_latitude':
-            newLocation.lat = parseFloat(setting.value);
+            const lat = parseFloat(setting.value);
+            if (!isNaN(lat)) newLocation.lat = lat;
             break;
           case 'gps_longitude':
-            newLocation.lng = parseFloat(setting.value);
+            const lng = parseFloat(setting.value);
+            if (!isNaN(lng)) newLocation.lng = lng;
             break;
           case 'location_name':
-            newLocation.name = setting.value as string;
+            if (setting.value) newLocation.name = setting.value as string;
             break;
           case 'location_address':
-            newLocation.address = setting.value as string;
+            if (setting.value) newLocation.address = setting.value as string;
             break;
         }
       });
@@ -57,34 +64,40 @@ const MapboxMap = () => {
   };
 
   useEffect(() => {
-    if (!mapContainer.current || loading) return;
+    if (!mapContainer.current || loading || !mapboxToken) return;
 
-    // Initialiser Mapbox avec le token public
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZS11c2VyIiwiYSI6ImNsZTEyMzQ1NiJ9.example-token';
+    try {
+      mapboxgl.accessToken = mapboxToken;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [location.lng, location.lat],
-      zoom: 15,
-    });
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [location.lng, location.lat],
+        zoom: 15,
+      });
 
-    // Ajouter un marqueur
-    new mapboxgl.Marker({ color: '#0066cc' })
-      .setLngLat([location.lng, location.lat])
-      .setPopup(
-        new mapboxgl.Popup({ offset: 25 })
-          .setHTML(`<h3 style="font-weight: bold; margin-bottom: 5px;">${location.name}</h3><p>${location.address}</p>`)
-      )
-      .addTo(map.current);
+      // Ajouter un marqueur
+      new mapboxgl.Marker({ color: '#0066cc' })
+        .setLngLat([location.lng, location.lat])
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 })
+            .setHTML(`<h3 style="font-weight: bold; margin-bottom: 5px;">${location.name}</h3><p>${location.address}</p>`)
+        )
+        .addTo(map.current);
 
-    // Ajouter les contrôles de navigation
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      // Ajouter les contrôles de navigation
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      setShowTokenInput(false);
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      setShowTokenInput(true);
+    }
 
     return () => {
       map.current?.remove();
     };
-  }, [location, loading]);
+  }, [location, loading, mapboxToken]);
 
   const openInGoogleMaps = () => {
     const query = encodeURIComponent(`${location.name}, ${location.address}, ${location.city}`);
@@ -97,6 +110,45 @@ const MapboxMap = () => {
         <CardContent className="p-8">
           <div className="flex justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (showTokenInput || !mapboxToken) {
+    return (
+      <Card>
+        <CardContent className="p-6 space-y-4">
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Pour afficher la carte interactive, veuillez configurer votre token Mapbox.
+              Obtenez votre token sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="underline">mapbox.com</a>
+            </AlertDescription>
+          </Alert>
+          
+          <div className="space-y-2">
+            <Label htmlFor="mapbox-token">Token Mapbox Public</Label>
+            <Input
+              id="mapbox-token"
+              type="text"
+              placeholder="pk.eyJ1IjoiZXhhbXBsZS11c2VyIiwiYSI6ImNsZTEyMzQ1NiJ9..."
+              value={mapboxToken}
+              onChange={(e) => setMapboxToken(e.target.value)}
+            />
+          </div>
+
+          <Button onClick={() => setShowTokenInput(false)} className="w-full">
+            Afficher la carte
+          </Button>
+
+          <div className="pt-4 border-t">
+            <Button onClick={openInGoogleMaps} variant="outline" className="w-full">
+              <Navigation className="w-4 h-4 mr-2" />
+              Ouvrir dans Google Maps à la place
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </CardContent>
       </Card>
