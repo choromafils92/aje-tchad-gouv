@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,19 +43,20 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulation d'envoi
-    setTimeout(() => {
-      alert(`Votre message a été envoyé avec succès !
-      
-Détails de votre demande:
-- Nom: ${formData.prenom} ${formData.nom}
-- Organisation: ${formData.organisation}
-- Sujet: ${formData.sujet}
-- Niveau d'urgence: ${formData.urgence}
+    try {
+      const { error } = await (supabase as any).from('contacts').insert({
+        nom: `${formData.prenom} ${formData.nom}`,
+        email: formData.email,
+        telephone: formData.telephone,
+        sujet: formData.sujet,
+        message: formData.message,
+        statut: 'nouveau'
+      });
 
-Nous vous contacterons dans les plus brefs délais à l'adresse: ${formData.email}`);
+      if (error) throw error;
+
+      alert('Votre message a été envoyé avec succès !');
       
-      // Reset form
       setFormData({
         nom: "",
         prenom: "",
@@ -66,8 +68,12 @@ Nous vous contacterons dans les plus brefs délais à l'adresse: ${formData.emai
         message: "",
         urgence: "normal"
       });
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -110,21 +111,22 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      alert(`Votre demande d'avis juridique a été enregistrée avec succès !
+    try {
+      const { error } = await (supabase as any).from('demandes_avis').insert({
+        nom_complet: formData.demandeur,
+        email: formData.email,
+        telephone: formData.telephone,
+        organisme: formData.organisation,
+        objet: formData.objet,
+        description: `${formData.contexte}\n\nQuestion juridique: ${formData.questionJuridique}`,
+        statut: 'en_attente'
+      });
 
-Détails:
-- Organisation: ${formData.organisation}
-- Objet: ${formData.objet}
-- Urgence: ${formData.urgence}
-- Référence: AJ-${Date.now().toString().slice(-8)}
+      if (error) throw error;
 
-Vous recevrez un accusé de réception par email. Nos juristes examineront votre demande selon le niveau d'urgence indiqué.`);
-
-      // Générer le PDF
+      alert(`Votre demande d'avis juridique a été enregistrée avec succès !`);
       generatePDF();
       
-      // Reset form
       setFormData({
         organisation: "",
         demandeur: "",
@@ -140,8 +142,12 @@ Vous recevrez un accusé de réception par email. Nos juristes examineront votre
         budgetEstime: "",
         confirmationLecture: false
       });
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   const documentsTypes = [
