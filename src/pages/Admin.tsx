@@ -23,6 +23,7 @@ import MediaPressReleasesManagement from '@/components/admin/MediaPressReleasesM
 import MediaKitManagement from '@/components/admin/MediaKitManagement';
 import MediaGalleryManagement from '@/components/admin/MediaGalleryManagement';
 import MediaPressNewsletterManagement from '@/components/admin/MediaPressNewsletterManagement';
+import ContactSettingsManagement from '@/components/admin/ContactSettingsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -77,6 +78,7 @@ const Admin = () => {
             <TabsTrigger value="faq">FAQ</TabsTrigger>
             <TabsTrigger value="avis">Avis</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="contact-settings">Paramètres Contact</TabsTrigger>
             <TabsTrigger value="offres">Offres d'emploi</TabsTrigger>
             <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
             <TabsTrigger value="media-contact">Contact Presse</TabsTrigger>
@@ -156,6 +158,10 @@ const Admin = () => {
           
           <TabsContent value="press-newsletter" className="mt-6">
             <MediaPressNewsletterManagement />
+          </TabsContent>
+
+          <TabsContent value="contact-settings" className="mt-6">
+            <ContactSettingsManagement />
           </TabsContent>
         </Tabs>
       </main>

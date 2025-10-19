@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,53 +10,180 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Phone, Mail, Clock, Send, Calendar } from "lucide-react";
 import MapboxMap from "@/components/MapboxMap";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+interface SubDirection {
+  nom: string;
+  responsable: string;
+  telephone: string;
+  email: string;
+}
 
 const Contact = () => {
-  const coordonnees = {
-    adresse: "Avenue Félix Éboué, Quartier administratif",
-    ville: "N'Djamena, République du Tchad",
-    telephone: "+235 22 XX XX XX",
-    fax: "+235 22 XX XX XX",
-    email: "contact@aje.td",
-    horaires: {
-      lunVen: "Lundi au Jeudi : 7h30 - 15h30",
-      vendredi: "Vendredi : 7h30 - 12h30",
-      weekend: "Weekend : Fermé"
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [hours, setHours] = useState("");
+  const [subdirections, setSubdirections] = useState<SubDirection[]>([]);
+
+  const [contactForm, setContactForm] = useState({
+    nom: "",
+    email: "",
+    telephone: "",
+    organisme: "",
+    sujet: "",
+    message: ""
+  });
+
+  const [rdvForm, setRdvForm] = useState({
+    nom: "",
+    fonction: "",
+    organisme: "",
+    service: "",
+    date: "",
+    heure: "",
+    email: "",
+    telephone: "",
+    objet: ""
+  });
+
+  const [submittingContact, setSubmittingContact] = useState(false);
+  const [submittingRdv, setSubmittingRdv] = useState(false);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("site_settings")
+        .select("key, value")
+        .in("key", [
+          "contact_address",
+          "contact_phone",
+          "contact_email",
+          "contact_hours",
+          "contact_subdirections"
+        ]);
+
+      if (error) throw error;
+
+      data?.forEach((setting: any) => {
+        switch (setting.key) {
+          case "contact_address":
+            setAddress(setting.value || "");
+            break;
+          case "contact_phone":
+            setPhone(setting.value || "");
+            break;
+          case "contact_email":
+            setEmail(setting.value || "");
+            break;
+          case "contact_hours":
+            setHours(setting.value || "");
+            break;
+          case "contact_subdirections":
+            setSubdirections(setting.value || []);
+            break;
+        }
+      });
+    } catch (error) {
+      console.error("Erreur lors du chargement des paramètres:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const services = [
-    {
-      nom: "Agent judiciaire de l'État",
-      telephone: "+235 22 XX XX XX",
-      email: "direction@aje.td",
-      responsable: "Agent judiciaire de l'État"
-    },
-    {
-      nom: "Sous-Direction du Contentieux Judiciaire",
-      telephone: "+235 22 XX XX XX",
-      email: "contentieux.judiciaire@aje.td",
-      responsable: "Sous-Directeur du Contentieux Judiciaire"
-    },
-    {
-      nom: "Sous-Direction du Contentieux Administratif",
-      telephone: "+235 22 XX XX XX",
-      email: "contentieux.administratif@aje.td",
-      responsable: "Sous-Directeur du Contentieux Administratif"
-    },
-    {
-      nom: "Sous-Direction du Conseil et des Etudes Juridiques",
-      telephone: "+235 22 XX XX XX",
-      email: "conseil.etudes@aje.td",
-      responsable: "Sous-Directeur du Conseil et des Etudes Juridiques"
-    },
-    {
-      nom: "Sous-Direction du Recouvrement de Créances Contentieuses",
-      telephone: "+235 22 XX XX XX",
-      email: "recouvrement@aje.td",
-      responsable: "Sous-Directeur du Recouvrement de Créances Contentieuses"
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittingContact(true);
+
+    try {
+      const { error } = await supabase
+        .from("contacts" as any)
+        .insert([{
+          nom: contactForm.nom,
+          email: contactForm.email,
+          telephone: contactForm.telephone,
+          sujet: contactForm.sujet,
+          message: `Organisme: ${contactForm.organisme}\n\n${contactForm.message}`,
+          statut: 'nouveau'
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Message envoyé",
+        description: "Votre message a été envoyé avec succès !",
+      });
+
+      setContactForm({
+        nom: "",
+        email: "",
+        telephone: "",
+        organisme: "",
+        sujet: "",
+        message: ""
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Erreur lors de l'envoi",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingContact(false);
     }
-  ];
+  };
+
+  const handleRdvSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittingRdv(true);
+
+    try {
+      const { error } = await supabase
+        .from("contacts" as any)
+        .insert([{
+          nom: rdvForm.nom,
+          email: rdvForm.email,
+          telephone: rdvForm.telephone,
+          sujet: `Demande de rendez-vous - ${rdvForm.service}`,
+          message: `Fonction: ${rdvForm.fonction}\nOrganisme: ${rdvForm.organisme}\nService: ${rdvForm.service}\nDate souhaitée: ${rdvForm.date}\nHeure souhaitée: ${rdvForm.heure}\n\nObjet:\n${rdvForm.objet}`,
+          statut: 'nouveau'
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Demande envoyée",
+        description: "Votre demande de rendez-vous a été envoyée avec succès !",
+      });
+
+      setRdvForm({
+        nom: "",
+        fonction: "",
+        organisme: "",
+        service: "",
+        date: "",
+        heure: "",
+        email: "",
+        telephone: "",
+        objet: ""
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Erreur lors de l'envoi",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingRdv(false);
+    }
+  };
 
   const creneauxRendezVous = [
     "09h00 - 09h30",
@@ -97,62 +225,63 @@ const Contact = () => {
                   Nos coordonnées
                 </h2>
                 
-                <div className="space-y-6">
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <MapPin className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
-                        <div>
-                          <h3 className="font-semibold text-primary mb-2">Adresse</h3>
-                          <p className="text-foreground/80">{coordonnees.adresse}</p>
-                          <p className="text-foreground/80">{coordonnees.ville}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {loading ? (
+                  <div className="p-6">Chargement...</div>
+                ) : (
+                  <div className="space-y-6">
                     <Card>
                       <CardContent className="p-6">
-                        <div className="flex items-center space-x-4">
-                          <Phone className="h-6 w-6 text-primary flex-shrink-0" />
+                        <div className="flex items-start space-x-4">
+                          <MapPin className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                           <div>
-                            <h3 className="font-semibold text-primary mb-1">Téléphone</h3>
-                            <p className="text-foreground/80">{coordonnees.telephone}</p>
+                            <h3 className="font-semibold text-primary mb-2">Adresse</h3>
+                            <p className="text-foreground/80 whitespace-pre-line">{address}</p>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card>
+                        <CardContent className="p-6">
+                          <div className="flex items-center space-x-4">
+                            <Phone className="h-6 w-6 text-primary flex-shrink-0" />
+                            <div>
+                              <h3 className="font-semibold text-primary mb-1">Téléphone</h3>
+                              <p className="text-foreground/80">{phone}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="p-6">
+                          <div className="flex items-center space-x-4">
+                            <Mail className="h-6 w-6 text-primary flex-shrink-0" />
+                            <div>
+                              <h3 className="font-semibold text-primary mb-1">Email</h3>
+                              <p className="text-foreground/80">{email}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
                     <Card>
                       <CardContent className="p-6">
-                        <div className="flex items-center space-x-4">
-                          <Mail className="h-6 w-6 text-primary flex-shrink-0" />
+                        <div className="flex items-start space-x-4">
+                          <Clock className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                           <div>
-                            <h3 className="font-semibold text-primary mb-1">Email</h3>
-                            <p className="text-foreground/80">{coordonnees.email}</p>
+                            <h3 className="font-semibold text-primary mb-3">Horaires d'ouverture</h3>
+                            <div className="space-y-1 text-foreground/80 whitespace-pre-line">
+                              {hours}
+                            </div>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
                   </div>
-
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <Clock className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
-                        <div>
-                          <h3 className="font-semibold text-primary mb-3">Horaires d'ouverture</h3>
-                          <div className="space-y-1 text-foreground/80">
-                            <p>{coordonnees.horaires.lunVen}</p>
-                            <p>{coordonnees.horaires.vendredi}</p>
-                            <p className="text-muted-foreground">{coordonnees.horaires.weekend}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                )}
               </div>
 
               {/* Services spécialisés */}
@@ -161,30 +290,41 @@ const Contact = () => {
                   Contactez par sous-direction
                 </h2>
                 
-                <div className="space-y-4">
-                  {services.map((service, index) => (
-                    <Card key={index} className="hover:shadow-lg transition-shadow">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-lg text-primary">
-                          {service.nom}
-                        </CardTitle>
-                        <CardDescription>
-                          {service.responsable}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="flex items-center space-x-3 text-sm">
-                          <Phone className="h-4 w-4 text-muted-foreground" />
-                          <span>{service.telephone}</span>
-                        </div>
-                        <div className="flex items-center space-x-3 text-sm">
-                          <Mail className="h-4 w-4 text-muted-foreground" />
-                          <span>{service.email}</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                {loading ? (
+                  <div className="p-6">Chargement...</div>
+                ) : (
+                  <div className="space-y-4">
+                    {subdirections.map((service, index) => (
+                      <Card key={index} className="hover:shadow-lg transition-shadow">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-lg text-primary">
+                            {service.nom}
+                          </CardTitle>
+                          <CardDescription>
+                            {service.responsable}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="flex items-center space-x-3 text-sm">
+                            <Phone className="h-4 w-4 text-muted-foreground" />
+                            <span>{service.telephone}</span>
+                          </div>
+                          <div className="flex items-center space-x-3 text-sm">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            <span>{service.email}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    {subdirections.length === 0 && (
+                      <Card>
+                        <CardContent className="p-6 text-center text-muted-foreground">
+                          Aucune sous-direction configurée
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -217,34 +357,61 @@ const Contact = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <form className="space-y-6">
+                      <form onSubmit={handleContactSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <Label htmlFor="nom">Nom complet *</Label>
-                            <Input id="nom" placeholder="Votre nom et prénom" />
+                            <Input 
+                              id="nom" 
+                              placeholder="Votre nom et prénom"
+                              value={contactForm.nom}
+                              onChange={(e) => setContactForm({...contactForm, nom: e.target.value})}
+                              required
+                            />
                           </div>
 
                           <div className="space-y-2">
                             <Label htmlFor="organisme">Organisme/Entreprise</Label>
-                            <Input id="organisme" placeholder="Nom de votre organisme" />
+                            <Input 
+                              id="organisme" 
+                              placeholder="Nom de votre organisme"
+                              value={contactForm.organisme}
+                              onChange={(e) => setContactForm({...contactForm, organisme: e.target.value})}
+                            />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <Label htmlFor="email-contact">Email *</Label>
-                            <Input id="email-contact" type="email" placeholder="votre.email@exemple.com" />
+                            <Input 
+                              id="email-contact" 
+                              type="email" 
+                              placeholder="votre.email@exemple.com"
+                              value={contactForm.email}
+                              onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
+                              required
+                            />
                           </div>
 
                           <div className="space-y-2">
                             <Label htmlFor="telephone-contact">Téléphone</Label>
-                            <Input id="telephone-contact" placeholder="+235 XX XX XX XX" />
+                            <Input 
+                              id="telephone-contact" 
+                              placeholder="+235 XX XX XX XX"
+                              value={contactForm.telephone}
+                              onChange={(e) => setContactForm({...contactForm, telephone: e.target.value})}
+                            />
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <Label htmlFor="sujet">Sujet de votre message *</Label>
-                          <Select>
+                          <Select 
+                            value={contactForm.sujet}
+                            onValueChange={(value) => setContactForm({...contactForm, sujet: value})}
+                            required
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Choisissez un sujet" />
                             </SelectTrigger>
@@ -265,12 +432,15 @@ const Contact = () => {
                             id="message" 
                             placeholder="Décrivez votre demande ou question..."
                             rows={6}
+                            value={contactForm.message}
+                            onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
+                            required
                           />
                         </div>
 
-                        <Button size="lg" className="w-full">
+                        <Button type="submit" size="lg" className="w-full" disabled={submittingContact}>
                           <Send className="mr-2 h-5 w-5" />
-                          Envoyer le message
+                          {submittingContact ? "Envoi..." : "Envoyer le message"}
                         </Button>
                       </form>
                     </CardContent>
