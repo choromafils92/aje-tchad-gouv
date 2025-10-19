@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Clock, CheckCircle, Download, Send, AlertCircle, Phone, Mail, Scale, Building, Briefcase, Gavel, UserCheck } from "lucide-react";
+import { Users, FileText, Clock, CheckCircle, Download, Send, AlertCircle, Phone, Mail, Scale, Building, Briefcase, Gavel, UserCheck, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface ResourceDocument {
+  id: string;
+  title: string;
+  description: string;
+  pdf_url: string | null;
+  word_url: string | null;
+  file_size: string;
+}
+
+interface AssistanceContact {
+  id: string;
+  service_name: string;
+  contact_label: string;
+  contact_value: string;
+  additional_info: string | null;
+}
 
 const Services = () => {
   const servicesOfferts = [
@@ -106,32 +125,39 @@ const Services = () => {
     }
   ];
 
-  const documentsTypes = [
-    {
-      nom: "Formulaire de demande d'avis juridique",
-      description: "Document officiel pour saisir l'AJE en demande d'avis",
-      format: "PDF/Word",
-      taille: "120 KB"
-    },
-    {
-      nom: "Modèle de clause de règlement des différends",
-      description: "Clauses types pour sécuriser les contrats publics",
-      format: "Word",
-      taille: "85 KB"
-    },
-    {
-      nom: "Check-list pré-contentieuse",
-      description: "Vérifications à effectuer avant toute action en justice",
-      format: "PDF",
-      taille: "95 KB"
-    },
-    {
-      nom: "Guide des marchés publics",
-      description: "Procédures et obligations en matière de commande publique",
-      format: "PDF",
-      taille: "2.1 MB"
+  const [documents, setDocuments] = useState<ResourceDocument[]>([]);
+  const [contacts, setContacts] = useState<AssistanceContact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [docsResponse, contactsResponse] = await Promise.all([
+        supabase
+          .from("resource_documents" as any)
+          .select("*")
+          .eq("published", true)
+          .order("ordre", { ascending: true }),
+        supabase
+          .from("faq_assistance_contacts" as any)
+          .select("*")
+          .order("ordre", { ascending: true })
+      ]);
+
+      if (docsResponse.error) throw docsResponse.error;
+      if (contactsResponse.error) throw contactsResponse.error;
+
+      setDocuments(docsResponse.data as any || []);
+      setContacts(contactsResponse.data as any || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   return (
     <div className="min-h-screen">
@@ -414,41 +440,74 @@ const Services = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {documentsTypes.map((doc, index) => (
-                      <Card key={index} className="hover:shadow-lg transition-shadow">
-                        <CardHeader className="pb-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <CardTitle className="text-lg leading-snug mb-2">
-                                {doc.nom}
-                              </CardTitle>
-                              <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                                <Badge variant="outline">{doc.format}</Badge>
-                                <span>{doc.taille}</span>
+                  {loading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {documents.length === 0 ? (
+                        <div className="col-span-2 text-center py-8">
+                          <p className="text-muted-foreground">
+                            Aucun document disponible pour le moment
+                          </p>
+                        </div>
+                      ) : (
+                        documents.map((doc) => (
+                          <Card key={doc.id} className="hover:shadow-lg transition-shadow">
+                            <CardHeader className="pb-4">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <CardTitle className="text-lg leading-snug mb-2">
+                                    {doc.title}
+                                  </CardTitle>
+                                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                                    {doc.pdf_url && doc.word_url && (
+                                      <Badge variant="outline">PDF/Word</Badge>
+                                    )}
+                                    {doc.pdf_url && !doc.word_url && (
+                                      <Badge variant="outline">PDF</Badge>
+                                    )}
+                                    {!doc.pdf_url && doc.word_url && (
+                                      <Badge variant="outline">Word</Badge>
+                                    )}
+                                    <span>{doc.file_size}</span>
+                                  </div>
+                                </div>
+                                <FileText className="h-8 w-8 text-muted-foreground" />
                               </div>
-                            </div>
-                            <FileText className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <CardDescription className="text-foreground/80">
-                            {doc.description}
-                          </CardDescription>
-                          <Button 
-                            className="w-full"
-                            onClick={() => {
-                              const fileName = doc.nom.toLowerCase().replace(/\s+/g, '_');
-                              window.open(`/documents/${fileName}.pdf`, '_blank');
-                            }}
-                          >
-                            <Download className="mr-2 h-4 w-4" />
-                            Télécharger
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                              <CardDescription className="text-foreground/80">
+                                {doc.description}
+                              </CardDescription>
+                              <div className="flex gap-2">
+                                {doc.pdf_url && (
+                                  <Button 
+                                    className="flex-1"
+                                    onClick={() => window.open(doc.pdf_url!, '_blank')}
+                                  >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    PDF
+                                  </Button>
+                                )}
+                                {doc.word_url && (
+                                  <Button 
+                                    variant="outline"
+                                    className="flex-1"
+                                    onClick={() => window.open(doc.word_url!, '_blank')}
+                                  >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Word
+                                  </Button>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))
+                      )}
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
@@ -469,23 +528,43 @@ const Services = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="text-center">
-                      <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="font-semibold text-primary mb-2">Par téléphone</h3>
-                      <p className="text-muted-foreground mb-2">Service client AJE</p>
-                      <p className="font-medium">+235 22 XX XX XX</p>
-                      <p className="text-sm text-muted-foreground">Lun-Jeu : 7h30-15h30, Ven : 7h30-12h30</p>
+                  {loading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
                     </div>
-                    
-                    <div className="text-center">
-                      <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="font-semibold text-primary mb-2">Par email</h3>
-                      <p className="text-muted-foreground mb-2">Service conseil juridique</p>
-                      <p className="font-medium">conseil@aje.td</p>
-                      <p className="text-sm text-muted-foreground">Réponse sous 24h en jours ouvrables</p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {contacts.length === 0 ? (
+                        <div className="col-span-2 text-center py-8">
+                          <p className="text-muted-foreground">
+                            Informations de contact non disponibles
+                          </p>
+                        </div>
+                      ) : (
+                        contacts.map((contact) => (
+                          <div key={contact.id} className="text-center">
+                            {contact.service_name.toLowerCase().includes("téléphone") ? (
+                              <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
+                            ) : (
+                              <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
+                            )}
+                            <h3 className="font-semibold text-primary mb-2">
+                              {contact.service_name}
+                            </h3>
+                            <p className="text-muted-foreground mb-2">
+                              {contact.contact_label}
+                            </p>
+                            <p className="font-medium">{contact.contact_value}</p>
+                            {contact.additional_info && (
+                              <p className="text-sm text-muted-foreground">
+                                {contact.additional_info}
+                              </p>
+                            )}
+                          </div>
+                        ))
+                      )}
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import {
@@ -10,9 +11,83 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { HelpCircle, Mail, Phone, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
+
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+  ordre: number;
+}
+
+interface AssistanceContact {
+  id: string;
+  service_name: string;
+  contact_label: string;
+  contact_value: string;
+  additional_info: string | null;
+}
 
 const FAQ = () => {
-  const faqCategories = [
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [contacts, setContacts] = useState<AssistanceContact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [faqsResponse, contactsResponse] = await Promise.all([
+        supabase
+          .from("faq" as any)
+          .select("*")
+          .eq("published", true)
+          .order("ordre", { ascending: true }),
+        supabase
+          .from("faq_assistance_contacts" as any)
+          .select("*")
+          .order("ordre", { ascending: true })
+      ]);
+
+      if (faqsResponse.error) throw faqsResponse.error;
+      if (contactsResponse.error) throw contactsResponse.error;
+
+      setFaqs(faqsResponse.data as any || []);
+      setContacts(contactsResponse.data as any || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Group FAQs by category
+  const faqCategories = faqs.reduce((acc: any, faq) => {
+    const category = faq.category || "Autres";
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(faq);
+    return acc;
+  }, {});
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <div className="flex items-center justify-center p-16">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const oldFaqCategories = [
     {
       category: "Questions générales",
       questions: [
@@ -106,31 +181,37 @@ const FAQ = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
-              {faqCategories.map((category, categoryIndex) => (
-                <div key={categoryIndex}>
-                  <h2 className="text-2xl font-bold text-primary mb-6">
-                    {category.category}
-                  </h2>
-                  <Accordion type="single" collapsible className="space-y-4">
-                    {category.questions.map((item, questionIndex) => (
-                      <AccordionItem
-                        key={questionIndex}
-                        value={`${categoryIndex}-${questionIndex}`}
-                        className="border rounded-lg px-6"
-                      >
-                        <AccordionTrigger className="text-left hover:no-underline">
-                          <span className="font-semibold text-foreground">
-                            {item.question}
-                          </span>
-                        </AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground pt-4">
-                          {item.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              ))}
+              {Object.keys(faqCategories).length === 0 ? (
+                <p className="text-center text-muted-foreground">
+                  Aucune question fréquente disponible pour le moment.
+                </p>
+              ) : (
+                Object.entries(faqCategories).map(([category, questions]: [string, any]) => (
+                  <div key={category}>
+                    <h2 className="text-2xl font-bold text-primary mb-6">
+                      {category}
+                    </h2>
+                    <Accordion type="single" collapsible className="space-y-4">
+                      {questions.map((faq: FAQ) => (
+                        <AccordionItem
+                          key={faq.id}
+                          value={faq.id}
+                          className="border rounded-lg px-6"
+                        >
+                          <AccordionTrigger className="text-left hover:no-underline">
+                            <span className="font-semibold text-foreground">
+                              {faq.question}
+                            </span>
+                          </AccordionTrigger>
+                          <AccordionContent className="text-muted-foreground pt-4">
+                            {faq.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -151,27 +232,46 @@ const FAQ = () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="text-center p-4">
-                      <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
-                      <h3 className="font-semibold mb-2">Par téléphone</h3>
-                      <p className="text-sm text-muted-foreground">+235 22 XX XX XX</p>
-                    </div>
-
-                    <div className="text-center p-4">
-                      <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
-                      <h3 className="font-semibold mb-2">Par email</h3>
-                      <p className="text-sm text-muted-foreground">contact@aje.td</p>
-                    </div>
-
-                    <div className="text-center p-4">
-                      <FileText className="h-8 w-8 text-primary mx-auto mb-3" />
-                      <h3 className="font-semibold mb-2">Demande écrite</h3>
-                      <Button variant="outline" size="sm" asChild className="mt-2">
-                        <Link to="/contact">
-                          Nous contacter
-                        </Link>
-                      </Button>
-                    </div>
+                    {contacts.length === 0 ? (
+                      <div className="col-span-3 text-center py-8">
+                        <p className="text-muted-foreground">
+                          Informations de contact non disponibles
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {contacts.map((contact) => (
+                          <div key={contact.id} className="text-center p-4">
+                            {contact.service_name.toLowerCase().includes("téléphone") ? (
+                              <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
+                            ) : contact.service_name.toLowerCase().includes("email") ? (
+                              <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
+                            ) : (
+                              <FileText className="h-8 w-8 text-primary mx-auto mb-3" />
+                            )}
+                            <h3 className="font-semibold mb-2">{contact.service_name}</h3>
+                            <p className="text-sm text-muted-foreground mb-1">
+                              {contact.contact_label}
+                            </p>
+                            <p className="font-medium">{contact.contact_value}</p>
+                            {contact.additional_info && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {contact.additional_info}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                        <div className="text-center p-4">
+                          <FileText className="h-8 w-8 text-primary mx-auto mb-3" />
+                          <h3 className="font-semibold mb-2">Demande écrite</h3>
+                          <Button variant="outline" size="sm" asChild className="mt-2">
+                            <Link to="/contact">
+                              Nous contacter
+                            </Link>
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>

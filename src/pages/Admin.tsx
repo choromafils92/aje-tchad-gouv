@@ -24,6 +24,8 @@ import MediaKitManagement from '@/components/admin/MediaKitManagement';
 import MediaGalleryManagement from '@/components/admin/MediaGalleryManagement';
 import MediaPressNewsletterManagement from '@/components/admin/MediaPressNewsletterManagement';
 import ContactSettingsManagement from '@/components/admin/ContactSettingsManagement';
+import FAQAssistanceManagement from '@/components/admin/FAQAssistanceManagement';
+import ResourceDocumentsManagement from '@/components/admin/ResourceDocumentsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -87,6 +89,8 @@ const Admin = () => {
             <TabsTrigger value="media-kit">Kit Média</TabsTrigger>
             <TabsTrigger value="galerie">Galerie</TabsTrigger>
             <TabsTrigger value="press-newsletter">Newsletter Presse</TabsTrigger>
+            <TabsTrigger value="faq-assistance">Assistance FAQ</TabsTrigger>
+            <TabsTrigger value="resource-docs">Documents Ressources</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -162,6 +166,14 @@ const Admin = () => {
 
           <TabsContent value="contact-settings" className="mt-6">
             <ContactSettingsManagement />
+          </TabsContent>
+
+          <TabsContent value="faq-assistance" className="mt-6">
+            <FAQAssistanceManagement />
+          </TabsContent>
+
+          <TabsContent value="resource-docs" className="mt-6">
+            <ResourceDocumentsManagement />
           </TabsContent>
         </Tabs>
       </main>
