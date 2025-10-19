@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, Download, Image, Video, Newspaper, Phone } from 'lucide-react';
+import logoPng from '@/assets/logo-aje-final.png';
+import logoSvg from '@/assets/logo-aje.svg';
 
 const pressReleases = [
   {
@@ -29,20 +31,35 @@ const mediaKit = [
     type: 'Image',
     size: '2.3 MB',
     icon: Image,
+    file: logoPng,
+    filename: 'logo-aje.png',
   },
   {
     name: 'Logo AJE (SVG)',
     type: 'Image',
     size: '45 KB',
     icon: Image,
+    file: logoSvg,
+    filename: 'logo-aje.svg',
   },
   {
     name: 'Plaquette institutionnelle',
     type: 'PDF',
     size: '5.8 MB',
     icon: FileText,
+    file: '/documents/Loi_AJE.pdf',
+    filename: 'plaquette-institutionnelle.pdf',
   },
 ];
+
+const handleDownload = (fileUrl: string, filename: string) => {
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 export default function Medias() {
   return (
@@ -156,7 +173,11 @@ export default function Medias() {
                               </p>
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleDownload(item.file, item.filename)}
+                          >
                             <Download className="h-4 w-4" />
                           </Button>
                         </div>
