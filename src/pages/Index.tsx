@@ -6,6 +6,7 @@ import LatestNews from "@/components/home/LatestNews";
 import QuickAccess from "@/components/home/QuickAccess";
 import DirectorMessage from "@/components/home/DirectorMessage";
 import SubDirectors from "@/components/home/SubDirectors";
+import NewsletterSubscription from "@/components/home/NewsletterSubscription";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
         <QuickAccess />
         <LatestNews />
         <SubDirectors />
+        <NewsletterSubscription />
       </main>
       <Footer />
     </div>
