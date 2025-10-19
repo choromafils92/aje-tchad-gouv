@@ -82,7 +82,7 @@ const Hero = () => {
                 
                 <div className="space-y-6">
               
-                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
                     <Button 
                       size="lg" 
                       variant="secondary"
@@ -94,8 +94,8 @@ const Hero = () => {
                     </Button>
                     <Button 
                       size="lg" 
-                      variant="outline"
-                      className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                      variant="secondary"
+                      className="bg-transparent border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
                       onClick={() => navigate('/textes')}
                     >
                       {t("hero.textsBtn")}
