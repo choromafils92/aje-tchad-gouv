@@ -29,6 +29,7 @@ const AdminManagement = () => {
   const [newAdminPassword, setNewAdminPassword] = useState('');
   const [newAdminName, setNewAdminName] = useState('');
   const [addingAdmin, setAddingAdmin] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -117,6 +118,7 @@ const AdminManagement = () => {
       setNewAdminEmail('');
       setNewAdminPassword('');
       setNewAdminName('');
+      setShowAddForm(false);
       fetchAdmins();
     } catch (error) {
       console.error('Error adding admin:', error);
@@ -164,53 +166,76 @@ const AdminManagement = () => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Créer un nouvel administrateur</CardTitle>
+          <CardTitle>Ajouter utilisateur</CardTitle>
           <CardDescription>
             Créer un nouveau compte utilisateur avec droits d'administration
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="admin-name">Nom complet (optionnel)</Label>
-              <Input
-                id="admin-name"
-                type="text"
-                placeholder="Nom complet"
-                value={newAdminName}
-                onChange={(e) => setNewAdminName(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label htmlFor="admin-email">Email</Label>
-              <Input
-                id="admin-email"
-                type="email"
-                placeholder="email@example.com"
-                value={newAdminEmail}
-                onChange={(e) => setNewAdminEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label htmlFor="admin-password">Mot de passe</Label>
-              <Input
-                id="admin-password"
-                type="password"
-                placeholder="Minimum 6 caractères"
-                value={newAdminPassword}
-                onChange={(e) => setNewAdminPassword(e.target.value)}
-                minLength={6}
-              />
-            </div>
+          {!showAddForm ? (
             <Button 
-              onClick={addAdmin} 
-              disabled={addingAdmin || !newAdminEmail || !newAdminPassword}
+              onClick={() => setShowAddForm(true)} 
               className="w-full"
             >
               <UserPlus className="mr-2 h-4 w-4" />
-              {addingAdmin ? 'Création...' : 'Créer l\'administrateur'}
+              Ajouter utilisateur
             </Button>
-          </div>
+          ) : (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="admin-name">Nom complet (optionnel)</Label>
+                <Input
+                  id="admin-name"
+                  type="text"
+                  placeholder="Nom complet"
+                  value={newAdminName}
+                  onChange={(e) => setNewAdminName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="admin-email">Email</Label>
+                <Input
+                  id="admin-email"
+                  type="email"
+                  placeholder="email@example.com"
+                  value={newAdminEmail}
+                  onChange={(e) => setNewAdminEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="admin-password">Mot de passe</Label>
+                <Input
+                  id="admin-password"
+                  type="password"
+                  placeholder="Minimum 6 caractères"
+                  value={newAdminPassword}
+                  onChange={(e) => setNewAdminPassword(e.target.value)}
+                  minLength={6}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={addAdmin} 
+                  disabled={addingAdmin || !newAdminEmail || !newAdminPassword}
+                  className="flex-1"
+                >
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  {addingAdmin ? 'Enregistrement...' : 'Enregistrer l\'utilisateur'}
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setNewAdminEmail('');
+                    setNewAdminPassword('');
+                    setNewAdminName('');
+                  }}
+                >
+                  Annuler
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

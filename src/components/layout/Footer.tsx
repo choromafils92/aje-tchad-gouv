@@ -248,7 +248,7 @@ const Footer = () => {
                   {t("footer.rss")}
                 </a>
               </div>
-            <div className="text-xs opacity-75 text-center md:text-right">
+            <div className="text-xs opacity-75 text-center">
               <p>© {new Date().getFullYear()} {t("footer.copyright")}</p>
               <p className="mt-1">Développé par <span className="font-semibold">zenasys-technology</span></p>
             </div>
