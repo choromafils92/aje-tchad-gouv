@@ -26,6 +26,8 @@ const AdminManagement = () => {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [newAdminPassword, setNewAdminPassword] = useState('');
+  const [newAdminName, setNewAdminName] = useState('');
   const [addingAdmin, setAddingAdmin] = useState(false);
 
   useEffect(() => {
@@ -66,23 +68,35 @@ const AdminManagement = () => {
   };
 
   const addAdmin = async () => {
-    if (!newAdminEmail) return;
+    if (!newAdminEmail || !newAdminPassword) {
+      toast({
+        title: 'Champs requis',
+        description: 'Veuillez remplir l\'email et le mot de passe.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setAddingAdmin(true);
     try {
-      // First check if user exists
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', newAdminEmail)
-        .maybeSingle();
+      // Create new user with auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: newAdminEmail,
+        password: newAdminPassword,
+        options: {
+          data: {
+            full_name: newAdminName || '',
+          },
+          emailRedirectTo: `${window.location.origin}/`,
+        },
+      });
 
-      if (profileError) throw profileError;
+      if (authError) throw authError;
 
-      if (!profile) {
+      if (!authData.user) {
         toast({
-          title: 'Utilisateur introuvable',
-          description: 'Aucun utilisateur avec cet email n\'existe.',
+          title: 'Erreur',
+          description: 'Impossible de créer l\'utilisateur.',
           variant: 'destructive',
         });
         return;
@@ -91,33 +105,24 @@ const AdminManagement = () => {
       // Add admin role
       const { error: roleError } = await supabase
         .from('user_roles')
-        .insert({ user_id: profile.id, role: 'admin' });
+        .insert({ user_id: authData.user.id, role: 'admin' });
 
-      if (roleError) {
-        if (roleError.message.includes('duplicate')) {
-          toast({
-            title: 'Déjà administrateur',
-            description: 'Cet utilisateur est déjà administrateur.',
-            variant: 'destructive',
-          });
-        } else {
-          throw roleError;
-        }
-        return;
-      }
+      if (roleError) throw roleError;
 
       toast({
-        title: 'Administrateur ajouté',
-        description: 'L\'utilisateur a été ajouté comme administrateur.',
+        title: 'Utilisateur créé',
+        description: 'Le nouvel administrateur a été créé avec succès.',
       });
 
       setNewAdminEmail('');
+      setNewAdminPassword('');
+      setNewAdminName('');
       fetchAdmins();
     } catch (error) {
       console.error('Error adding admin:', error);
       toast({
         title: 'Erreur',
-        description: 'Impossible d\'ajouter l\'administrateur.',
+        description: 'Impossible de créer l\'administrateur.',
         variant: 'destructive',
       });
     } finally {
@@ -159,15 +164,25 @@ const AdminManagement = () => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Ajouter un administrateur</CardTitle>
+          <CardTitle>Créer un nouvel administrateur</CardTitle>
           <CardDescription>
-            Ajouter un utilisateur existant comme administrateur
+            Créer un nouveau compte utilisateur avec droits d'administration
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Label htmlFor="admin-email">Email de l'utilisateur</Label>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="admin-name">Nom complet (optionnel)</Label>
+              <Input
+                id="admin-name"
+                type="text"
+                placeholder="Nom complet"
+                value={newAdminName}
+                onChange={(e) => setNewAdminName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="admin-email">Email</Label>
               <Input
                 id="admin-email"
                 type="email"
@@ -176,13 +191,24 @@ const AdminManagement = () => {
                 onChange={(e) => setNewAdminEmail(e.target.value)}
               />
             </div>
+            <div>
+              <Label htmlFor="admin-password">Mot de passe</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                placeholder="Minimum 6 caractères"
+                value={newAdminPassword}
+                onChange={(e) => setNewAdminPassword(e.target.value)}
+                minLength={6}
+              />
+            </div>
             <Button 
               onClick={addAdmin} 
-              disabled={addingAdmin || !newAdminEmail}
-              className="mt-auto"
+              disabled={addingAdmin || !newAdminEmail || !newAdminPassword}
+              className="w-full"
             >
               <UserPlus className="mr-2 h-4 w-4" />
-              Ajouter
+              {addingAdmin ? 'Création...' : 'Créer l\'administrateur'}
             </Button>
           </div>
         </CardContent>

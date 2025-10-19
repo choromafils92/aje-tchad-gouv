@@ -14,6 +14,7 @@ import TextesJuridiquesManagement from '@/components/admin/TextesJuridiquesManag
 import SiteSettingsManagement from '@/components/admin/SiteSettingsManagement';
 import DemandesAvisManagement from '@/components/admin/DemandesAvisManagement';
 import ContactsManagement from '@/components/admin/ContactsManagement';
+import AnalyticsManagement from '@/components/admin/AnalyticsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -61,13 +62,14 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="actualites" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9">
             <TabsTrigger value="actualites">Actualités</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="textes">Textes</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
             <TabsTrigger value="avis">Avis</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
           </TabsList>
@@ -94,6 +96,10 @@ const Admin = () => {
           
           <TabsContent value="contacts" className="mt-6">
             <ContactsManagement />
+          </TabsContent>
+          
+          <TabsContent value="analytics" className="mt-6">
+            <AnalyticsManagement />
           </TabsContent>
           
           <TabsContent value="parametres" className="mt-6">
