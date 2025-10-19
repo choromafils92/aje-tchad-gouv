@@ -2,11 +2,11 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { SignalerContentieuxDialog } from "@/components/SignalerContentieuxDialog";
+import { DemanderConsultationDialog } from "@/components/DemanderConsultationDialog";
 import { 
   Scale, 
   FileText, 
@@ -44,84 +44,6 @@ const Contentieux = () => {
     }
   };
 
-  const handleSignalerContentieux = async () => {
-    const organisme = prompt("Nom de votre organisme:");
-    if (!organisme) return;
-    
-    const nom = prompt("Votre nom complet:");
-    if (!nom) return;
-    
-    const email = prompt("Votre email professionnel:");
-    if (!email) return;
-    
-    const telephone = prompt("Votre téléphone:");
-    const description = prompt("Description du contentieux urgent:");
-    if (!description) return;
-
-    try {
-      const numeroDossier = `CU-${Date.now().toString().slice(-6)}`;
-      const { error } = await supabase
-        .from("signalements_contentieux" as any)
-        .insert({
-          numero_dossier: numeroDossier,
-          organisme,
-          nom_demandeur: nom,
-          email,
-          telephone,
-          description,
-          priorite: "urgent"
-        });
-
-      if (error) throw error;
-      toast.success(`Contentieux signalé avec succès!\nNuméro de dossier: ${numeroDossier}`);
-    } catch (error: any) {
-      toast.error("Erreur lors du signalement");
-    }
-  };
-
-  const handleDemanderConsultation = async () => {
-    const organisme = prompt("Nom de votre organisme:");
-    if (!organisme) return;
-    
-    const nom = prompt("Votre nom complet:");
-    if (!nom) return;
-    
-    const fonction = prompt("Votre fonction:");
-    if (!fonction) return;
-    
-    const email = prompt("Votre email professionnel:");
-    if (!email) return;
-    
-    const telephone = prompt("Votre téléphone:");
-    if (!telephone) return;
-    
-    const objet = prompt("Objet de la consultation:");
-    if (!objet) return;
-    
-    const contexte = prompt("Contexte détaillé:");
-    if (!contexte) return;
-
-    try {
-      const numeroReference = `CON-${Date.now().toString().slice(-6)}`;
-      const { error } = await supabase
-        .from("consultations_juridiques" as any)
-        .insert({
-          numero_reference: numeroReference,
-          organisme,
-          nom_demandeur: nom,
-          fonction,
-          email,
-          telephone,
-          objet,
-          contexte
-        });
-
-      if (error) throw error;
-      toast.success(`Consultation enregistrée!\nRéférence: ${numeroReference}\nNous vous contacterons sous 48h.`);
-    } catch (error: any) {
-      toast.error("Erreur lors de l'enregistrement");
-    }
-  };
 
   const statistiques = [
     {
@@ -498,14 +420,7 @@ const Contentieux = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full"
-                    onClick={handleSignalerContentieux}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Signaler un Contentieux
-                  </Button>
+                  <SignalerContentieuxDialog />
                 </CardContent>
               </Card>
 
@@ -518,14 +433,7 @@ const Contentieux = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full"
-                    onClick={handleDemanderConsultation}
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Demander une Consultation
-                  </Button>
+                  <DemanderConsultationDialog />
                 </CardContent>
               </Card>
             </div>
