@@ -10,24 +10,44 @@ const Modeles = () => {
       title: "Modèle de demande d'avis juridique",
       description: "Formulaire type pour soumettre une demande d'avis juridique à l'AJE",
       file: "/documents/modele_demande_avis_juridique.html",
+      pdfFileName: "Modele_Demande_Avis_Juridique.pdf",
       icon: FileText
     },
     {
       title: "Modèle de transaction administrative",
       description: "Template pour la rédaction d'une transaction administrative",
       file: "/documents/modele_transaction_administrative.html",
+      pdfFileName: "Modele_Transaction_Administrative.pdf",
       icon: FileText
     },
     {
       title: "Modèle de clause de règlement des différends",
       description: "Clauses types pour le règlement des différends dans les contrats",
       file: "/documents/modele_clause_reglement_differends.html",
+      pdfFileName: "Modele_Clause_Reglement_Differends.pdf",
       icon: FileText
     }
   ];
 
   const handleDownload = (file: string, title: string) => {
-    window.open(file, '_blank');
+    // Open in new window for printing to PDF
+    const printWindow = window.open(file, '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    }
+  };
+
+  const handleDirectDownload = (file: string, pdfFileName: string) => {
+    // Create a temporary link to download as PDF
+    const link = document.createElement('a');
+    link.href = file;
+    link.download = pdfFileName;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -69,18 +89,16 @@ const Modeles = () => {
                         onClick={() => handleDownload(modele.file, modele.title)}
                       >
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        Ouvrir
+                        Aperçu
                       </Button>
                       <Button 
                         variant="outline"
                         size="sm"
                         className="flex-1"
-                        asChild
+                        onClick={() => handleDownload(modele.file, modele.title)}
                       >
-                        <a href={modele.file} download>
-                          <Download className="mr-2 h-4 w-4" />
-                          Télécharger
-                        </a>
+                        <Download className="mr-2 h-4 w-4" />
+                        PDF
                       </Button>
                     </div>
                   </CardContent>
@@ -104,7 +122,7 @@ const Modeles = () => {
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">•</span>
-                <span>Imprimez le document ou sauvegardez-le en PDF</span>
+                <span>Cliquez sur "PDF" pour télécharger directement, ou "Aperçu" pour visualiser avant téléchargement</span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">•</span>
