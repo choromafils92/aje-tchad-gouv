@@ -20,6 +20,11 @@ import Modeles from "./pages/Modeles";
 import RendezVous from "./pages/RendezVous";
 import Carrieres from "./pages/Carrieres";
 import Medias from "./pages/Medias";
+import MentionsLegales from "./pages/MentionsLegales";
+import DonneesPersonnelles from "./pages/DonneesPersonnelles";
+import Accessibilite from "./pages/Accessibilite";
+import PlanDuSite from "./pages/PlanDuSite";
+import RSS from "./pages/RSS";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +55,11 @@ const App = () => {
               <Route path="/contact/rendez-vous" element={<RendezVous />} />
               <Route path="/carrieres" element={<Carrieres />} />
               <Route path="/medias" element={<Medias />} />
+              <Route path="/mentions-legales" element={<MentionsLegales />} />
+              <Route path="/donnees-personnelles" element={<DonneesPersonnelles />} />
+              <Route path="/accessibilite" element={<Accessibilite />} />
+              <Route path="/plan-du-site" element={<PlanDuSite />} />
+              <Route path="/rss" element={<RSS />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -15,6 +15,13 @@ const Footer = () => {
     email: "contact@aje.td",
     hours: "Lundi au Jeudi : 7h30 - 15h30\nVendredi : 7h30 - 12h30\nWeekend : Fermé"
   });
+  const [socialLinks, setSocialLinks] = useState({
+    facebook: "",
+    twitter: "",
+    linkedin: "",
+    rss: ""
+  });
+  const [devise, setDevise] = useState("Conseiller-Défendre-Protéger");
 
   useEffect(() => {
     fetchContactInfo();
@@ -25,11 +32,23 @@ const Footer = () => {
       const { data, error } = await (supabase as any)
         .from("site_settings")
         .select("key, value")
-        .in("key", ["contact_address", "contact_phone", "contact_email", "contact_hours"]);
+        .in("key", [
+          "contact_address", 
+          "contact_phone", 
+          "contact_email", 
+          "contact_hours",
+          "social_facebook",
+          "social_twitter",
+          "social_linkedin",
+          "social_rss",
+          "aje_devise"
+        ]);
 
       if (error) throw error;
 
       const newInfo = { ...contactInfo };
+      const newSocial = { ...socialLinks };
+      
       data?.forEach((setting: any) => {
         switch (setting.key) {
           case "contact_address":
@@ -44,9 +63,25 @@ const Footer = () => {
           case "contact_hours":
             newInfo.hours = setting.value as string;
             break;
+          case "social_facebook":
+            newSocial.facebook = setting.value as string;
+            break;
+          case "social_twitter":
+            newSocial.twitter = setting.value as string;
+            break;
+          case "social_linkedin":
+            newSocial.linkedin = setting.value as string;
+            break;
+          case "social_rss":
+            newSocial.rss = setting.value as string;
+            break;
+          case "aje_devise":
+            setDevise(setting.value as string);
+            break;
         }
       });
       setContactInfo(newInfo);
+      setSocialLinks(newSocial);
     } catch (error) {
       console.error("Error fetching contact info:", error);
     } finally {
@@ -68,7 +103,7 @@ const Footer = () => {
               />
               <div>
                 <h3 className="font-semibold text-sm">{t("header.title")}</h3>
-                <p className="text-xs opacity-90">{t("hero.republic")}</p>
+                <p className="text-xs opacity-90">{devise}</p>
               </div>
             </div>
             
@@ -145,18 +180,50 @@ const Footer = () => {
             
             {/* Social Media */}
             <div className="flex space-x-3 pt-2">
-              <Button variant="ghost" size="sm" className="p-2 h-auto" aria-label="Facebook">
-                <Facebook className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="p-2 h-auto" aria-label="Twitter">
-                <Twitter className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="p-2 h-auto" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="p-2 h-auto" aria-label="RSS">
-                <Rss className="h-4 w-4" />
-              </Button>
+              {socialLinks.facebook && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-2 h-auto" 
+                  aria-label="Facebook"
+                  onClick={() => window.open(socialLinks.facebook, '_blank')}
+                >
+                  <Facebook className="h-4 w-4" />
+                </Button>
+              )}
+              {socialLinks.twitter && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-2 h-auto" 
+                  aria-label="Twitter"
+                  onClick={() => window.open(socialLinks.twitter, '_blank')}
+                >
+                  <Twitter className="h-4 w-4" />
+                </Button>
+              )}
+              {socialLinks.linkedin && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-2 h-auto" 
+                  aria-label="LinkedIn"
+                  onClick={() => window.open(socialLinks.linkedin, '_blank')}
+                >
+                  <Linkedin className="h-4 w-4" />
+                </Button>
+              )}
+              {socialLinks.rss && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-2 h-auto" 
+                  aria-label="RSS"
+                  onClick={() => window.open(socialLinks.rss, '_blank')}
+                >
+                  <Rss className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
         </div>

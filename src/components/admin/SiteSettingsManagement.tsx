@@ -178,11 +178,13 @@ const SiteSettingsManagement = () => {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="director" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="director">Directeur</TabsTrigger>
           <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="contentieux">Contentieux</TabsTrigger>
+          <TabsTrigger value="devise">Devise</TabsTrigger>
+          <TabsTrigger value="social">Réseaux Sociaux</TabsTrigger>
         </TabsList>
 
         <TabsContent value="director">
@@ -451,6 +453,90 @@ const SiteSettingsManagement = () => {
               </Button>
 
               <Button onClick={() => updateSetting("contentieux_domains", settings.contentieux_domains)} disabled={saving}>
+                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Enregistrer
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="devise">
+          <Card>
+            <CardHeader>
+              <CardTitle>Devise de l'AJE</CardTitle>
+              <CardDescription>Gérer la devise affichée sur le site</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Devise</Label>
+                <Input
+                  value={settings.aje_devise || ""}
+                  onChange={(e) => setSettings({ ...settings, aje_devise: e.target.value })}
+                  placeholder="Ex: Conseiller-Défendre-Protéger"
+                />
+              </div>
+
+              <Button onClick={() => updateSetting("aje_devise", settings.aje_devise)} disabled={saving}>
+                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Enregistrer
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="social">
+          <Card>
+            <CardHeader>
+              <CardTitle>Liens Réseaux Sociaux</CardTitle>
+              <CardDescription>Gérer les liens vers les réseaux sociaux</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Facebook</Label>
+                <Input
+                  type="url"
+                  value={settings.social_facebook || ""}
+                  onChange={(e) => setSettings({ ...settings, social_facebook: e.target.value })}
+                  placeholder="https://facebook.com/votre-page"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Twitter</Label>
+                <Input
+                  type="url"
+                  value={settings.social_twitter || ""}
+                  onChange={(e) => setSettings({ ...settings, social_twitter: e.target.value })}
+                  placeholder="https://twitter.com/votre-compte"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>LinkedIn</Label>
+                <Input
+                  type="url"
+                  value={settings.social_linkedin || ""}
+                  onChange={(e) => setSettings({ ...settings, social_linkedin: e.target.value })}
+                  placeholder="https://linkedin.com/company/votre-page"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>RSS Feed</Label>
+                <Input
+                  type="url"
+                  value={settings.social_rss || ""}
+                  onChange={(e) => setSettings({ ...settings, social_rss: e.target.value })}
+                  placeholder="https://votre-site.com/rss"
+                />
+              </div>
+
+              <Button onClick={() => {
+                updateSetting("social_facebook", settings.social_facebook);
+                updateSetting("social_twitter", settings.social_twitter);
+                updateSetting("social_linkedin", settings.social_linkedin);
+                updateSetting("social_rss", settings.social_rss);
+              }} disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Enregistrer
               </Button>
