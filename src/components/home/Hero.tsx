@@ -1,12 +1,55 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import drapeauTchad from "@/assets/drapeau-tchad.png";
 import armoirieTchad from "@/assets/armoirie-tchad.png";
 import logoAje from "@/assets/logo-aje-final.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
   const { t } = useLanguage();
+  const [loading, setLoading] = useState(true);
+  const [heroContent, setHeroContent] = useState({
+    title: "Agence Judiciaire de l'État",
+    tagline: "Conseiller-Défendre-Protéger",
+    description: "L'organe officiel chargé de défendre et représenter l'État du Tchad dans toutes les affaires juridiques et contentieuses."
+  });
+
+  useEffect(() => {
+    fetchHeroContent();
+  }, []);
+
+  const fetchHeroContent = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("site_settings")
+        .select("key, value")
+        .in("key", ["hero_title", "hero_tagline", "hero_description"]);
+
+      if (error) throw error;
+
+      const newContent = { ...heroContent };
+      data?.forEach((setting: any) => {
+        switch (setting.key) {
+          case "hero_title":
+            newContent.title = setting.value as string;
+            break;
+          case "hero_tagline":
+            newContent.tagline = setting.value as string;
+            break;
+          case "hero_description":
+            newContent.description = setting.value as string;
+            break;
+        }
+      });
+      setHeroContent(newContent);
+    } catch (error) {
+      console.error("Error fetching hero content:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   return (
     <section className="relative bg-gradient-to-br from-primary to-accent text-primary-foreground overflow-hidden">
@@ -14,21 +57,27 @@ const Hero = () => {
       <div className="relative container mx-auto px-4 py-12 md:py-20 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="space-y-8">
-            <div className="space-y-4">
-              <div>
-                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
-                  {t("hero.title")}
-                </h1>
-                <p className="text-base md:text-lg opacity-90 uppercase tracking-wide mt-2">
-                  {t("hero.tagline")}
-                </p>
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin" />
               </div>
-            </div>
-            
-            <div className="space-y-6">
-              <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95">
-                {t("hero.description")}
-              </p>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <div>
+                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
+                      {heroContent.title}
+                    </h1>
+                    <p className="text-base md:text-lg opacity-90 uppercase tracking-wide mt-2">
+                      {heroContent.tagline}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95">
+                    {heroContent.description}
+                  </p>
               
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <Button 
@@ -82,9 +131,11 @@ const Hero = () => {
                 </div>
               </div>
             </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        </div>
-      </div>
     </section>
   );
 };

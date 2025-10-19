@@ -178,13 +178,14 @@ const SiteSettingsManagement = () => {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="director" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="director">Directeur</TabsTrigger>
+          <TabsTrigger value="hero">Hero & GPS</TabsTrigger>
           <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="contentieux">Contentieux</TabsTrigger>
           <TabsTrigger value="devise">Devise</TabsTrigger>
-          <TabsTrigger value="social">Réseaux Sociaux</TabsTrigger>
+          <TabsTrigger value="social">Réseaux</TabsTrigger>
         </TabsList>
 
         <TabsContent value="director">
@@ -266,6 +267,104 @@ const SiteSettingsManagement = () => {
                 updateSetting("director_title", settings.director_title);
                 updateSetting("director_grade", settings.director_grade);
                 updateSetting("director_message", settings.director_message);
+              }} disabled={saving}>
+                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Enregistrer
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="hero">
+          <Card>
+            <CardHeader>
+              <CardTitle>Section Hero & Localisation</CardTitle>
+              <CardDescription>Gérer le texte d'accueil et les coordonnées GPS</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Titre Principal</Label>
+                <Input
+                  value={settings.hero_title || ""}
+                  onChange={(e) => setSettings({ ...settings, hero_title: e.target.value })}
+                  placeholder="Agence Judiciaire de l'État"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Devise (sous-titre)</Label>
+                <Input
+                  value={settings.hero_tagline || ""}
+                  onChange={(e) => setSettings({ ...settings, hero_tagline: e.target.value })}
+                  placeholder="Conseiller-Défendre-Protéger"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea
+                  value={settings.hero_description || ""}
+                  onChange={(e) => setSettings({ ...settings, hero_description: e.target.value })}
+                  rows={4}
+                  placeholder="L'organe officiel chargé de défendre et représenter l'État du Tchad..."
+                />
+              </div>
+
+              <div className="border-t pt-4 mt-6">
+                <h4 className="font-semibold mb-4">Coordonnées GPS</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Latitude</Label>
+                    <Input
+                      type="number"
+                      step="0.000001"
+                      value={settings.gps_latitude || ""}
+                      onChange={(e) => setSettings({ ...settings, gps_latitude: e.target.value })}
+                      placeholder="12.1067"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Longitude</Label>
+                    <Input
+                      type="number"
+                      step="0.000001"
+                      value={settings.gps_longitude || ""}
+                      onChange={(e) => setSettings({ ...settings, gps_longitude: e.target.value })}
+                      placeholder="15.0444"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Utilisez Google Maps pour trouver les coordonnées exactes de votre localisation
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Nom du Lieu</Label>
+                <Input
+                  value={settings.location_name || ""}
+                  onChange={(e) => setSettings({ ...settings, location_name: e.target.value })}
+                  placeholder="Agence Judiciaire de l'État"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Adresse</Label>
+                <Input
+                  value={settings.location_address || ""}
+                  onChange={(e) => setSettings({ ...settings, location_address: e.target.value })}
+                  placeholder="Avenue Félix Éboué, Quartier administratif"
+                />
+              </div>
+
+              <Button onClick={() => {
+                updateSetting("hero_title", settings.hero_title);
+                updateSetting("hero_tagline", settings.hero_tagline);
+                updateSetting("hero_description", settings.hero_description);
+                updateSetting("gps_latitude", settings.gps_latitude);
+                updateSetting("gps_longitude", settings.gps_longitude);
+                updateSetting("location_name", settings.location_name);
+                updateSetting("location_address", settings.location_address);
               }} disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Enregistrer
