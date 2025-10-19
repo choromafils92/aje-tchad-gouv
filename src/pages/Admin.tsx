@@ -15,6 +15,8 @@ import SiteSettingsManagement from '@/components/admin/SiteSettingsManagement';
 import DemandesAvisManagement from '@/components/admin/DemandesAvisManagement';
 import ContactsManagement from '@/components/admin/ContactsManagement';
 import AnalyticsManagement from '@/components/admin/AnalyticsManagement';
+import JobOffersManagement from '@/components/admin/JobOffersManagement';
+import JobApplicationsManagement from '@/components/admin/JobApplicationsManagement';
 // Temporarily commented until SQL is executed in Supabase
 // import ProceduresManagement from '@/components/admin/ProceduresManagement';
 // import JurisprudenceManagement from '@/components/admin/JurisprudenceManagement';
@@ -74,6 +76,8 @@ const Admin = () => {
             <TabsTrigger value="faq">FAQ</TabsTrigger>
             <TabsTrigger value="avis">Avis</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="offres">Offres d'emploi</TabsTrigger>
+            <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -101,6 +105,14 @@ const Admin = () => {
           
           <TabsContent value="contacts" className="mt-6">
             <ContactsManagement />
+          </TabsContent>
+          
+          <TabsContent value="offres" className="mt-6">
+            <JobOffersManagement />
+          </TabsContent>
+          
+          <TabsContent value="candidatures" className="mt-6">
+            <JobApplicationsManagement />
           </TabsContent>
           
           <TabsContent value="analytics" className="mt-6">

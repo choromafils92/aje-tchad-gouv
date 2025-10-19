@@ -1,41 +1,47 @@
+import { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Briefcase, MapPin, Clock, Users, Award, TrendingUp } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import CandidatureDialog from '@/components/CandidatureDialog';
 
-const jobOffers = [
-  {
-    id: 1,
-    title: 'Juriste Conseil',
-    department: 'Département Juridique',
-    location: 'N\'Djamena, Tchad',
-    type: 'CDI',
-    experience: '3-5 ans',
-    description: 'Nous recherchons un juriste conseil expérimenté pour rejoindre notre équipe.',
-  },
-  {
-    id: 2,
-    title: 'Avocat Contentieux',
-    department: 'Contentieux',
-    location: 'N\'Djamena, Tchad',
-    type: 'CDI',
-    experience: '5+ ans',
-    description: 'Poste d\'avocat spécialisé en contentieux administratif et droit public.',
-  },
-  {
-    id: 3,
-    title: 'Assistant Juridique',
-    department: 'Administration',
-    location: 'N\'Djamena, Tchad',
-    type: 'CDD',
-    experience: '1-2 ans',
-    description: 'Assistant(e) juridique pour soutenir l\'équipe dans les tâches administratives.',
-  },
-];
+interface JobOffer {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  experience: string;
+  description: string;
+}
 
 export default function Carrieres() {
+  const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchJobOffers();
+  }, []);
+
+  const fetchJobOffers = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('job_offers')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (data) setJobOffers(data);
+    } catch (error) {
+      console.error('Error fetching job offers:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -96,44 +102,54 @@ export default function Carrieres() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Postes disponibles</h2>
             
-            <div className="max-w-4xl mx-auto space-y-6">
-              {jobOffers.map((job) => (
-                <Card key={job.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start flex-wrap gap-4">
-                      <div>
-                        <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
-                        <CardDescription className="flex items-center gap-2">
-                          <Briefcase className="h-4 w-4" />
-                          {job.department}
-                        </CardDescription>
-                      </div>
-                      <Badge variant="secondary">{job.type}</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <p className="text-muted-foreground">{job.description}</p>
-                      
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          {job.location}
+            {loading ? (
+              <div className="text-center py-8">Chargement des offres...</div>
+            ) : jobOffers.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Aucune offre d'emploi disponible pour le moment.
+              </div>
+            ) : (
+              <div className="max-w-4xl mx-auto space-y-6">
+                {jobOffers.map((job) => (
+                  <Card key={job.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex justify-between items-start flex-wrap gap-4">
+                        <div>
+                          <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
+                          <CardDescription className="flex items-center gap-2">
+                            <Briefcase className="h-4 w-4" />
+                            {job.department}
+                          </CardDescription>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          Expérience: {job.experience}
+                        <Badge variant="secondary">{job.type}</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <p className="text-muted-foreground">{job.description}</p>
+                        
+                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <MapPin className="h-4 w-4" />
+                            {job.location}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            Expérience: {job.experience}
+                          </div>
+                        </div>
+                        
+                        <div className="pt-4">
+                          <CandidatureDialog jobId={job.id} jobTitle={job.title}>
+                            <Button>Postuler</Button>
+                          </CandidatureDialog>
                         </div>
                       </div>
-                      
-                      <div className="pt-4">
-                        <Button>Postuler</Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -157,7 +173,9 @@ export default function Carrieres() {
                     Objet: Candidature spontanée - [Votre nom]
                   </p>
                 </div>
-                <Button className="mt-6">Envoyer ma candidature</Button>
+                <CandidatureDialog isSpontaneous>
+                  <Button className="mt-6">Envoyer ma candidature</Button>
+                </CandidatureDialog>
               </CardContent>
             </Card>
           </div>
