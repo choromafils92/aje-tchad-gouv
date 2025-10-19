@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
+import { z } from "zod";
 
 interface CandidatureDialogProps {
   jobId?: string;
@@ -14,6 +15,14 @@ interface CandidatureDialogProps {
   isSpontaneous?: boolean;
   children: React.ReactNode;
 }
+
+const candidatureSchema = z.object({
+  nom: z.string().trim().min(1, "Le nom est requis").max(100, "Le nom ne doit pas dépasser 100 caractères"),
+  prenom: z.string().trim().min(1, "Le prénom est requis").max(100, "Le prénom ne doit pas dépasser 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email ne doit pas dépasser 255 caractères"),
+  telephone: z.string().trim().min(1, "Le téléphone est requis").max(20, "Le téléphone ne doit pas dépasser 20 caractères"),
+  lettre_motivation: z.string().trim().min(10, "La lettre doit contenir au moins 10 caractères").max(5000, "La lettre ne doit pas dépasser 5000 caractères"),
+});
 
 export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = false, children }: CandidatureDialogProps) {
   const { toast } = useToast();
@@ -32,14 +41,17 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
     setIsSubmitting(true);
 
     try {
+      // Validate form data
+      const validatedData = candidatureSchema.parse(formData);
+
       const { error } = await (supabase as any).from("job_applications").insert({
         job_offer_id: jobId || null,
         is_spontaneous: isSpontaneous,
-        nom: formData.nom,
-        prenom: formData.prenom,
-        email: formData.email,
-        telephone: formData.telephone,
-        lettre_motivation: formData.lettre_motivation,
+        nom: validatedData.nom,
+        prenom: validatedData.prenom,
+        email: validatedData.email,
+        telephone: validatedData.telephone,
+        lettre_motivation: validatedData.lettre_motivation,
         statut: "nouveau",
       });
 
@@ -59,11 +71,19 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
       });
       setOpen(false);
     } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de l'envoi de votre candidature.",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Erreur de validation",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: error.message || "Une erreur est survenue lors de l'envoi de votre candidature.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
