@@ -58,7 +58,7 @@ USING (false);
 CREATE POLICY "Anyone can submit contact form"
 ON contacts
 FOR INSERT
-USING (true);
+WITH CHECK (true);
 
 -- Seuls les admins peuvent voir les contacts
 CREATE POLICY "Only admins can view contacts"
@@ -81,7 +81,7 @@ USING (false);
 CREATE POLICY "Anyone can submit job applications"
 ON job_applications
 FOR INSERT
-USING (true);
+WITH CHECK (true);
 
 -- Seuls les admins peuvent voir les candidatures
 CREATE POLICY "Only admins can view job applications"
@@ -104,7 +104,7 @@ USING (false);
 CREATE POLICY "Anyone can create accreditation requests"
 ON media_accreditations
 FOR INSERT
-USING (true);
+WITH CHECK (true);
 
 -- Seuls les admins peuvent voir les demandes
 CREATE POLICY "Only admins can view accreditations"
@@ -127,7 +127,7 @@ USING (false);
 CREATE POLICY "Anyone can create signalements"
 ON signalements_contentieux
 FOR INSERT
-USING (true);
+WITH CHECK (true);
 
 -- Seuls les admins et personnes assignées peuvent voir les signalements
 CREATE POLICY "Only admins and assigned can view signalements"
