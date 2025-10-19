@@ -33,6 +33,13 @@ const Modeles = () => {
       file: "/documents/modele_transaction_administrative.html",
       pdfFileName: "Modele_Transaction_Administrative.pdf",
       icon: FileText
+    },
+    {
+      title: "Guide des marchés publics",
+      description: "Guide complet sur la réglementation des marchés publics au Tchad avec procédures et seuils",
+      file: "/documents/guide_marches_publics.html",
+      pdfFileName: "Guide_Marches_Publics.pdf",
+      icon: FileText
     }
   ];
 

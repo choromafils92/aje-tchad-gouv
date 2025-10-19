@@ -25,32 +25,39 @@ const Textes = () => {
 
   const modelesTypes = [
     {
-      title: "Modèle de demande d'avis juridique",
-      description: "Formulaire type pour saisir l'AJE en demande d'avis",
+      title: "Formulaire de demande d'avis juridique",
+      description: "Modèle de formulaire pour soumettre une demande d'avis juridique à l'AJE",
       format: "HTML",
-      size: "45 KB",
+      size: "25 KB",
       downloadUrl: "/documents/modele_demande_avis_juridique.html"
     },
     {
       title: "Modèle de clause de règlement des différends",
-      description: "Clauses types pour les contrats publics",
+      description: "Clause type à intégrer dans les contrats administratifs",
       format: "HTML",
-      size: "120 KB",
+      size: "20 KB",
       downloadUrl: "/documents/modele_clause_reglement_differends.html"
     },
     {
       title: "Check-list pré-contentieuse",
-      description: "Liste de vérification avant engagement d'une procédure",
+      description: "Liste de vérification complète avant engagement d'une procédure",
       format: "HTML",
-      size: "80 KB",
+      size: "95 KB",
       downloadUrl: "/documents/checklist_pre_contentieuse.html"
     },
     {
       title: "Modèle de transaction administrative",
       description: "Cadre type pour les accords transactionnels",
       format: "HTML",
-      size: "55 KB",
+      size: "22 KB",
       downloadUrl: "/documents/modele_transaction_administrative.html"
+    },
+    {
+      title: "Guide des marchés publics",
+      description: "Guide complet sur la réglementation des marchés publics au Tchad",
+      format: "HTML",
+      size: "2.1 MB",
+      downloadUrl: "/documents/guide_marches_publics.html"
     }
   ];
 
