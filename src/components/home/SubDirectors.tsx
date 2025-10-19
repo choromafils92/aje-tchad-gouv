@@ -25,7 +25,7 @@ const SubDirectors = () => {
         .from("site_settings")
         .select("value")
         .eq("key", "subdirections")
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
