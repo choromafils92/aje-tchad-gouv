@@ -492,19 +492,13 @@ const Services = () => {
                                         const fileName = doc.pdf_url!.split('/').pop()?.replace('.html', '');
                                         window.open(`/modeles?file=${fileName}`, '_blank');
                                       } else {
-                                        // Direct download for real PDFs
-                                        const link = document.createElement('a');
-                                        link.href = doc.pdf_url!;
-                                        link.download = `${doc.title}.pdf`;
-                                        link.target = '_blank';
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        document.body.removeChild(link);
+                                        // Open PDF in new tab for viewing
+                                        window.open(doc.pdf_url!, '_blank');
                                       }
                                     }}
                                   >
                                     <Download className="mr-2 h-4 w-4" />
-                                    {doc.pdf_url!.endsWith('.html') ? 'Voir & Télécharger' : 'PDF'}
+                                    {doc.pdf_url!.endsWith('.html') ? 'Voir & Télécharger' : 'Visualiser'}
                                   </Button>
                                 )}
                                 {doc.word_url && (
@@ -512,13 +506,7 @@ const Services = () => {
                                     variant="outline"
                                     className="flex-1"
                                     onClick={() => {
-                                      const link = document.createElement('a');
-                                      link.href = doc.word_url!;
-                                      link.download = `${doc.title}.docx`;
-                                      link.target = '_blank';
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      document.body.removeChild(link);
+                                      window.open(doc.word_url!, '_blank');
                                     }}
                                   >
                                     <Download className="mr-2 h-4 w-4" />
