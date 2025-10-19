@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
+import logoAje from "@/assets/logo-arrondi-vf.png";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -61,7 +62,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <img 
-                src="/src/assets/logo-aje.svg" 
+                src={logoAje} 
                 alt="Logo AJE"
                 className="w-12 h-12 object-contain"
               />
@@ -180,9 +181,10 @@ const Footer = () => {
                   {t("footer.rss")}
                 </a>
               </div>
-            <p className="text-xs opacity-75">
-              © {new Date().getFullYear()} {t("footer.copyright")}
-            </p>
+            <div className="text-xs opacity-75 text-center md:text-right">
+              <p>© {new Date().getFullYear()} {t("footer.copyright")}</p>
+              <p className="mt-1">Développé par <span className="font-semibold">zenasys-technology</span></p>
+            </div>
           </div>
         </div>
       </div>
