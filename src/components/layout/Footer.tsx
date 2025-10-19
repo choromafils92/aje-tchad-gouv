@@ -4,11 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import logoAje from "@/assets/logo-arrondi-vf.png";
 
 const Footer = () => {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
   const [contactInfo, setContactInfo] = useState({
     address: "Avenue Félix Éboué, Quartier administratif\nN'Djamena, République du Tchad",
     phone: "+235 22 XX XX XX",
@@ -86,6 +89,43 @@ const Footer = () => {
       console.error("Error fetching contact info:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleNewsletterSubscribe = async () => {
+    if (!newsletterEmail) {
+      toast.error("Veuillez entrer votre adresse email");
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newsletterEmail)) {
+      toast.error("Veuillez entrer une adresse email valide");
+      return;
+    }
+
+    setSubscribing(true);
+    try {
+      const { error } = await (supabase as any)
+        .from("newsletter_subscriptions")
+        .insert({ email: newsletterEmail.toLowerCase().trim() });
+
+      if (error) {
+        if (error.code === "23505") {
+          toast.error("Cette adresse email est déjà inscrite à la newsletter");
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success("Inscription réussie ! Vous recevrez nos prochaines publications.");
+        setNewsletterEmail("");
+      }
+    } catch (error: any) {
+      console.error("Error subscribing to newsletter:", error);
+      toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
+    } finally {
+      setSubscribing(false);
     }
   };
   
@@ -167,14 +207,29 @@ const Footer = () => {
                 type="email"
                 placeholder={t("footer.emailPlaceholder")}
                 className="bg-primary-foreground text-primary"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleNewsletterSubscribe();
+                  }
+                }}
               />
               <Button 
                 variant="secondary" 
                 size="sm" 
                 className="w-full"
-                onClick={() => alert('Inscription à la newsletter confirmée ! Vous recevrez nos prochaines publications.')}
+                onClick={handleNewsletterSubscribe}
+                disabled={subscribing}
               >
-                {t("footer.subscribe")}
+                {subscribing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Inscription...
+                  </>
+                ) : (
+                  t("footer.subscribe")
+                )}
               </Button>
             </div>
             
