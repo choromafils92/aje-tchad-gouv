@@ -17,11 +17,12 @@ import ContactsManagement from '@/components/admin/ContactsManagement';
 import AnalyticsManagement from '@/components/admin/AnalyticsManagement';
 import JobOffersManagement from '@/components/admin/JobOffersManagement';
 import JobApplicationsManagement from '@/components/admin/JobApplicationsManagement';
-// Temporarily commented until SQL is executed in Supabase
-// import ProceduresManagement from '@/components/admin/ProceduresManagement';
-// import JurisprudenceManagement from '@/components/admin/JurisprudenceManagement';
-// import SignalementsManagement from '@/components/admin/SignalementsManagement';
-// import ConsultationsManagement from '@/components/admin/ConsultationsManagement';
+import MediaPressContactManagement from '@/components/admin/MediaPressContactManagement';
+import MediaAccreditationsManagement from '@/components/admin/MediaAccreditationsManagement';
+import MediaPressReleasesManagement from '@/components/admin/MediaPressReleasesManagement';
+import MediaKitManagement from '@/components/admin/MediaKitManagement';
+import MediaGalleryManagement from '@/components/admin/MediaGalleryManagement';
+import MediaPressNewsletterManagement from '@/components/admin/MediaPressNewsletterManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -78,6 +79,12 @@ const Admin = () => {
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="offres">Offres d'emploi</TabsTrigger>
             <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
+            <TabsTrigger value="media-contact">Contact Presse</TabsTrigger>
+            <TabsTrigger value="accreditations">Accréditations</TabsTrigger>
+            <TabsTrigger value="communiques">Communiqués</TabsTrigger>
+            <TabsTrigger value="media-kit">Kit Média</TabsTrigger>
+            <TabsTrigger value="galerie">Galerie</TabsTrigger>
+            <TabsTrigger value="press-newsletter">Newsletter Presse</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -125,6 +132,30 @@ const Admin = () => {
           
           <TabsContent value="admins" className="mt-6">
             <AdminManagement />
+          </TabsContent>
+          
+          <TabsContent value="media-contact" className="mt-6">
+            <MediaPressContactManagement />
+          </TabsContent>
+          
+          <TabsContent value="accreditations" className="mt-6">
+            <MediaAccreditationsManagement />
+          </TabsContent>
+          
+          <TabsContent value="communiques" className="mt-6">
+            <MediaPressReleasesManagement />
+          </TabsContent>
+          
+          <TabsContent value="media-kit" className="mt-6">
+            <MediaKitManagement />
+          </TabsContent>
+          
+          <TabsContent value="galerie" className="mt-6">
+            <MediaGalleryManagement />
+          </TabsContent>
+          
+          <TabsContent value="press-newsletter" className="mt-6">
+            <MediaPressNewsletterManagement />
           </TabsContent>
         </Tabs>
       </main>
