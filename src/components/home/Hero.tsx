@@ -85,6 +85,7 @@ const Hero = () => {
                       size="lg" 
                       variant="secondary"
                       className="text-primary hover:text-primary"
+                      onClick={() => window.location.href = '/missions'}
                     >
                       {t("hero.discoverBtn")}
                       <ChevronRight className="ml-2 h-5 w-5" />
@@ -93,6 +94,7 @@ const Hero = () => {
                       size="lg" 
                       variant="outline"
                       className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                      onClick={() => window.location.href = '/textes'}
                     >
                       {t("hero.textsBtn")}
                     </Button>

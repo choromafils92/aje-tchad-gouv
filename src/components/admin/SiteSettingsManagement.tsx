@@ -110,6 +110,38 @@ const SiteSettingsManagement = () => {
     }
   };
 
+  const handleSubdirectorPhotoUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingPhoto(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `subdirector-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("director-photos")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from("director-photos")
+        .getPublicUrl(filePath);
+
+      updateSubdirection(index, "photo", data.publicUrl);
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
   const updateDirectorMessage = (index: number, value: string) => {
     const messages = [...(settings.director_message || [])];
     messages[index] = value;
@@ -136,7 +168,7 @@ const SiteSettingsManagement = () => {
   const addSubdirection = () => {
     const subdirections = [
       ...(settings.subdirections || []),
-      { name: "", responsable: "", phone: "", email: "" },
+      { name: "", responsable: "", phone: "", email: "", photo: "" },
     ];
     setSettings({ ...settings, subdirections });
   };
@@ -433,11 +465,30 @@ const SiteSettingsManagement = () => {
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
+                      
+                      <div className="space-y-2">
+                        <Label>Photo du Sous-Directeur</Label>
+                        {sub.photo && (
+                          <img
+                            src={sub.photo}
+                            alt={sub.responsable}
+                            className="w-32 h-32 object-cover rounded-full mb-2 border-4 border-primary/20"
+                          />
+                        )}
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleSubdirectorPhotoUpload(index, e)}
+                          disabled={uploadingPhoto}
+                        />
+                      </div>
+                      
                       <div className="space-y-2">
                         <Label>Nom</Label>
                         <Input
                           value={sub.name || ""}
                           onChange={(e) => updateSubdirection(index, "name", e.target.value)}
+                          placeholder="Ex: Sous-direction du contentieux administratif"
                         />
                       </div>
                       <div className="space-y-2">
@@ -445,6 +496,7 @@ const SiteSettingsManagement = () => {
                         <Input
                           value={sub.responsable || ""}
                           onChange={(e) => updateSubdirection(index, "responsable", e.target.value)}
+                          placeholder="Ex: Dr. Jean DUPONT"
                         />
                       </div>
                       <div className="space-y-2">
@@ -452,6 +504,7 @@ const SiteSettingsManagement = () => {
                         <Input
                           value={sub.phone || ""}
                           onChange={(e) => updateSubdirection(index, "phone", e.target.value)}
+                          placeholder="Ex: +235 XX XX XX XX"
                         />
                       </div>
                       <div className="space-y-2">
@@ -460,6 +513,7 @@ const SiteSettingsManagement = () => {
                           type="email"
                           value={sub.email || ""}
                           onChange={(e) => updateSubdirection(index, "email", e.target.value)}
+                          placeholder="Ex: sous.direction@aje.td"
                         />
                       </div>
                     </CardContent>
