@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowLeft, FileText, AlertTriangle, Megaphone, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import DOMPurify from "dompurify";
 
 interface Actualite {
   id: string;
@@ -159,7 +160,12 @@ const ActualiteDetail = () => {
                 {actualite.content && (
                   <div
                     className="prose prose-lg max-w-none text-foreground/80"
-                    dangerouslySetInnerHTML={{ __html: actualite.content }}
+                    dangerouslySetInnerHTML={{ 
+                      __html: DOMPurify.sanitize(actualite.content, {
+                        ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre', 'div', 'span', 'table', 'thead', 'tbody', 'tr', 'th', 'td'],
+                        ALLOWED_ATTR: ['href', 'target', 'rel', 'class']
+                      })
+                    }}
                   />
                 )}
               </CardContent>
