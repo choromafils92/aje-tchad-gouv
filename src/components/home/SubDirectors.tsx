@@ -74,7 +74,7 @@ const SubDirectors = () => {
                   alt={subdirector.responsable}
                   className="object-cover"
                 />
-                <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-2xl font-bold">
                   {subdirector.responsable
                     ?.split(" ")
                     .map((n) => n[0])
