@@ -67,10 +67,10 @@ const Hero = () => {
               <>
                 <div className="space-y-6">
                   <div className="flex flex-col items-center space-y-2">
-                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-center ml-8">
+                    <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold leading-tight text-center ml-8 text-white drop-shadow-lg">
                       {heroContent.title}
                     </h1>
-                    <p className="text-base md:text-lg opacity-90 uppercase tracking-wide text-center">
+                    <p className="text-base md:text-lg font-bold uppercase tracking-wide text-center text-white drop-shadow-md">
                       {heroContent.tagline}
                     </p>
                   </div>
@@ -109,15 +109,15 @@ const Hero = () => {
           <div className="hidden lg:block">
             <div className="relative">
               <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                <div className="text-center space-y-6 px-4">
-                  <div className="space-y-3">
-                    <h3 className="text-2xl font-semibold opacity-90">
-                      {t("hero.republic")}
-                    </h3>
-                    <p className="text-base opacity-75 font-medium">
-                      {t("hero.motto")}
-                    </p>
-                  </div>
+                  <div className="text-center space-y-6 px-4">
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-extrabold text-white drop-shadow-lg">
+                        {t("hero.republic")}
+                      </h3>
+                      <p className="text-base font-bold text-white drop-shadow-md">
+                        {t("hero.motto")}
+                      </p>
+                    </div>
                   <div className="flex items-center justify-center space-x-6">
                     <img 
                       src={drapeauTchad} 
