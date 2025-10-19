@@ -4,17 +4,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { MapPin, Navigation, ExternalLink, Loader2, AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react';
 
 const MapboxMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [loading, setLoading] = useState(true);
   const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(false);
   const [location, setLocation] = useState({
     name: "Agence Judiciaire de l'État",
     address: "Avenue Félix Éboué, Quartier administratif",
@@ -64,12 +60,9 @@ const MapboxMap = () => {
       setLocation(newLocation);
       if (token) {
         setMapboxToken(token);
-      } else {
-        setShowTokenInput(true);
       }
     } catch (error) {
       console.error('Error fetching location data:', error);
-      setShowTokenInput(true);
     } finally {
       setLoading(false);
     }
@@ -99,11 +92,8 @@ const MapboxMap = () => {
 
       // Ajouter les contrôles de navigation
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-      setShowTokenInput(false);
     } catch (error) {
       console.error('Error initializing map:', error);
-      setShowTokenInput(true);
     }
 
     return () => {
@@ -128,39 +118,66 @@ const MapboxMap = () => {
     );
   }
 
-  if (showTokenInput || !mapboxToken) {
+  // Si pas de token configuré, afficher la carte simple (fallback)
+  if (!mapboxToken) {
     return (
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Pour afficher la carte interactive, veuillez configurer votre token Mapbox.
-              Obtenez votre token sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="underline">mapbox.com</a>
-            </AlertDescription>
-          </Alert>
-          
-          <div className="space-y-2">
-            <Label htmlFor="mapbox-token">Token Mapbox Public</Label>
-            <Input
-              id="mapbox-token"
-              type="text"
-              placeholder="pk.eyJ1IjoiZXhhbXBsZS11c2VyIiwiYSI6ImNsZTEyMzQ1NiJ9..."
-              value={mapboxToken}
-              onChange={(e) => setMapboxToken(e.target.value)}
-            />
-          </div>
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <div className="relative h-[500px] bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20">
+            {/* Decorative grid background */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="h-full w-full" style={{
+                backgroundImage: 'linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)',
+                backgroundSize: '50px 50px'
+              }} />
+            </div>
 
-          <Button onClick={() => setShowTokenInput(false)} className="w-full">
-            Afficher la carte
-          </Button>
+            {/* Center marker */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center space-y-6 z-10">
+                <div className="relative">
+                  <div className="w-24 h-24 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+                    <MapPin className="w-12 h-12" />
+                  </div>
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-2 bg-primary/30 rounded-full blur-sm" />
+                </div>
+                
+                <div className="bg-background/95 backdrop-blur-sm p-6 rounded-lg shadow-xl max-w-md">
+                  <h3 className="text-xl font-bold text-primary mb-2">
+                    {location.name}
+                  </h3>
+                  <p className="text-foreground/80 mb-1">
+                    {location.address}
+                  </p>
+                  <p className="text-foreground/80 mb-4">
+                    {location.city}
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Coordonnées: {location.lat.toFixed(6)}° N, {location.lng.toFixed(6)}° E
+                  </p>
+                  
+                  <Button onClick={openInGoogleMaps} className="w-full">
+                    <Navigation className="w-4 h-4 mr-2" />
+                    Ouvrir dans Google Maps
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
-          <div className="pt-4 border-t">
-            <Button onClick={openInGoogleMaps} variant="outline" className="w-full">
-              <Navigation className="w-4 h-4 mr-2" />
-              Ouvrir dans Google Maps à la place
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </Button>
+            {/* Corner decorations */}
+            <div className="absolute top-4 left-4 text-primary/20">
+              <MapPin className="w-8 h-8" />
+            </div>
+            <div className="absolute top-4 right-4 text-primary/20">
+              <Navigation className="w-8 h-8" />
+            </div>
+            <div className="absolute bottom-4 left-4 text-primary/20">
+              <Navigation className="w-8 h-8 transform rotate-180" />
+            </div>
+            <div className="absolute bottom-4 right-4 text-primary/20">
+              <MapPin className="w-8 h-8" />
+            </div>
           </div>
         </CardContent>
       </Card>
