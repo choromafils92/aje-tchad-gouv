@@ -26,6 +26,8 @@ import MediaPressNewsletterManagement from '@/components/admin/MediaPressNewslet
 import ContactSettingsManagement from '@/components/admin/ContactSettingsManagement';
 import FAQAssistanceManagement from '@/components/admin/FAQAssistanceManagement';
 import ResourceDocumentsManagement from '@/components/admin/ResourceDocumentsManagement';
+import ServicesJuridiquesManagement from '@/components/admin/ServicesJuridiquesManagement';
+import DomainesContentieuxManagement from '@/components/admin/DomainesContentieuxManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -91,6 +93,8 @@ const Admin = () => {
             <TabsTrigger value="press-newsletter">Newsletter Presse</TabsTrigger>
             <TabsTrigger value="faq-assistance">Assistance FAQ</TabsTrigger>
             <TabsTrigger value="resource-docs">Documents Ressources</TabsTrigger>
+            <TabsTrigger value="services-juridiques">Services Juridiques</TabsTrigger>
+            <TabsTrigger value="domaines-contentieux">Domaines Contentieux</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -174,6 +178,14 @@ const Admin = () => {
 
           <TabsContent value="resource-docs" className="mt-6">
             <ResourceDocumentsManagement />
+          </TabsContent>
+
+          <TabsContent value="services-juridiques" className="mt-6">
+            <ServicesJuridiquesManagement />
+          </TabsContent>
+
+          <TabsContent value="domaines-contentieux" className="mt-6">
+            <DomainesContentieuxManagement />
           </TabsContent>
         </Tabs>
       </main>

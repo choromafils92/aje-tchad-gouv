@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Clock, CheckCircle, Download, Send, AlertCircle, Phone, Mail, Scale, Building, Briefcase, Gavel, UserCheck, Loader2 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ResourceDocument {
@@ -30,103 +30,33 @@ interface AssistanceContact {
   additional_info: string | null;
 }
 
+interface ServiceJuridique {
+  id: string;
+  titre: string;
+  description: string;
+  delai: string;
+  criteres: string[];
+  icon_name: string;
+  ordre: number;
+  published: boolean;
+}
+
+interface DomaineContentieux {
+  id: string;
+  categorie: string;
+  description: string;
+  affaires: string[];
+  statistiques: string;
+  icon_name: string;
+  ordre: number;
+  published: boolean;
+}
+
 const Services = () => {
-  const servicesOfferts = [
-    {
-      title: "Avis juridiques préalables",
-      description: "Conseil et validation juridique avant signature de contrats ou prise de décisions",
-      delai: "7-15 jours",
-      criteres: ["Contrats > 50M FCFA", "Projets de décrets", "Conventions internationales"],
-      icon: FileText
-    },
-    {
-      title: "Représentation contentieuse",
-      description: "Défense des intérêts de l'État devant toutes juridictions",
-      delai: "Selon procédure",
-      criteres: ["Litiges impliquant l'État", "Arbitrages", "Procédures d'urgence"],
-      icon: Users
-    },
-    {
-      title: "Formation juridique",
-      description: "Sessions de formation pour les agents des administrations publiques",
-      delai: "Sur planning",
-      criteres: ["Cadres administratifs", "Gestionnaires de marchés", "Directeurs juridiques"],
-      icon: CheckCircle
-    },
-    {
-      title: "Veille juridique",
-      description: "Information sur l'évolution de la législation et de la jurisprudence",
-      delai: "Continu",
-      criteres: ["Abonnement newsletter", "Accès documentation", "Alertes réglementaires"],
-      icon: AlertCircle
-    }
-  ];
-
-  const typesContentieux = [
-    {
-      categorie: "Contentieux Administratif",
-      description: "Litiges impliquant l'administration publique",
-      affaires: [
-        "Marchés publics",
-        "Fonction publique", 
-        "Urbanisme et domaine public",
-        "Fiscalité et douanes"
-      ],
-      statistiques: "67% des dossiers",
-      icon: Building
-    },
-    {
-      categorie: "Contentieux Civil",
-      description: "Litiges de droit privé impliquant l'État",
-      affaires: [
-        "Responsabilité civile de l'État",
-        "Contrats de droit privé",
-        "Propriété et biens publics",
-        "Assurances et indemnisations"
-      ],
-      statistiques: "23% des dossiers",
-      icon: Scale
-    },
-    {
-      categorie: "Contentieux Commercial", 
-      description: "Litiges économiques et commerciaux",
-      affaires: [
-        "Partenariats public-privé",
-        "Concessions et délégations",
-        "Investissements publics",
-        "Commerce international"
-      ],
-      statistiques: "10% des dossiers",
-      icon: Briefcase
-    },
-    {
-      categorie: "Contentieux Pénal",
-      description: "Défense des intérêts de l'État dans les affaires pénales",
-      affaires: [
-        "Constitution de partie civile",
-        "Infractions contre les biens publics",
-        "Blanchiment et fraude fiscale",
-        "Crimes économiques et financiers"
-      ],
-      statistiques: "5% des dossiers",
-      icon: Gavel
-    },
-    {
-      categorie: "Contentieux Social",
-      description: "Litiges relatifs au droit du travail et de la sécurité sociale",
-      affaires: [
-        "Agents de l'État et fonctionnaires",
-        "Accidents de service",
-        "Sécurité sociale et pensions",
-        "Conflits collectifs du travail"
-      ],
-      statistiques: "8% des dossiers",
-      icon: UserCheck
-    }
-  ];
-
   const [documents, setDocuments] = useState<ResourceDocument[]>([]);
   const [contacts, setContacts] = useState<AssistanceContact[]>([]);
+  const [servicesJuridiques, setServicesJuridiques] = useState<ServiceJuridique[]>([]);
+  const [domainesContentieux, setDomainesContentieux] = useState<DomaineContentieux[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -135,7 +65,7 @@ const Services = () => {
 
   const fetchData = async () => {
     try {
-      const [docsResponse, contactsResponse] = await Promise.all([
+      const [docsResponse, contactsResponse, servicesResponse, domainesResponse] = await Promise.all([
         supabase
           .from("resource_documents" as any)
           .select("*")
@@ -144,14 +74,28 @@ const Services = () => {
         supabase
           .from("faq_assistance_contacts" as any)
           .select("*")
+          .order("ordre", { ascending: true }),
+        supabase
+          .from("services_juridiques" as any)
+          .select("*")
+          .eq("published", true)
+          .order("ordre", { ascending: true }),
+        supabase
+          .from("domaines_contentieux" as any)
+          .select("*")
+          .eq("published", true)
           .order("ordre", { ascending: true })
       ]);
 
       if (docsResponse.error) throw docsResponse.error;
       if (contactsResponse.error) throw contactsResponse.error;
+      if (servicesResponse.error) throw servicesResponse.error;
+      if (domainesResponse.error) throw domainesResponse.error;
 
       setDocuments(docsResponse.data as any || []);
       setContacts(contactsResponse.data as any || []);
+      setServicesJuridiques(servicesResponse.data as any || []);
+      setDomainesContentieux(domainesResponse.data as any || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -167,7 +111,7 @@ const Services = () => {
         <section className="bg-gradient-to-br from-primary to-accent text-primary-foreground py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <Users className="h-16 w-16 mx-auto mb-6 opacity-90" />
+              <LucideIcons.Users className="h-16 w-16 mx-auto mb-6 opacity-90" />
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
                 Services aux Administrations
               </h1>
@@ -192,10 +136,10 @@ const Services = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-              {servicesOfferts.map((service, index) => {
-                const IconComponent = service.icon;
+              {servicesJuridiques.map((service) => {
+                const IconComponent = (LucideIcons as any)[service.icon_name] || LucideIcons.FileText;
                 return (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                  <Card key={service.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-4">
                       <div className="flex items-start space-x-4">
                         <div className="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center flex-shrink-0">
@@ -203,10 +147,10 @@ const Services = () => {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-xl text-primary mb-2">
-                            {service.title}
+                            {service.titre}
                           </CardTitle>
                           <div className="flex items-center space-x-2 mb-3">
-                            <Clock className="h-4 w-4 text-muted-foreground" />
+                            <LucideIcons.Clock className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm text-muted-foreground">
                               Délai : {service.delai}
                             </span>
@@ -223,7 +167,7 @@ const Services = () => {
                         <div className="space-y-2">
                           {service.criteres.map((critere, idx) => (
                             <div key={idx} className="flex items-center space-x-2">
-                              <CheckCircle className="h-4 w-4 text-accent" />
+                              <LucideIcons.CheckCircle className="h-4 w-4 text-accent" />
                               <span className="text-sm text-foreground/80">{critere}</span>
                             </div>
                           ))}
@@ -246,10 +190,10 @@ const Services = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {typesContentieux.map((contentieux, index) => {
-                const IconComponent = contentieux.icon;
+              {domainesContentieux.map((domaine) => {
+                const IconComponent = (LucideIcons as any)[domaine.icon_name] || LucideIcons.Scale;
                 return (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                  <Card key={domaine.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-4">
                       <div className="flex items-start space-x-4">
                         <div className="w-12 h-12 bg-accent/10 text-accent rounded-lg flex items-center justify-center flex-shrink-0">
@@ -257,24 +201,24 @@ const Services = () => {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-lg text-primary mb-2">
-                            {contentieux.categorie}
+                            {domaine.categorie}
                           </CardTitle>
                           <Badge variant="secondary" className="text-xs">
-                            {contentieux.statistiques}
+                            {domaine.statistiques}
                           </Badge>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <CardDescription className="text-foreground/80 leading-relaxed">
-                        {contentieux.description}
+                        {domaine.description}
                       </CardDescription>
                       <div>
                         <h4 className="font-medium text-primary mb-2 text-sm">Types d'affaires :</h4>
                         <div className="space-y-1.5">
-                          {contentieux.affaires.map((affaire, idx) => (
+                          {domaine.affaires.map((affaire, idx) => (
                             <div key={idx} className="flex items-center space-x-2">
-                              <CheckCircle className="h-3.5 w-3.5 text-accent flex-shrink-0" />
+                              <LucideIcons.CheckCircle className="h-3.5 w-3.5 text-accent flex-shrink-0" />
                               <span className="text-sm text-foreground/80">{affaire}</span>
                             </div>
                           ))}
@@ -294,11 +238,11 @@ const Services = () => {
             <Tabs defaultValue="demande" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-8 max-w-md mx-auto">
                 <TabsTrigger value="demande" className="flex items-center space-x-2">
-                  <Send className="h-4 w-4" />
+                  <LucideIcons.Send className="h-4 w-4" />
                   <span>Demande d'avis</span>
                 </TabsTrigger>
                 <TabsTrigger value="ressources" className="flex items-center space-x-2">
-                  <Download className="h-4 w-4" />
+                  <LucideIcons.Download className="h-4 w-4" />
                   <span>Ressources</span>
                 </TabsTrigger>
               </TabsList>
@@ -416,7 +360,7 @@ const Services = () => {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-6">
                           <Button size="lg" className="flex-1">
-                            <Send className="mr-2 h-5 w-5" />
+                            <LucideIcons.Send className="mr-2 h-5 w-5" />
                             Envoyer la demande
                           </Button>
                           <Button size="lg" variant="outline" type="button">
@@ -442,7 +386,7 @@ const Services = () => {
 
                   {loading ? (
                     <div className="flex justify-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <LucideIcons.Loader2 className="h-8 w-8 animate-spin" />
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -474,7 +418,7 @@ const Services = () => {
                                     <span>{doc.file_size}</span>
                                   </div>
                                 </div>
-                                <FileText className="h-8 w-8 text-muted-foreground" />
+                                <LucideIcons.FileText className="h-8 w-8 text-muted-foreground" />
                               </div>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -497,7 +441,7 @@ const Services = () => {
                                       }
                                     }}
                                   >
-                                    <Download className="mr-2 h-4 w-4" />
+                                    <LucideIcons.Download className="mr-2 h-4 w-4" />
                                     {doc.pdf_url!.endsWith('.html') ? 'Voir & Télécharger' : 'Visualiser'}
                                   </Button>
                                 )}
@@ -509,7 +453,7 @@ const Services = () => {
                                       window.open(doc.word_url!, '_blank');
                                     }}
                                   >
-                                    <Download className="mr-2 h-4 w-4" />
+                                    <LucideIcons.Download className="mr-2 h-4 w-4" />
                                     Word
                                   </Button>
                                 )}
@@ -542,7 +486,7 @@ const Services = () => {
                 <CardContent>
                   {loading ? (
                     <div className="flex justify-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <LucideIcons.Loader2 className="h-8 w-8 animate-spin" />
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -556,9 +500,9 @@ const Services = () => {
                         contacts.map((contact) => (
                           <div key={contact.id} className="text-center">
                             {contact.service_name.toLowerCase().includes("téléphone") ? (
-                              <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
+                              <LucideIcons.Phone className="h-12 w-12 text-primary mx-auto mb-4" />
                             ) : (
-                              <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
+                              <LucideIcons.Mail className="h-12 w-12 text-primary mx-auto mb-4" />
                             )}
                             <h3 className="font-semibold text-primary mb-2">
                               {contact.service_name}
