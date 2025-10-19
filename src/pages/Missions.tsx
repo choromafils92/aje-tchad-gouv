@@ -68,10 +68,10 @@ const Missions = () => {
         <section className="bg-gradient-to-br from-primary to-accent text-primary-foreground py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 text-white drop-shadow-lg">
                 Missions et Rôle de l'AJE
               </h1>
-              <p className="text-xl lg:text-2xl opacity-90 mb-8">
+              <p className="text-xl lg:text-2xl font-bold mb-8 text-white drop-shadow-md">
                 Trois domaines d'expertise au service de l'État du Tchad
               </p>
               <div className="flex items-center justify-center space-x-2 text-lg">

@@ -46,10 +46,10 @@ const DemandeAvis = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <FileText className="h-16 w-16 mx-auto mb-6 opacity-90" />
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 text-white drop-shadow-lg">
                 Demande d'Avis Juridique
               </h1>
-              <p className="text-xl lg:text-2xl opacity-90">
+              <p className="text-xl lg:text-2xl font-bold text-white drop-shadow-md">
                 Service réservé aux administrations publiques et établissements publics
               </p>
             </div>

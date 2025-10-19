@@ -111,10 +111,10 @@ const Textes = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <BookOpen className="h-16 w-16 mx-auto mb-6 opacity-90" />
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 text-white drop-shadow-lg">
                 Textes & Références
               </h1>
-              <p className="text-xl lg:text-2xl opacity-90 mb-8">
+              <p className="text-xl lg:text-2xl font-bold mb-8 text-white drop-shadow-md">
                 Bibliothèque juridique et ressources documentaires de l'AJE
               </p>
             </div>
