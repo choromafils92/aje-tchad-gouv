@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss, Loader2 } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Rss, Loader2, Youtube, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -22,6 +22,8 @@ const Footer = () => {
     facebook: "",
     twitter: "",
     linkedin: "",
+    youtube: "",
+    whatsapp: "",
     rss: ""
   });
   const [devise, setDevise] = useState("Conseiller-Défendre-Protéger");
@@ -43,6 +45,8 @@ const Footer = () => {
           "social_facebook",
           "social_twitter",
           "social_linkedin",
+          "social_youtube",
+          "social_whatsapp",
           "social_rss",
           "aje_devise"
         ]);
@@ -74,6 +78,12 @@ const Footer = () => {
             break;
           case "social_linkedin":
             newSocial.linkedin = setting.value as string;
+            break;
+          case "social_youtube":
+            newSocial.youtube = setting.value as string;
+            break;
+          case "social_whatsapp":
+            newSocial.whatsapp = setting.value as string;
             break;
           case "social_rss":
             newSocial.rss = setting.value as string;
@@ -234,51 +244,76 @@ const Footer = () => {
             </div>
             
             {/* Social Media */}
-            <div className="flex space-x-3 pt-2">
-              {socialLinks.facebook && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-2 h-auto" 
-                  aria-label="Facebook"
-                  onClick={() => window.open(socialLinks.facebook, '_blank')}
-                >
-                  <Facebook className="h-4 w-4" />
-                </Button>
-              )}
-              {socialLinks.twitter && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-2 h-auto" 
-                  aria-label="Twitter"
-                  onClick={() => window.open(socialLinks.twitter, '_blank')}
-                >
-                  <Twitter className="h-4 w-4" />
-                </Button>
-              )}
-              {socialLinks.linkedin && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-2 h-auto" 
-                  aria-label="LinkedIn"
-                  onClick={() => window.open(socialLinks.linkedin, '_blank')}
-                >
-                  <Linkedin className="h-4 w-4" />
-                </Button>
-              )}
-              {socialLinks.rss && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-2 h-auto" 
-                  aria-label="RSS"
-                  onClick={() => window.open(socialLinks.rss, '_blank')}
-                >
-                  <Rss className="h-4 w-4" />
-                </Button>
-              )}
+            <div className="pt-2">
+              <h5 className="font-semibold text-xs mb-3 opacity-90">{t("footer.followUs")}</h5>
+              <div className="flex flex-wrap gap-2">
+                {socialLinks.facebook && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="Facebook"
+                    onClick={() => window.open(socialLinks.facebook, '_blank')}
+                  >
+                    <Facebook className="h-5 w-5" />
+                  </Button>
+                )}
+                {socialLinks.twitter && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="Twitter"
+                    onClick={() => window.open(socialLinks.twitter, '_blank')}
+                  >
+                    <Twitter className="h-5 w-5" />
+                  </Button>
+                )}
+                {socialLinks.linkedin && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="LinkedIn"
+                    onClick={() => window.open(socialLinks.linkedin, '_blank')}
+                  >
+                    <Linkedin className="h-5 w-5" />
+                  </Button>
+                )}
+                {socialLinks.youtube && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="YouTube"
+                    onClick={() => window.open(socialLinks.youtube, '_blank')}
+                  >
+                    <Youtube className="h-5 w-5" />
+                  </Button>
+                )}
+                {socialLinks.whatsapp && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="WhatsApp"
+                    onClick={() => window.open(socialLinks.whatsapp, '_blank')}
+                  >
+                    <MessageCircle className="h-5 w-5" />
+                  </Button>
+                )}
+                {socialLinks.rss && (
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="p-2 h-auto hover:scale-110 transition-transform" 
+                    aria-label="RSS"
+                    onClick={() => window.open(socialLinks.rss, '_blank')}
+                  >
+                    <Rss className="h-5 w-5" />
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>

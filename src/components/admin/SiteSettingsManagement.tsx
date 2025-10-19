@@ -675,6 +675,26 @@ const SiteSettingsManagement = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>YouTube</Label>
+                <Input
+                  type="url"
+                  value={settings.social_youtube || ""}
+                  onChange={(e) => setSettings({ ...settings, social_youtube: e.target.value })}
+                  placeholder="https://youtube.com/@votre-chaine"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Canal WhatsApp</Label>
+                <Input
+                  type="url"
+                  value={settings.social_whatsapp || ""}
+                  onChange={(e) => setSettings({ ...settings, social_whatsapp: e.target.value })}
+                  placeholder="https://whatsapp.com/channel/votre-canal"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label>RSS Feed</Label>
                 <Input
                   type="url"
@@ -688,6 +708,8 @@ const SiteSettingsManagement = () => {
                 updateSetting("social_facebook", settings.social_facebook);
                 updateSetting("social_twitter", settings.social_twitter);
                 updateSetting("social_linkedin", settings.social_linkedin);
+                updateSetting("social_youtube", settings.social_youtube);
+                updateSetting("social_whatsapp", settings.social_whatsapp);
                 updateSetting("social_rss", settings.social_rss);
               }} disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

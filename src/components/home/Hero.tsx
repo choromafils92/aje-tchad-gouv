@@ -15,7 +15,7 @@ const Hero = () => {
   const [heroContent, setHeroContent] = useState({
     title: "Agence Judiciaire de l'État",
     tagline: "Conseiller-Défendre-Protéger",
-    description: "L'organe officiel chargé de défendre et représenter l'État du Tchad dans toutes les affaires juridiques et contentieuses."
+    description: "L'organe officiel chargé de défendre et représenter l'État du Tchad dans toutes les affaires juridictionnels et contentieuses, d'assister les administrations par le conseil, et d'assurer la gestion centralisée du contentieux de l'État."
   });
 
   useEffect(() => {

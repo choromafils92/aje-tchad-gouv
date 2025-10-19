@@ -91,9 +91,9 @@ const DirectorMessage = () => {
                     </div>
                   </div>
 
-                  <div className="text-foreground leading-relaxed space-y-4">
+                  <div className="text-foreground leading-relaxed space-y-6">
                     {directorMessage.map((paragraph, index) => (
-                      <p key={index} className={index === 0 ? "text-lg" : ""}>
+                      <p key={index} className={`text-justify ${index === 0 ? "text-lg font-semibold" : "text-base"}`}>
                         "{paragraph}"
                       </p>
                     ))}
