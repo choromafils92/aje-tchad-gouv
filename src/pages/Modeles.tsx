@@ -7,10 +7,24 @@ import { Download, FileText, ExternalLink } from "lucide-react";
 const Modeles = () => {
   const modeles = [
     {
-      title: "Modèle de demande d'avis juridique",
-      description: "Formulaire type pour soumettre une demande d'avis juridique à l'AJE",
+      title: "Formulaire de demande d'avis juridique",
+      description: "Modèle de formulaire pour soumettre une demande d'avis juridique à l'AJE",
       file: "/documents/modele_demande_avis_juridique.html",
-      pdfFileName: "Modele_Demande_Avis_Juridique.pdf",
+      pdfFileName: "Formulaire_Demande_Avis_Juridique.pdf",
+      icon: FileText
+    },
+    {
+      title: "Modèle de clause de règlement des différends",
+      description: "Clause type à intégrer dans les contrats administratifs pour le règlement des différends",
+      file: "/documents/modele_clause_reglement_differends.html",
+      pdfFileName: "Modele_Clause_Reglement_Differends.pdf",
+      icon: FileText
+    },
+    {
+      title: "Check-list pré-contentieuse",
+      description: "Liste de vérification pour évaluer la solidité d'un dossier avant une procédure contentieuse",
+      file: "/documents/checklist_pre_contentieuse.html",
+      pdfFileName: "Checklist_Pre_Contentieuse.pdf",
       icon: FileText
     },
     {
@@ -19,29 +33,24 @@ const Modeles = () => {
       file: "/documents/modele_transaction_administrative.html",
       pdfFileName: "Modele_Transaction_Administrative.pdf",
       icon: FileText
-    },
-    {
-      title: "Modèle de clause de règlement des différends",
-      description: "Clauses types pour le règlement des différends dans les contrats",
-      file: "/documents/modele_clause_reglement_differends.html",
-      pdfFileName: "Modele_Clause_Reglement_Differends.pdf",
-      icon: FileText
     }
   ];
 
   const handlePreview = (file: string) => {
+    // Open document in new tab for preview
     window.open(file, '_blank');
   };
 
-  const handleDownloadPDF = (file: string, title: string) => {
-    // Open in new window with print dialog for PDF generation
+  const handleDownloadPDF = (file: string, pdfFileName: string) => {
+    // Open in new window and trigger print dialog
     const printWindow = window.open(file, '_blank');
     if (printWindow) {
+      printWindow.document.title = pdfFileName;
       printWindow.onload = () => {
-        // Auto-trigger print dialog after 1 second
+        // Trigger print dialog after content loads
         setTimeout(() => {
           printWindow.print();
-        }, 1000);
+        }, 500);
       };
     }
   };
@@ -91,10 +100,10 @@ const Modeles = () => {
                         variant="outline"
                         size="sm"
                         className="flex-1"
-                        onClick={() => handleDownloadPDF(modele.file, modele.title)}
+                        onClick={() => handleDownloadPDF(modele.file, modele.pdfFileName)}
                       >
                         <Download className="mr-2 h-4 w-4" />
-                        Imprimer PDF
+                        PDF
                       </Button>
                     </div>
                   </CardContent>
@@ -105,30 +114,32 @@ const Modeles = () => {
 
           <div className="mt-12 p-6 bg-secondary/50 rounded-lg max-w-4xl mx-auto">
             <h2 className="text-xl font-semibold text-primary mb-4">
-              Comment utiliser ces modèles ?
+              Comment télécharger en PDF ?
             </h2>
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span>Téléchargez le modèle correspondant à votre besoin</span>
+                <span className="text-primary mr-2">1.</span>
+                <span>Cliquez sur <strong>"Aperçu"</strong> pour visualiser le formulaire, ou sur <strong>"PDF"</strong> pour télécharger directement</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span>Remplissez tous les champs requis avec attention</span>
+                <span className="text-primary mr-2">2.</span>
+                <span>Dans la fenêtre d'impression qui s'ouvre, choisissez <strong>"Enregistrer au format PDF"</strong> ou <strong>"Microsoft Print to PDF"</strong> comme destination</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span>Cliquez sur "Aperçu" pour visualiser le document, ou "Imprimer PDF" pour ouvrir la boîte de dialogue d'impression</span>
+                <span className="text-primary mr-2">3.</span>
+                <span>Remplissez le formulaire téléchargé avec toutes les informations requises</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span>Dans la boîte d'impression, sélectionnez "Enregistrer en PDF" ou "Microsoft Print to PDF" comme imprimante de destination</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span>Transmettez-le à l'AJE selon les modalités indiquées</span>
+                <span className="text-primary mr-2">4.</span>
+                <span>Transmettez le document complété à l'AJE par email ou en personne</span>
               </li>
             </ul>
+            
+            <div className="mt-6 p-4 bg-accent/10 rounded-md border border-accent/20">
+              <p className="text-sm text-foreground">
+                <strong className="text-accent">💡 Astuce :</strong> Vous pouvez également copier le texte du formulaire dans votre logiciel de traitement de texte préféré (Word, LibreOffice, etc.) pour le personnaliser avant de l'imprimer.
+              </p>
+            </div>
           </div>
         </div>
       </main>

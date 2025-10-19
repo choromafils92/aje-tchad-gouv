@@ -486,17 +486,25 @@ const Services = () => {
                                   <Button 
                                     className="flex-1"
                                     onClick={() => {
-                                      const link = document.createElement('a');
-                                      link.href = doc.pdf_url!;
-                                      link.download = `${doc.title}.pdf`;
-                                      link.target = '_blank';
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      document.body.removeChild(link);
+                                      // Check if it's an HTML file (template) or a real PDF
+                                      if (doc.pdf_url!.endsWith('.html')) {
+                                        // Extract filename for template preview
+                                        const fileName = doc.pdf_url!.split('/').pop()?.replace('.html', '');
+                                        window.open(`/modeles?file=${fileName}`, '_blank');
+                                      } else {
+                                        // Direct download for real PDFs
+                                        const link = document.createElement('a');
+                                        link.href = doc.pdf_url!;
+                                        link.download = `${doc.title}.pdf`;
+                                        link.target = '_blank';
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                      }
                                     }}
                                   >
                                     <Download className="mr-2 h-4 w-4" />
-                                    PDF
+                                    {doc.pdf_url!.endsWith('.html') ? 'Voir & Télécharger' : 'PDF'}
                                   </Button>
                                 )}
                                 {doc.word_url && (
