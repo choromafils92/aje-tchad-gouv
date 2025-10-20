@@ -25,6 +25,9 @@ const ResourceDocumentsManagement = () => {
   const [documents, setDocuments] = useState<ResourceDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [wordFile, setWordFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -61,6 +64,37 @@ const ResourceDocumentsManagement = () => {
     }
   };
 
+  const handleFileUpload = async (file: File, type: 'pdf' | 'word') => {
+    try {
+      setUploadingFile(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('documents-files')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('documents-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error: any) {
+      console.error('Error uploading file:', error);
+      toast({
+        title: "Erreur d'upload",
+        description: error.message,
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -74,10 +108,32 @@ const ResourceDocumentsManagement = () => {
     }
 
     try {
+      // Upload files if selected
+      let pdfUrl = formData.pdf_url;
+      let wordUrl = formData.word_url;
+
+      if (pdfFile) {
+        const uploadedPdfUrl = await handleFileUpload(pdfFile, 'pdf');
+        if (uploadedPdfUrl) pdfUrl = uploadedPdfUrl;
+      }
+
+      if (wordFile) {
+        const uploadedWordUrl = await handleFileUpload(wordFile, 'word');
+        if (uploadedWordUrl) wordUrl = uploadedWordUrl;
+      }
+
       if (editingId) {
         const { error } = await supabase
           .from("resource_documents" as any)
-          .update(formData)
+          .update({
+            title: formData.title,
+            description: formData.description,
+            pdf_url: pdfUrl,
+            word_url: wordUrl,
+            file_size: formData.file_size,
+            ordre: formData.ordre,
+            published: formData.published
+          })
           .eq("id", editingId);
 
         if (error) throw error;
@@ -89,7 +145,13 @@ const ResourceDocumentsManagement = () => {
         const { error } = await supabase
           .from("resource_documents" as any)
           .insert([{
-            ...formData,
+            title: formData.title,
+            description: formData.description,
+            pdf_url: pdfUrl,
+            word_url: wordUrl,
+            file_size: formData.file_size,
+            ordre: formData.ordre,
+            published: formData.published,
             created_by: user.id
           }]);
 
@@ -109,6 +171,8 @@ const ResourceDocumentsManagement = () => {
         ordre: 0,
         published: true
       });
+      setPdfFile(null);
+      setWordFile(null);
       setEditingId(null);
       fetchDocuments();
     } catch (error: any) {
@@ -202,23 +266,43 @@ const ResourceDocumentsManagement = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="pdf_url">URL du fichier PDF</Label>
+                <Label htmlFor="pdf_url">URL du fichier PDF ou Upload</Label>
                 <Input
                   id="pdf_url"
                   value={formData.pdf_url}
                   onChange={(e) => setFormData({ ...formData, pdf_url: e.target.value })}
                   placeholder="/documents/fichier.pdf"
+                  className="mb-2"
                 />
+                <Input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
+                  disabled={uploadingFile}
+                />
+                <p className="text-sm text-muted-foreground">
+                  {pdfFile ? `Fichier sélectionné: ${pdfFile.name}` : 'Ou saisissez une URL ci-dessus'}
+                </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="word_url">URL du fichier Word</Label>
+                <Label htmlFor="word_url">URL du fichier Word ou Upload</Label>
                 <Input
                   id="word_url"
                   value={formData.word_url}
                   onChange={(e) => setFormData({ ...formData, word_url: e.target.value })}
                   placeholder="/documents/fichier.docx"
+                  className="mb-2"
                 />
+                <Input
+                  type="file"
+                  accept=".doc,.docx"
+                  onChange={(e) => setWordFile(e.target.files?.[0] || null)}
+                  disabled={uploadingFile}
+                />
+                <p className="text-sm text-muted-foreground">
+                  {wordFile ? `Fichier sélectionné: ${wordFile.name}` : 'Ou saisissez une URL ci-dessus'}
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -252,9 +336,9 @@ const ResourceDocumentsManagement = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit">
+              <Button type="submit" disabled={loading || uploadingFile}>
                 <Save className="mr-2 h-4 w-4" />
-                {editingId ? "Modifier" : "Ajouter"}
+                {uploadingFile ? 'Upload en cours...' : editingId ? 'Modifier' : 'Ajouter'}
               </Button>
               {editingId && (
                 <Button
@@ -262,6 +346,8 @@ const ResourceDocumentsManagement = () => {
                   variant="outline"
                   onClick={() => {
                     setEditingId(null);
+                    setPdfFile(null);
+                    setWordFile(null);
                     setFormData({
                       title: "",
                       description: "",
@@ -283,7 +369,71 @@ const ResourceDocumentsManagement = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Documents existants</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>Documents existants</CardTitle>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={async () => {
+                if (!confirm("Voulez-vous supprimer tous les doublons ? Seule la première occurrence de chaque titre sera conservée.")) return;
+                try {
+                  // Count duplicates first
+                  const titleCounts: Record<string, number> = {};
+                  documents.forEach(doc => {
+                    titleCounts[doc.title] = (titleCounts[doc.title] || 0) + 1;
+                  });
+                  
+                  const hasDuplicates = Object.values(titleCounts).some(count => count > 1);
+                  
+                  if (!hasDuplicates) {
+                    toast({
+                      title: "Info",
+                      description: "Aucun doublon détecté",
+                    });
+                    return;
+                  }
+
+                  // Group by title and keep only first occurrence
+                  const seen = new Set<string>();
+                  const toDelete: string[] = [];
+                  
+                  documents.forEach(doc => {
+                    if (seen.has(doc.title)) {
+                      toDelete.push(doc.id);
+                    } else {
+                      seen.add(doc.title);
+                    }
+                  });
+
+                  // Delete duplicates
+                  for (const id of toDelete) {
+                    const { error } = await supabase
+                      .from("resource_documents" as any)
+                      .delete()
+                      .eq("id", id);
+                    
+                    if (error) throw error;
+                  }
+
+                  toast({
+                    title: "Succès",
+                    description: `${toDelete.length} doublon(s) supprimé(s)`,
+                  });
+                  
+                  fetchDocuments();
+                } catch (error: any) {
+                  toast({
+                    title: "Erreur",
+                    description: error.message,
+                    variant: "destructive",
+                  });
+                }
+              }}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Supprimer les doublons
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

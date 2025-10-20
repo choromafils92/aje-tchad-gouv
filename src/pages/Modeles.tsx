@@ -1,89 +1,67 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, FileText, ExternalLink } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+interface ResourceDocument {
+  id: string;
+  title: string;
+  description: string;
+  pdf_url: string | null;
+  word_url: string | null;
+  file_size: string | null;
+  ordre: number;
+  published: boolean;
+}
 
 const Modeles = () => {
-  const modeles = [
-    {
-      title: "Formulaire de demande d'avis juridique",
-      description: "Modèle de formulaire pour soumettre une demande d'avis juridique à l'AJE",
-      file: "/documents/modele_demande_avis_juridique.html",
-      pdfFileName: "Formulaire_Demande_Avis_Juridique.pdf",
-      icon: FileText
-    },
-    {
-      title: "Modèle de clause de règlement des différends",
-      description: "Clause type à intégrer dans les contrats administratifs pour le règlement des différends",
-      file: "/documents/modele_clause_reglement_differends.html",
-      pdfFileName: "Modele_Clause_Reglement_Differends.pdf",
-      icon: FileText
-    },
-    {
-      title: "Check-list pré-contentieuse",
-      description: "Liste de vérification pour évaluer la solidité d'un dossier avant une procédure contentieuse",
-      file: "/documents/checklist_pre_contentieuse.html",
-      pdfFileName: "Checklist_Pre_Contentieuse.pdf",
-      icon: FileText
-    },
-    {
-      title: "Modèle de transaction administrative",
-      description: "Template pour la rédaction d'une transaction administrative",
-      file: "/documents/modele_transaction_administrative.html",
-      pdfFileName: "Modele_Transaction_Administrative.pdf",
-      icon: FileText
-    },
-    {
-      title: "Guide des marchés publics",
-      description: "Guide complet sur la réglementation des marchés publics au Tchad avec procédures et seuils",
-      file: "/documents/guide_marches_publics.html",
-      pdfFileName: "Guide_Marches_Publics.pdf",
-      icon: FileText
+  const [documents, setDocuments] = useState<ResourceDocument[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('resource_documents' as any)
+        .select('*')
+        .eq('published', true)
+        .order('ordre', { ascending: true });
+
+      if (error) throw error;
+      setDocuments((data as any) || []);
+    } catch (error: any) {
+      console.error('Error fetching documents:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les documents",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const handlePreview = (file: string) => {
     // Open document in new tab for preview
     window.open(file, '_blank');
   };
 
-  const handleDownloadPDF = async (file: string, pdfFileName: string) => {
-    try {
-      // Fetch the HTML content
-      const response = await fetch(file);
-      const htmlContent = await response.text();
-      
-      // Create a temporary iframe to load the HTML
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'absolute';
-      iframe.style.width = '210mm';
-      iframe.style.height = '297mm';
-      iframe.style.left = '-9999px';
-      document.body.appendChild(iframe);
-      
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (iframeDoc) {
-        iframeDoc.open();
-        iframeDoc.write(htmlContent);
-        iframeDoc.close();
-        
-        // Wait for content to load
-        setTimeout(() => {
-          if (iframe.contentWindow) {
-            iframe.contentWindow.print();
-          }
-          // Clean up
-          setTimeout(() => {
-            document.body.removeChild(iframe);
-          }, 1000);
-        }, 500);
-      }
-    } catch (error) {
-      console.error('Erreur lors du téléchargement PDF:', error);
-      // Fallback: open in new window
-      window.open(file, '_blank');
-    }
+  const handleDownload = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -100,48 +78,75 @@ const Modeles = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {modeles.map((modele, index) => {
-              const IconComponent = modele.icon;
-              return (
-                <Card key={index} className="hover:shadow-lg transition-all duration-300">
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Chargement des documents...</p>
+            </div>
+          ) : documents.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Aucun document disponible</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {documents.map((doc) => (
+                <Card key={doc.id} className="hover:shadow-lg transition-all duration-300">
                   <CardHeader>
                     <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4">
-                      <IconComponent className="h-8 w-8" />
+                      <FileText className="h-8 w-8" />
                     </div>
                     <CardTitle className="text-xl text-primary">
-                      {modele.title}
+                      {doc.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <CardDescription className="text-foreground/80 leading-relaxed">
-                      {modele.description}
+                      {doc.description}
                     </CardDescription>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="default"
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handlePreview(modele.file)}
-                      >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Aperçu
-                      </Button>
-                      <Button 
-                        variant="outline"
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handleDownloadPDF(modele.file, modele.pdfFileName)}
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        PDF
-                      </Button>
+                    {doc.file_size && (
+                      <p className="text-sm text-muted-foreground">
+                        Taille: {doc.file_size}
+                      </p>
+                    )}
+                    <div className="flex flex-col gap-2">
+                      {doc.pdf_url && (
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="default"
+                            size="sm"
+                            className="flex-1"
+                            onClick={() => window.open(doc.pdf_url!, '_blank')}
+                          >
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Aperçu PDF
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                            onClick={() => handleDownload(doc.pdf_url!, `${doc.title}.pdf`)}
+                          >
+                            <Download className="mr-2 h-4 w-4" />
+                            PDF
+                          </Button>
+                        </div>
+                      )}
+                      {doc.word_url && (
+                        <Button 
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => handleDownload(doc.word_url!, `${doc.title}.docx`)}
+                        >
+                          <Download className="mr-2 h-4 w-4" />
+                          Word
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
 
           <div className="mt-12 p-6 bg-secondary/50 rounded-lg max-w-4xl mx-auto">
             <h2 className="text-xl font-semibold text-primary mb-4">
