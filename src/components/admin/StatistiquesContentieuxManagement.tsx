@@ -52,7 +52,7 @@ const StatistiquesContentieuxManagement = () => {
 
   const fetchStatistiques = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("statistiques_contentieux")
         .select("*")
         .order("ordre");
@@ -72,7 +72,7 @@ const StatistiquesContentieuxManagement = () => {
       if (!user) throw new Error("Non authentifié");
 
       if (editingStatistique) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("statistiques_contentieux")
           .update(formData)
           .eq("id", editingStatistique.id);
@@ -80,7 +80,7 @@ const StatistiquesContentieuxManagement = () => {
         if (error) throw error;
         toast.success("Statistique mise à jour");
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("statistiques_contentieux")
           .insert({ ...formData, created_by: user.id });
 
@@ -100,7 +100,7 @@ const StatistiquesContentieuxManagement = () => {
     if (!confirm("Supprimer cette statistique ?")) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("statistiques_contentieux")
         .delete()
         .eq("id", id);
@@ -140,7 +140,7 @@ const StatistiquesContentieuxManagement = () => {
 
   const updateOrdre = async (id: string, newOrdre: number) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("statistiques_contentieux")
         .update({ ordre: newOrdre })
         .eq("id", id);

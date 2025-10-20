@@ -43,7 +43,7 @@ const JurisprudencesManagement = () => {
 
   const fetchJurisprudences = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("jurisprudences")
         .select("*")
         .order("date", { ascending: false });
@@ -63,7 +63,7 @@ const JurisprudencesManagement = () => {
       if (!user) throw new Error("Non authentifié");
 
       if (editingJurisprudence) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("jurisprudences")
           .update(formData)
           .eq("id", editingJurisprudence.id);
@@ -71,7 +71,7 @@ const JurisprudencesManagement = () => {
         if (error) throw error;
         toast.success("Jurisprudence mise à jour");
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("jurisprudences")
           .insert({ ...formData, created_by: user.id });
 
@@ -91,7 +91,7 @@ const JurisprudencesManagement = () => {
     if (!confirm("Supprimer cette jurisprudence ?")) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("jurisprudences")
         .delete()
         .eq("id", id);
