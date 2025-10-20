@@ -154,8 +154,14 @@ export default function FAQManagement() {
       const uniqueFaqs = new Map<string, FAQ>();
       faqs.forEach(faq => {
         const key = `${faq.question}-${faq.category}`;
-        if (!uniqueFaqs.has(key) || new Date(faq.created_at) < new Date(uniqueFaqs.get(key)!.created_at)) {
+        if (!uniqueFaqs.has(key)) {
           uniqueFaqs.set(key, faq);
+        } else {
+          // Garder la plus ancienne (première créée)
+          const existing = uniqueFaqs.get(key)!;
+          if (new Date(faq.created_at) < new Date(existing.created_at)) {
+            uniqueFaqs.set(key, faq);
+          }
         }
       });
 
@@ -163,24 +169,39 @@ export default function FAQManagement() {
       const toKeep = new Set(Array.from(uniqueFaqs.values()).map(faq => faq.id));
       const toDelete = faqs.filter(faq => !toKeep.has(faq.id));
 
+      if (toDelete.length === 0) {
+        toast({
+          title: 'Information',
+          description: 'Aucun doublon trouvé',
+        });
+        setRemovingDuplicates(false);
+        return;
+      }
+
+      // Supprimer tous les doublons en batch
       for (const faq of toDelete) {
         const { error } = await supabase
           .from('faq' as any)
           .delete()
           .eq('id', faq.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur lors de la suppression:', error);
+          throw error;
+        }
       }
 
       toast({
         title: 'Succès',
         description: `${toDelete.length} FAQ(s) en doublon supprimée(s)`,
       });
-      fetchFAQs();
+      
+      await fetchFAQs();
     } catch (error: any) {
+      console.error('Erreur complète:', error);
       toast({
         title: 'Erreur',
-        description: error.message,
+        description: `Impossible de supprimer les doublons: ${error.message}`,
         variant: 'destructive',
       });
     } finally {
