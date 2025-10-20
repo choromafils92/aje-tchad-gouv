@@ -28,6 +28,8 @@ import FAQAssistanceManagement from '@/components/admin/FAQAssistanceManagement'
 import ResourceDocumentsManagement from '@/components/admin/ResourceDocumentsManagement';
 import ServicesJuridiquesManagement from '@/components/admin/ServicesJuridiquesManagement';
 import DomainesContentieuxManagement from '@/components/admin/DomainesContentieuxManagement';
+import StatistiquesContentieuxManagement from '@/components/admin/StatistiquesContentieuxManagement';
+import JurisprudencesManagement from '@/components/admin/JurisprudencesManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -95,6 +97,8 @@ const Admin = () => {
             <TabsTrigger value="resource-docs">Documents Ressources</TabsTrigger>
             <TabsTrigger value="services-juridiques">Services Juridiques</TabsTrigger>
             <TabsTrigger value="domaines-contentieux">Domaines Contentieux</TabsTrigger>
+            <TabsTrigger value="stats-contentieux">Stats Contentieux</TabsTrigger>
+            <TabsTrigger value="jurisprudences">Jurisprudences</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -186,6 +190,14 @@ const Admin = () => {
 
           <TabsContent value="domaines-contentieux" className="mt-6">
             <DomainesContentieuxManagement />
+          </TabsContent>
+
+          <TabsContent value="stats-contentieux" className="mt-6">
+            <StatistiquesContentieuxManagement />
+          </TabsContent>
+
+          <TabsContent value="jurisprudences" className="mt-6">
+            <JurisprudencesManagement />
           </TabsContent>
         </Tabs>
       </main>

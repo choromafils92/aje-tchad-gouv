@@ -22,6 +22,7 @@ import {
 const Contentieux = () => {
   const [proceduresDb, setProceduresDb] = useState<any[]>([]);
   const [jurisprudencesDb, setJurisprudencesDb] = useState<any[]>([]);
+  const [statistiquesDb, setStatistiquesDb] = useState<any[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -30,13 +31,15 @@ const Contentieux = () => {
 
   const fetchData = async () => {
     try {
-      const [proceduresRes, jurisprudencesRes] = await Promise.all([
+      const [proceduresRes, jurisprudencesRes, statistiquesRes] = await Promise.all([
         supabase.from("procedures_contentieux" as any).select("*").eq("published", true).order("ordre"),
-        supabase.from("jurisprudences" as any).select("*").eq("published", true).order("date", { ascending: false }).limit(3)
+        supabase.from("jurisprudences" as any).select("*").eq("published", true).order("date", { ascending: false }).limit(3),
+        supabase.from("statistiques_contentieux" as any).select("*").eq("published", true).order("ordre")
       ]);
 
       if (proceduresRes.data) setProceduresDb(proceduresRes.data);
       if (jurisprudencesRes.data) setJurisprudencesDb(jurisprudencesRes.data);
+      if (statistiquesRes.data) setStatistiquesDb(statistiquesRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -279,22 +282,29 @@ const Contentieux = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Statistiques 2024</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statistiques.map((stat, index) => (
-                <Card key={index} className="text-center">
-                  <CardHeader className="pb-4">
-                    <div className="flex justify-center mb-3">
-                      <stat.icon className={`w-8 h-8 ${stat.couleur}`} />
-                    </div>
-                    <CardTitle className="text-2xl font-bold">{stat.valeur}</CardTitle>
-                    <CardDescription>{stat.titre}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Badge variant="outline" className="text-green-600">
-                      {stat.evolution}
-                    </Badge>
-                  </CardContent>
-                </Card>
-              ))}
+              {(statistiquesDb.length > 0 ? statistiquesDb : statistiques).map((stat: any, index: number) => {
+                const IconComponent = stat.icon || 
+                  (stat.icon_name === 'TrendingUp' ? TrendingUp :
+                   stat.icon_name === 'Clock' ? Clock :
+                   stat.icon_name === 'Scale' ? Scale : FileText);
+                
+                return (
+                  <Card key={index} className="text-center">
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-center mb-3">
+                        <IconComponent className={`w-8 h-8 ${stat.couleur || 'text-primary'}`} />
+                      </div>
+                      <CardTitle className="text-2xl font-bold">{stat.valeur}</CardTitle>
+                      <CardDescription>{stat.titre}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Badge variant="outline" className="text-green-600">
+                        {stat.evolution}
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -340,7 +350,7 @@ const Contentieux = () => {
 
               <TabsContent value="procedures" className="mt-8">
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="text-center">
                     <CardTitle>Processus de Traitement du Contentieux</CardTitle>
                     <CardDescription>
                       Étapes standardisées pour la gestion efficace des dossiers contentieux
@@ -349,8 +359,8 @@ const Contentieux = () => {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                       {(proceduresDb.length > 0 ? proceduresDb : defaultProcedures).map((proc: any, index: number) => (
-                        <div key={index} className="text-center">
-                          <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+                        <div key={index} className="flex flex-col items-center text-center">
+                          <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mb-4 text-lg font-bold">
                             {index + 1}
                           </div>
                           <h3 className="font-semibold mb-2">{proc.etape}</h3>
@@ -359,11 +369,11 @@ const Contentieux = () => {
                             <Clock className="w-3 h-3 mr-1" />
                             {proc.delai}
                           </Badge>
-                          <ul className="text-xs text-left space-y-1">
+                          <ul className="text-xs w-full space-y-1">
                             {(Array.isArray(proc.documents) ? proc.documents : JSON.parse(proc.documents || '[]')).map((doc: string, i: number) => (
-                              <li key={i} className="flex items-center">
+                              <li key={i} className="flex items-center justify-center">
                                 <FileText className="w-3 h-3 mr-1 text-muted-foreground" />
-                                {doc}
+                                <span>{doc}</span>
                               </li>
                             ))}
                           </ul>

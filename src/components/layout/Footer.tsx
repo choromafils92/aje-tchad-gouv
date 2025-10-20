@@ -247,7 +247,7 @@ const Footer = () => {
             <div className="pt-2">
               <h5 className="font-semibold text-xs mb-3 opacity-90">{t("footer.followUs")}</h5>
               <div className="flex flex-wrap gap-2">
-                {socialLinks.facebook && (
+                {socialLinks.facebook && socialLinks.facebook.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
@@ -258,7 +258,7 @@ const Footer = () => {
                     <Facebook className="h-5 w-5" />
                   </Button>
                 )}
-                {socialLinks.twitter && (
+                {socialLinks.twitter && socialLinks.twitter.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
@@ -269,7 +269,7 @@ const Footer = () => {
                     <Twitter className="h-5 w-5" />
                   </Button>
                 )}
-                {socialLinks.linkedin && (
+                {socialLinks.linkedin && socialLinks.linkedin.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
@@ -280,7 +280,7 @@ const Footer = () => {
                     <Linkedin className="h-5 w-5" />
                   </Button>
                 )}
-                {socialLinks.youtube && (
+                {socialLinks.youtube && socialLinks.youtube.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
@@ -291,7 +291,7 @@ const Footer = () => {
                     <Youtube className="h-5 w-5" />
                   </Button>
                 )}
-                {socialLinks.whatsapp && (
+                {socialLinks.whatsapp && socialLinks.whatsapp.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
@@ -302,7 +302,7 @@ const Footer = () => {
                     <MessageCircle className="h-5 w-5" />
                   </Button>
                 )}
-                {socialLinks.rss && (
+                {socialLinks.rss && socialLinks.rss.trim() !== "" && (
                   <Button 
                     variant="secondary" 
                     size="sm" 
