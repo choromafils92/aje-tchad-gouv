@@ -55,10 +55,18 @@ const Modeles = () => {
   };
 
   const handleDownload = (url: string, filename: string) => {
+    // Pour les fichiers HTML, ouvrir dans un nouvel onglet pour consultation/impression
+    if (url.endsWith('.html')) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    
+    // Pour les PDF et autres fichiers, téléchargement direct
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
     link.target = '_blank';
+    link.rel = 'noopener noreferrer';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -109,26 +117,15 @@ const Modeles = () => {
                     )}
                     <div className="flex flex-col gap-2">
                       {doc.pdf_url && (
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="default"
-                            size="sm"
-                            className="flex-1"
-                            onClick={() => window.open(doc.pdf_url!, '_blank')}
-                          >
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Aperçu PDF
-                          </Button>
-                          <Button 
-                            variant="outline"
-                            size="sm"
-                            className="flex-1"
-                            onClick={() => handleDownload(doc.pdf_url!, `${doc.title}.pdf`)}
-                          >
-                            <Download className="mr-2 h-4 w-4" />
-                            PDF
-                          </Button>
-                        </div>
+                        <Button 
+                          variant="default"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => handleDownload(doc.pdf_url!, `${doc.title}${doc.pdf_url.endsWith('.pdf') ? '.pdf' : ''}`)}
+                        >
+                          <FileText className="mr-2 h-4 w-4" />
+                          {doc.pdf_url.endsWith('.html') ? 'Consulter le document' : 'Télécharger PDF'}
+                        </Button>
                       )}
                       {doc.word_url && (
                         <Button 
@@ -138,7 +135,7 @@ const Modeles = () => {
                           onClick={() => handleDownload(doc.word_url!, `${doc.title}.docx`)}
                         >
                           <Download className="mr-2 h-4 w-4" />
-                          Word
+                          Télécharger Word
                         </Button>
                       )}
                     </div>
