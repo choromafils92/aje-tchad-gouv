@@ -46,12 +46,16 @@ export default function FAQManagement() {
         .select('*')
         .order('ordre', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erreur chargement FAQs:', error);
+        throw error;
+      }
       setFaqs((data as unknown as FAQ[]) || []);
     } catch (error: any) {
+      console.error('Erreur complète:', error);
       toast({
         title: 'Erreur',
-        description: error.message,
+        description: `Impossible de charger les FAQs: ${error.message}`,
         variant: 'destructive',
       });
     } finally {
@@ -64,7 +68,14 @@ export default function FAQManagement() {
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Non authentifié");
+      if (!user) {
+        toast({
+          title: 'Erreur',
+          description: 'Vous devez être connecté',
+          variant: 'destructive',
+        });
+        return;
+      }
 
       if (editingId) {
         const { error } = await supabase
@@ -72,7 +83,10 @@ export default function FAQManagement() {
           .update(formData)
           .eq('id', editingId);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur mise à jour FAQ:', error);
+          throw error;
+        }
 
         toast({
           title: 'Succès',
@@ -83,7 +97,10 @@ export default function FAQManagement() {
           .from('faq' as any)
           .insert([{ ...formData, created_by: user.id }]);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur ajout FAQ:', error);
+          throw error;
+        }
 
         toast({
           title: 'Succès',
@@ -99,11 +116,12 @@ export default function FAQManagement() {
         published: true,
       });
       setEditingId(null);
-      fetchFAQs();
+      await fetchFAQs();
     } catch (error: any) {
+      console.error('Erreur complète:', error);
       toast({
         title: 'Erreur',
-        description: error.message,
+        description: `Opération échouée: ${error.message}`,
         variant: 'destructive',
       });
     }
@@ -124,22 +142,36 @@ export default function FAQManagement() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette FAQ ?')) return;
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: 'Erreur',
+          description: 'Vous devez être connecté pour supprimer une FAQ',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from('faq' as any)
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erreur suppression FAQ:', error);
+        throw error;
+      }
 
       toast({
         title: 'Succès',
         description: 'FAQ supprimée avec succès',
       });
-      fetchFAQs();
+      await fetchFAQs();
     } catch (error: any) {
+      console.error('Erreur complète:', error);
       toast({
         title: 'Erreur',
-        description: error.message,
+        description: `Impossible de supprimer: ${error.message}`,
         variant: 'destructive',
       });
     }
