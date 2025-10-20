@@ -311,13 +311,31 @@ export default function MediaGalleryManagement() {
                 id="file"
                 type="file"
                 accept="image/*,video/*"
-                onChange={handleFileUpload}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setFormData({ ...formData, title: formData.title || file.name });
+                  }
+                }}
                 disabled={uploading}
               />
             </div>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              Annuler
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={async () => {
+                  const fileInput = document.getElementById('file') as HTMLInputElement;
+                  if (fileInput?.files?.[0]) {
+                    await handleFileUpload({ target: { files: fileInput.files } } as any);
+                  }
+                }}
+                disabled={uploading || !formData.title}
+              >
+                {uploading ? 'Sauvegarde...' : 'Sauvegarder'}
+              </Button>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                Annuler
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

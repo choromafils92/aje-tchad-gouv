@@ -87,69 +87,109 @@ const AnalyticsManagement = () => {
     }
   };
 
-  const downloadReport = () => {
-    const reportData = {
-      date: new Date().toLocaleDateString('fr-FR'),
-      statistiques: {
-        'Total des contacts': analytics.totalContacts,
-        'Contacts récents (7 jours)': analytics.recentContacts,
-        'Total des documents': analytics.totalDocuments,
-        'Total des textes juridiques': analytics.totalTextes,
-        'Total des actualités': analytics.totalActualites,
-        'Total des demandes d\'avis': analytics.totalDemandesAvis,
-        'Demandes d\'avis récentes (7 jours)': analytics.recentDemandesAvis,
-      },
-    };
+  const downloadReport = async () => {
+    try {
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      
+      const reportData = {
+        date: new Date().toLocaleDateString('fr-FR'),
+        statistiques: {
+          'Total des contacts': analytics.totalContacts,
+          'Contacts récents (7 jours)': analytics.recentContacts,
+          'Total des documents': analytics.totalDocuments,
+          'Total des textes juridiques': analytics.totalTextes,
+          'Total des actualités': analytics.totalActualites,
+          'Total des demandes d\'avis': analytics.totalDemandesAvis,
+          'Demandes d\'avis récentes (7 jours)': analytics.recentDemandesAvis,
+        },
+      };
 
-    const reportText = `
-===========================================
-RAPPORT D'ANALYSE DU SITE - AJE TCHAD
-===========================================
+      // Configuration
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const marginLeft = 20;
+      let yPosition = 20;
 
-Date du rapport: ${reportData.date}
+      // Titre
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('RAPPORT D\'ANALYSE DU SITE', pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 10;
+      doc.text('AJE TCHAD', pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 15;
 
--------------------------------------------
-STATISTIQUES GÉNÉRALES
--------------------------------------------
+      // Date
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Date du rapport: ${reportData.date}`, marginLeft, yPosition);
+      yPosition += 15;
 
-Total des contacts reçus: ${reportData.statistiques['Total des contacts']}
-Contacts reçus (7 derniers jours): ${reportData.statistiques['Contacts récents (7 jours)']}
+      // Section Statistiques
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('STATISTIQUES GÉNÉRALES', marginLeft, yPosition);
+      yPosition += 10;
 
-Documents publiés: ${reportData.statistiques['Total des documents']}
-Textes juridiques: ${reportData.statistiques['Total des textes juridiques']}
-Actualités publiées: ${reportData.statistiques['Total des actualités']}
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      
+      // Contacts
+      doc.text(`Total des contacts reçus: ${reportData.statistiques['Total des contacts']}`, marginLeft, yPosition);
+      yPosition += 7;
+      doc.text(`Contacts reçus (7 derniers jours): ${reportData.statistiques['Contacts récents (7 jours)']}`, marginLeft, yPosition);
+      yPosition += 10;
 
-Demandes d'avis juridique: ${reportData.statistiques['Total des demandes d\'avis']}
-Demandes récentes (7 jours): ${reportData.statistiques['Demandes d\'avis récentes (7 jours)']}
+      // Documents
+      doc.text(`Documents publiés: ${reportData.statistiques['Total des documents']}`, marginLeft, yPosition);
+      yPosition += 7;
+      doc.text(`Textes juridiques: ${reportData.statistiques['Total des textes juridiques']}`, marginLeft, yPosition);
+      yPosition += 7;
+      doc.text(`Actualités publiées: ${reportData.statistiques['Total des actualités']}`, marginLeft, yPosition);
+      yPosition += 10;
 
--------------------------------------------
-OBSERVATIONS
--------------------------------------------
+      // Demandes d'avis
+      doc.text(`Demandes d'avis juridique: ${reportData.statistiques['Total des demandes d\'avis']}`, marginLeft, yPosition);
+      yPosition += 7;
+      doc.text(`Demandes récentes (7 jours): ${reportData.statistiques['Demandes d\'avis récentes (7 jours)']}`, marginLeft, yPosition);
+      yPosition += 15;
 
-Ce rapport fournit un aperçu des activités du site de l'Agence Judiciaire de l'État.
-Les données sont extraites directement de la base de données à la date indiquée.
+      // Section Observations
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('OBSERVATIONS', marginLeft, yPosition);
+      yPosition += 10;
 
-Pour plus d'informations détaillées, veuillez consulter les sections individuelles du tableau de bord administrateur.
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const observations = [
+        'Ce rapport fournit un aperçu des activités du site de l\'Agence Judiciaire',
+        'de l\'État. Les données sont extraites directement de la base de données',
+        'à la date indiquée.',
+        '',
+        'Pour plus d\'informations détaillées, veuillez consulter les sections',
+        'individuelles du tableau de bord administrateur.'
+      ];
+      
+      observations.forEach(line => {
+        doc.text(line, marginLeft, yPosition);
+        yPosition += 6;
+      });
 
-===========================================
-Fin du rapport
-===========================================
-    `;
+      // Télécharger
+      doc.save(`rapport-analytics-${new Date().toISOString().split('T')[0]}.pdf`);
 
-    const blob = new Blob([reportText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `rapport-analytics-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-
-    toast({
-      title: 'Rapport téléchargé',
-      description: 'Le rapport d\'analyse a été téléchargé avec succès.',
-    });
+      toast({
+        title: 'Rapport téléchargé',
+        description: 'Le rapport d\'analyse a été téléchargé en PDF avec succès.',
+      });
+    } catch (error) {
+      console.error('Erreur lors de la génération du PDF:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de générer le rapport PDF.',
+        variant: 'destructive',
+      });
+    }
   };
 
   if (loading) {

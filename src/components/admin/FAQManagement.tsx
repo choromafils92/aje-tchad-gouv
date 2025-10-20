@@ -24,6 +24,7 @@ export default function FAQManagement() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [removingDuplicates, setRemovingDuplicates] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -144,6 +145,49 @@ export default function FAQManagement() {
     }
   };
 
+  const removeDuplicates = async () => {
+    if (!confirm('Voulez-vous supprimer toutes les FAQs en doublon ? Cette action est irréversible.')) return;
+
+    setRemovingDuplicates(true);
+    try {
+      // Créer un map des FAQs uniques basé sur question+category
+      const uniqueFaqs = new Map<string, FAQ>();
+      faqs.forEach(faq => {
+        const key = `${faq.question}-${faq.category}`;
+        if (!uniqueFaqs.has(key) || new Date(faq.created_at) < new Date(uniqueFaqs.get(key)!.created_at)) {
+          uniqueFaqs.set(key, faq);
+        }
+      });
+
+      // Supprimer les doublons
+      const toKeep = new Set(Array.from(uniqueFaqs.values()).map(faq => faq.id));
+      const toDelete = faqs.filter(faq => !toKeep.has(faq.id));
+
+      for (const faq of toDelete) {
+        const { error } = await supabase
+          .from('faq' as any)
+          .delete()
+          .eq('id', faq.id);
+
+        if (error) throw error;
+      }
+
+      toast({
+        title: 'Succès',
+        description: `${toDelete.length} FAQ(s) en doublon supprimée(s)`,
+      });
+      fetchFAQs();
+    } catch (error: any) {
+      toast({
+        title: 'Erreur',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setRemovingDuplicates(false);
+    }
+  };
+
   if (loading) {
     return <div>Chargement...</div>;
   }
@@ -238,7 +282,16 @@ export default function FAQManagement() {
 
       <Card>
         <CardHeader>
-          <CardTitle>FAQs existantes</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>FAQs existantes</CardTitle>
+            <Button 
+              variant="outline" 
+              onClick={removeDuplicates}
+              disabled={removingDuplicates}
+            >
+              {removingDuplicates ? 'Suppression...' : 'Supprimer les doublons'}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>

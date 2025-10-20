@@ -429,28 +429,82 @@ const Services = () => {
                                 {doc.pdf_url && (
                                   <Button 
                                     className="flex-1"
-                                    onClick={() => {
+                                    onClick={async () => {
                                       // Check if it's an HTML file (template) or a real PDF
                                       if (doc.pdf_url!.endsWith('.html')) {
-                                        // Extract filename for template preview
-                                        const fileName = doc.pdf_url!.split('/').pop()?.replace('.html', '');
-                                        window.open(`/modeles?file=${fileName}`, '_blank');
+                                        try {
+                                          // Fetch the HTML content
+                                          const response = await fetch(doc.pdf_url!);
+                                          const htmlContent = await response.text();
+                                          
+                                          // Create a temporary iframe to load the HTML
+                                          const iframe = document.createElement('iframe');
+                                          iframe.style.position = 'absolute';
+                                          iframe.style.width = '210mm';
+                                          iframe.style.height = '297mm';
+                                          iframe.style.left = '-9999px';
+                                          document.body.appendChild(iframe);
+                                          
+                                          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                                          if (iframeDoc) {
+                                            iframeDoc.open();
+                                            iframeDoc.write(htmlContent);
+                                            iframeDoc.close();
+                                            
+                                            // Wait for content to load
+                                            setTimeout(() => {
+                                              if (iframe.contentWindow) {
+                                                iframe.contentWindow.print();
+                                              }
+                                              // Clean up
+                                              setTimeout(() => {
+                                                document.body.removeChild(iframe);
+                                              }, 1000);
+                                            }, 500);
+                                          }
+                                        } catch (error) {
+                                          console.error('Erreur lors du téléchargement PDF:', error);
+                                          // Fallback: open in new window
+                                          window.open(doc.pdf_url!, '_blank');
+                                        }
                                       } else {
-                                        // Open PDF in new tab for viewing
-                                        window.open(doc.pdf_url!, '_blank');
+                                        // Download or open real PDF
+                                        try {
+                                          const link = document.createElement('a');
+                                          link.href = doc.pdf_url!;
+                                          link.download = doc.title + '.pdf';
+                                          link.target = '_blank';
+                                          link.rel = 'noopener noreferrer';
+                                          document.body.appendChild(link);
+                                          link.click();
+                                          document.body.removeChild(link);
+                                        } catch (error) {
+                                          window.open(doc.pdf_url!, '_blank');
+                                        }
                                       }
                                     }}
                                   >
                                     <LucideIcons.Download className="mr-2 h-4 w-4" />
-                                    {doc.pdf_url!.endsWith('.html') ? 'Voir & Télécharger' : 'Visualiser'}
+                                    {doc.pdf_url!.endsWith('.html') ? 'Télécharger PDF' : 'Télécharger'}
                                   </Button>
                                 )}
                                 {doc.word_url && (
                                   <Button 
                                     variant="outline"
                                     className="flex-1"
-                                    onClick={() => {
-                                      window.open(doc.word_url!, '_blank');
+                                    onClick={async () => {
+                                      try {
+                                        const link = document.createElement('a');
+                                        link.href = doc.word_url!;
+                                        link.download = doc.title + '.docx';
+                                        link.target = '_blank';
+                                        link.rel = 'noopener noreferrer';
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                      } catch (error) {
+                                        window.open(doc.word_url!, '_blank');
+                                      }
                                     }}
                                   >
                                     <LucideIcons.Download className="mr-2 h-4 w-4" />

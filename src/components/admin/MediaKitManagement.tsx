@@ -357,13 +357,31 @@ export default function MediaKitManagement() {
               <Input
                 id="file"
                 type="file"
-                onChange={handleFileUpload}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setFormData({ ...formData, name: formData.name || file.name });
+                  }
+                }}
                 disabled={uploading}
               />
             </div>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              Annuler
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={async () => {
+                  const fileInput = document.getElementById('file') as HTMLInputElement;
+                  if (fileInput?.files?.[0]) {
+                    await handleFileUpload({ target: { files: fileInput.files } } as any);
+                  }
+                }}
+                disabled={uploading || !formData.name}
+              >
+                {uploading ? 'Sauvegarde...' : 'Sauvegarder'}
+              </Button>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                Annuler
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

@@ -48,17 +48,41 @@ const Modeles = () => {
     window.open(file, '_blank');
   };
 
-  const handleDownloadPDF = (file: string, pdfFileName: string) => {
-    // Open in new window and trigger print dialog
-    const printWindow = window.open(file, '_blank');
-    if (printWindow) {
-      printWindow.document.title = pdfFileName;
-      printWindow.onload = () => {
-        // Trigger print dialog after content loads
+  const handleDownloadPDF = async (file: string, pdfFileName: string) => {
+    try {
+      // Fetch the HTML content
+      const response = await fetch(file);
+      const htmlContent = await response.text();
+      
+      // Create a temporary iframe to load the HTML
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'absolute';
+      iframe.style.width = '210mm';
+      iframe.style.height = '297mm';
+      iframe.style.left = '-9999px';
+      document.body.appendChild(iframe);
+      
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc) {
+        iframeDoc.open();
+        iframeDoc.write(htmlContent);
+        iframeDoc.close();
+        
+        // Wait for content to load
         setTimeout(() => {
-          printWindow.print();
+          if (iframe.contentWindow) {
+            iframe.contentWindow.print();
+          }
+          // Clean up
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 1000);
         }, 500);
-      };
+      }
+    } catch (error) {
+      console.error('Erreur lors du téléchargement PDF:', error);
+      // Fallback: open in new window
+      window.open(file, '_blank');
     }
   };
 

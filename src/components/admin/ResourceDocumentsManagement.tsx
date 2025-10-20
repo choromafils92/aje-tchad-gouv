@@ -302,26 +302,52 @@ const ResourceDocumentsManagement = () => {
                     <p className="text-sm text-muted-foreground mt-1">{doc.description}</p>
                     <div className="flex gap-4 mt-2">
                       {doc.pdf_url && (
-                        <a 
-                          href={doc.pdf_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline flex items-center"
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="h-auto p-0 text-xs"
+                          onClick={async () => {
+                            try {
+                              const link = document.createElement('a');
+                              link.href = doc.pdf_url!;
+                              link.download = doc.title + '.pdf';
+                              link.target = '_blank';
+                              link.rel = 'noopener noreferrer';
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            } catch (error) {
+                              window.open(doc.pdf_url!, '_blank');
+                            }
+                          }}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           PDF
-                        </a>
+                        </Button>
                       )}
                       {doc.word_url && (
-                        <a 
-                          href={doc.word_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline flex items-center"
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="h-auto p-0 text-xs"
+                          onClick={async () => {
+                            try {
+                              const link = document.createElement('a');
+                              link.href = doc.word_url!;
+                              link.download = doc.title + '.docx';
+                              link.target = '_blank';
+                              link.rel = 'noopener noreferrer';
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            } catch (error) {
+                              window.open(doc.word_url!, '_blank');
+                            }
+                          }}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           Word
-                        </a>
+                        </Button>
                       )}
                       <span className="text-xs text-muted-foreground">{doc.file_size}</span>
                     </div>
