@@ -152,7 +152,7 @@ const Footer = () => {
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h3 className="font-semibold text-sm">{t("header.title")}</h3>
+                <h3 className="font-bold text-sm text-white">{t("header.title")}</h3>
                 <p className="text-xs opacity-90">{devise}</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm">{t("footer.quickLinks")}</h4>
+            <h4 className="font-bold text-sm text-white">{t("footer.quickLinks")}</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="/" className="hover:opacity-75 transition-opacity">{t("header.nav.home")}</a></li>
               <li><a href="/missions" className="hover:opacity-75 transition-opacity">{t("header.nav.missions")}</a></li>
@@ -196,7 +196,7 @@ const Footer = () => {
 
           {/* Services */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm">{t("footer.services")}</h4>
+            <h4 className="font-bold text-sm text-white">{t("footer.services")}</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="/services/demande-avis" className="hover:opacity-75 transition-opacity">Demander un avis juridique</a></li>
               <li><a href="/services/modeles" className="hover:opacity-75 transition-opacity">Modèles et guides</a></li>
@@ -208,7 +208,7 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm">{t("footer.newsletter")}</h4>
+            <h4 className="font-bold text-sm text-white">{t("footer.newsletter")}</h4>
             <p className="text-xs opacity-90">
               {t("footer.newsletterText")}
             </p>
@@ -245,7 +245,7 @@ const Footer = () => {
             
             {/* Social Media */}
             <div className="pt-2">
-              <h5 className="font-semibold text-xs mb-3 opacity-90">{t("footer.followUs")}</h5>
+              <h5 className="font-bold text-xs mb-3 text-white">{t("footer.followUs")}</h5>
               <div className="flex flex-wrap gap-2">
                 {socialLinks.facebook && socialLinks.facebook.trim() !== "" && (
                   <Button 

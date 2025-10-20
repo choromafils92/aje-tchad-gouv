@@ -137,33 +137,6 @@ const Contentieux = () => {
     }
   ];
 
-  const procedures = [
-    {
-      etape: "1. Saisine",
-      description: "Réception et analyse de la demande",
-      delai: "2-5 jours",
-      documents: ["Dossier complet", "Pièces justificatives"]
-    },
-    {
-      etape: "2. Instruction",
-      description: "Étude approfondie du dossier",
-      delai: "15-30 jours", 
-      documents: ["Analyses juridiques", "Consultations"]
-    },
-    {
-      etape: "3. Stratégie",
-      description: "Définition de la stratégie contentieuse",
-      delai: "5-10 jours",
-      documents: ["Plan d'action", "Recommandations"]
-    },
-    {
-      etape: "4. Action",
-      description: "Mise en œuvre et suivi",
-      delai: "Variable",
-      documents: ["Actes de procédure", "Rapports de suivi"]
-    }
-  ];
-
   const jurisprudences = [
     {
       date: "15 Mars 2024",
@@ -253,7 +226,7 @@ const Contentieux = () => {
         <section className="bg-gradient-to-r from-slate-900 to-slate-700 text-white py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6">
                 Gestion du Contentieux
               </h1>
               <p className="text-xl text-slate-300 mb-8">
@@ -419,7 +392,7 @@ const Contentieux = () => {
         {/* Actions et Contact */}
         <section className="py-16 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-8">Besoin d'Assistance Contentieuse ?</h2>
+            <h2 className="text-3xl font-bold text-white mb-8">Besoin d'Assistance Contentieuse ?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               <Card className="bg-white/10 border-white/20">
                 <CardHeader>
