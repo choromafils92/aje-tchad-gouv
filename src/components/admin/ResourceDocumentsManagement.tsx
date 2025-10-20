@@ -186,6 +186,8 @@ const ResourceDocumentsManagement = () => {
 
   const handleEdit = (doc: ResourceDocument) => {
     setEditingId(doc.id);
+    setPdfFile(null);
+    setWordFile(null);
     setFormData({
       title: doc.title,
       description: doc.description,
@@ -194,6 +196,14 @@ const ResourceDocumentsManagement = () => {
       file_size: doc.file_size,
       ordre: doc.ordre,
       published: doc.published
+    });
+    
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    toast({
+      title: "Mode édition",
+      description: `Modification de "${doc.title}"`,
     });
   };
 
@@ -233,8 +243,11 @@ const ResourceDocumentsManagement = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Modifier" : "Ajouter"} un document</CardTitle>
+        <CardHeader className={editingId ? "bg-primary/5 border-l-4 border-primary" : ""}>
+          <CardTitle>
+            {editingId ? "✏️ Modifier" : "➕ Ajouter"} un document
+            {editingId && <span className="ml-2 text-sm text-muted-foreground">(Mode édition actif)</span>}
+          </CardTitle>
           <CardDescription>
             Gérez les documents téléchargeables (PDF et Word) sur la page Services
           </CardDescription>
@@ -336,9 +349,9 @@ const ResourceDocumentsManagement = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit" disabled={loading || uploadingFile}>
+              <Button type="submit" disabled={loading || uploadingFile} className={editingId ? "bg-primary" : ""}>
                 <Save className="mr-2 h-4 w-4" />
-                {uploadingFile ? 'Upload en cours...' : editingId ? 'Modifier' : 'Ajouter'}
+                {uploadingFile ? '⏳ Upload en cours...' : editingId ? '✅ Enregistrer les modifications' : '➕ Ajouter le document'}
               </Button>
               {editingId && (
                 <Button
@@ -375,7 +388,8 @@ const ResourceDocumentsManagement = () => {
               variant="destructive"
               size="sm"
               onClick={async () => {
-                if (!confirm("Voulez-vous supprimer tous les doublons ? Seule la première occurrence de chaque titre sera conservée.")) return;
+                if (!confirm("⚠️ Voulez-vous supprimer tous les doublons ?\n\nSeule la première occurrence de chaque titre sera conservée.\nCette action est irréversible !")) return;
+                
                 try {
                   // Count duplicates first
                   const titleCounts: Record<string, number> = {};
@@ -387,8 +401,8 @@ const ResourceDocumentsManagement = () => {
                   
                   if (!hasDuplicates) {
                     toast({
-                      title: "Info",
-                      description: "Aucun doublon détecté",
+                      title: "✅ Aucun doublon",
+                      description: "Tous les documents ont des titres uniques",
                     });
                     return;
                   }
@@ -405,33 +419,44 @@ const ResourceDocumentsManagement = () => {
                     }
                   });
 
+                  toast({
+                    title: "🔄 Suppression en cours...",
+                    description: `${toDelete.length} doublon(s) détecté(s)`,
+                  });
+
                   // Delete duplicates
+                  let deletedCount = 0;
                   for (const id of toDelete) {
                     const { error } = await supabase
                       .from("resource_documents" as any)
                       .delete()
                       .eq("id", id);
                     
-                    if (error) throw error;
+                    if (error) {
+                      console.error("Erreur de suppression:", error);
+                      throw error;
+                    }
+                    deletedCount++;
                   }
 
                   toast({
-                    title: "Succès",
-                    description: `${toDelete.length} doublon(s) supprimé(s)`,
+                    title: "✅ Succès",
+                    description: `${deletedCount} doublon(s) supprimé(s) avec succès`,
                   });
                   
-                  fetchDocuments();
+                  await fetchDocuments();
                 } catch (error: any) {
+                  console.error("Erreur lors de la suppression des doublons:", error);
                   toast({
-                    title: "Erreur",
-                    description: error.message,
+                    title: "❌ Erreur",
+                    description: error.message || "Impossible de supprimer les doublons",
                     variant: "destructive",
                   });
                 }
               }}
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Supprimer les doublons
+              🗑️ Supprimer les doublons
             </Button>
           </div>
         </CardHeader>
@@ -510,15 +535,19 @@ const ResourceDocumentsManagement = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleEdit(doc)}
+                      title="Modifier ce document"
                     >
-                      <Pencil className="h-4 w-4" />
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Modifier
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(doc.id)}
+                      title="Supprimer ce document"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Supprimer
                     </Button>
                   </div>
                 </div>
