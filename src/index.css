@@ -154,3 +154,49 @@ strong, b {
   }
 }
 }
+
+@layer utilities {
+  /* Hover effects utilities */
+  .hover-lift {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[0_0_20px_rgba(10,58,102,0.5)];
+  }
+  
+  .hover-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full;
+  }
+
+  /* Smooth scroll behavior */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+  
+  /* Parallax effect base */
+  .parallax {
+    will-change: transform;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Card hover effects */
+  .card-interactive {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer;
+  }
+  
+  /* Button micro-interactions */
+  .btn-bounce:active {
+    @apply scale-95;
+  }
+  
+  /* Gradient animation */
+  .gradient-animate {
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+}
