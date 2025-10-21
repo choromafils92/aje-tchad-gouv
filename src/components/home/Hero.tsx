@@ -12,6 +12,7 @@ const Hero = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [heroContent, setHeroContent] = useState({
     title: "Agence Judiciaire de l'État",
     tagline: "Conseiller-Défendre-Protéger",
@@ -20,6 +21,13 @@ const Hero = () => {
 
   useEffect(() => {
     fetchHeroContent();
+    
+    // Mise à jour de l'heure chaque seconde
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(timer);
   }, []);
 
   const fetchHeroContent = async () => {
@@ -118,17 +126,35 @@ const Hero = () => {
                         {t("hero.motto")}
                       </p>
                     </div>
-                  <div className="flex items-center justify-center space-x-6">
+                  <div className="flex items-start justify-center space-x-6">
                     <img 
                       src={drapeauTchad} 
                       alt="Drapeau du Tchad"
                       className="w-28 h-20 object-cover rounded shadow-md"
                     />
-                    <img 
-                      src={armoirieTchad} 
-                      alt="Armoirie du Tchad"
-                      className="w-28 h-28 object-contain"
-                    />
+                    <div className="flex flex-col items-center space-y-2">
+                      <img 
+                        src={armoirieTchad} 
+                        alt="Armoirie du Tchad"
+                        className="w-28 h-28 object-contain"
+                      />
+                      <div className="text-center">
+                        <p className="text-sm font-semibold text-white drop-shadow-md">
+                          {currentDateTime.toLocaleDateString('fr-FR', { 
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric' 
+                          })}
+                        </p>
+                        <p className="text-lg font-bold text-white drop-shadow-md">
+                          {currentDateTime.toLocaleTimeString('fr-FR', { 
+                            hour: '2-digit', 
+                            minute: '2-digit', 
+                            second: '2-digit' 
+                          })}
+                        </p>
+                      </div>
+                    </div>
                     <img 
                       src={logoAje} 
                       alt="Logo AJE"
