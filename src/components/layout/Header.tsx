@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAdmin } = useAuth();
   const { language, setLanguage, t } = useLanguage();
 
@@ -140,13 +141,13 @@ const Header = () => {
             </div>
 
             {/* Mobile Menu */}
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild className="lg:hidden">
                 <Button variant="ghost" size="sm">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80 overflow-y-auto">
+              <SheetContent side="right" className="w-80 overflow-y-auto bg-background">
                 <div className="flex flex-col space-y-4 mt-8 pb-6">
                   <div className="relative">
                     <Input
@@ -162,6 +163,7 @@ const Header = () => {
                       <Link
                         key={item.href}
                         to={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
                         className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors flex items-center gap-2"
                       >
                         {item.label}
@@ -169,6 +171,7 @@ const Header = () => {
                     ))}
                     <Link
                       to={authItem.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className="px-4 py-3 text-foreground hover:bg-secondary rounded-md transition-colors flex items-center gap-2"
                     >
                       <authItem.icon className="h-4 w-4" />

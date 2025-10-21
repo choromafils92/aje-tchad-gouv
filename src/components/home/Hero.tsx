@@ -83,7 +83,7 @@ const Hero = () => {
                     </p>
                   </div>
                   
-                  <p className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_70%),_0_3px_12px_rgb(0_0_0_/_50%)]">
+                  <p className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed text-center text-white">
                     {heroContent.description}
                   </p>
                 </div>
