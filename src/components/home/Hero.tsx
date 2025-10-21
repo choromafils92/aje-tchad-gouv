@@ -132,11 +132,11 @@ const Hero = () => {
                       </p>
                     </div>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-center space-x-6">
+                    <div className="flex items-end justify-center space-x-6">
                       <img 
                         src={drapeauTchad} 
                         alt="Drapeau du Tchad"
-                        className="w-32 h-32 object-contain rounded shadow-md hover-scale animate-bounce-in"
+                        className="w-32 h-44 object-contain rounded shadow-md hover-scale animate-bounce-in"
                       />
                       <img 
                         src={armoirieTchad} 
