@@ -14,7 +14,7 @@ interface SearchResult {
   id: string;
   title: string;
   description: string;
-  type: 'actualite' | 'texte' | 'jurisprudence' | 'service';
+  type: 'actualite' | 'texte' | 'jurisprudence' | 'service' | 'document' | 'modele' | 'faq' | 'domaine' | 'procedure' | 'communique' | 'emploi';
   url: string;
   date?: string;
 }
@@ -129,6 +129,161 @@ const Recherche = () => {
         }
       });
 
+      // Recherche dans les documents
+      const { data: documents } = await supabase
+        .from('documents' as any)
+        .select('id, title, description, category, created_at')
+        .eq('published', true);
+
+      documents?.forEach((item: any) => {
+        if (
+          item.title?.toLowerCase().includes(lowerQuery) ||
+          item.description?.toLowerCase().includes(lowerQuery) ||
+          item.category?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.title,
+            description: item.description || item.category,
+            type: 'document',
+            url: `/textes`,
+            date: item.created_at,
+          });
+        }
+      });
+
+      // Recherche dans les modèles de formulaires
+      const { data: modeles } = await supabase
+        .from('resource_documents' as any)
+        .select('id, title, description, created_at')
+        .eq('published', true);
+
+      modeles?.forEach((item: any) => {
+        if (
+          item.title?.toLowerCase().includes(lowerQuery) ||
+          item.description?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            type: 'modele',
+            url: `/modeles`,
+            date: item.created_at,
+          });
+        }
+      });
+
+      // Recherche dans la FAQ
+      const { data: faq } = await supabase
+        .from('faq' as any)
+        .select('id, question, answer, category')
+        .eq('published', true);
+
+      faq?.forEach((item: any) => {
+        if (
+          item.question?.toLowerCase().includes(lowerQuery) ||
+          item.answer?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.question,
+            description: item.answer.substring(0, 200) + '...',
+            type: 'faq',
+            url: `/faq`,
+          });
+        }
+      });
+
+      // Recherche dans les domaines contentieux
+      const { data: domaines } = await supabase
+        .from('domaines_contentieux' as any)
+        .select('id, categorie, description, statistiques')
+        .eq('published', true);
+
+      domaines?.forEach((item: any) => {
+        if (
+          item.categorie?.toLowerCase().includes(lowerQuery) ||
+          item.description?.toLowerCase().includes(lowerQuery) ||
+          item.statistiques?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.categorie,
+            description: item.description,
+            type: 'domaine',
+            url: `/contentieux`,
+          });
+        }
+      });
+
+      // Recherche dans les procédures contentieux
+      const { data: procedures } = await supabase
+        .from('procedures_contentieux' as any)
+        .select('id, etape, description, delai')
+        .eq('published', true);
+
+      procedures?.forEach((item: any) => {
+        if (
+          item.etape?.toLowerCase().includes(lowerQuery) ||
+          item.description?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.etape,
+            description: item.description,
+            type: 'procedure',
+            url: `/contentieux`,
+          });
+        }
+      });
+
+      // Recherche dans les communiqués de presse
+      const { data: communiques } = await supabase
+        .from('media_press_releases' as any)
+        .select('id, title, excerpt, content, date_publication')
+        .eq('published', true);
+
+      communiques?.forEach((item: any) => {
+        if (
+          item.title?.toLowerCase().includes(lowerQuery) ||
+          item.excerpt?.toLowerCase().includes(lowerQuery) ||
+          item.content?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.title,
+            description: item.excerpt,
+            type: 'communique',
+            url: `/medias`,
+            date: item.date_publication,
+          });
+        }
+      });
+
+      // Recherche dans les offres d'emploi
+      const { data: emplois } = await supabase
+        .from('job_offers' as any)
+        .select('id, title, description, department, created_at')
+        .eq('published', true);
+
+      emplois?.forEach((item: any) => {
+        if (
+          item.title?.toLowerCase().includes(lowerQuery) ||
+          item.description?.toLowerCase().includes(lowerQuery) ||
+          item.department?.toLowerCase().includes(lowerQuery)
+        ) {
+          searchResults.push({
+            id: item.id,
+            title: item.title,
+            description: item.description.substring(0, 200) + '...',
+            type: 'emploi',
+            url: `/carrieres`,
+            date: item.created_at,
+          });
+        }
+      });
+
       setResults(searchResults);
     } catch (error) {
       console.error('Erreur de recherche:', error);
@@ -150,6 +305,13 @@ const Recherche = () => {
       case 'texte': return <FileText className="h-5 w-5" />;
       case 'jurisprudence': return <Scale className="h-5 w-5" />;
       case 'service': return <Briefcase className="h-5 w-5" />;
+      case 'document': return <FileText className="h-5 w-5" />;
+      case 'modele': return <FileText className="h-5 w-5" />;
+      case 'faq': return <FileText className="h-5 w-5" />;
+      case 'domaine': return <Scale className="h-5 w-5" />;
+      case 'procedure': return <Scale className="h-5 w-5" />;
+      case 'communique': return <Newspaper className="h-5 w-5" />;
+      case 'emploi': return <Briefcase className="h-5 w-5" />;
       default: return <FileText className="h-5 w-5" />;
     }
   };
@@ -160,6 +322,13 @@ const Recherche = () => {
       texte: 'Texte juridique',
       jurisprudence: 'Jurisprudence',
       service: 'Service',
+      document: 'Document',
+      modele: 'Modèle de formulaire',
+      faq: 'FAQ',
+      domaine: 'Domaine contentieux',
+      procedure: 'Procédure',
+      communique: 'Communiqué de presse',
+      emploi: 'Offre d\'emploi',
     };
     return labels[type] || type;
   };
@@ -191,7 +360,7 @@ const Recherche = () => {
                 <div className="flex gap-4">
                   <Input
                     type="search"
-                    placeholder="Rechercher des actualités, textes juridiques, services..."
+                    placeholder="Rechercher actualités, documents, formulaires, FAQ..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     className="flex-1 h-12 text-lg"
