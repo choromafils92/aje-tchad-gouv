@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Scale, Users, TrendingUp, Award, CheckCircle } from "lucide-react";
+import { FileText, Scale, Users, TrendingUp, Award, CheckCircle, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
@@ -44,6 +44,7 @@ const StatsDashboard = () => {
       TrendingUp,
       Award,
       CheckCircle,
+      Clock,
     };
     return icons[iconName] || FileText;
   };
@@ -56,9 +57,7 @@ const StatsDashboard = () => {
   return (
     <section ref={ref} className="py-8 bg-gradient-to-br from-secondary via-background to-secondary">
       <div className="container mx-auto px-4">
-        <div className={`text-center mb-12 transition-all duration-700 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
+        <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-primary mb-4">
             Notre Performance en Chiffres
           </h2>
@@ -70,15 +69,11 @@ const StatsDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => {
             const Icon = getIcon(stat.icon_name);
-            const delay = index * 100;
             
             return (
               <Card 
                 key={index}
-                className={`border-2 hover:shadow-xl hover:border-primary/50 transition-all duration-500 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${delay}ms` }}
+                className="border-2 hover:shadow-xl hover:border-primary/50 transition-all duration-500"
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -101,9 +96,7 @@ const StatsDashboard = () => {
           })}
         </div>
 
-        <div className={`mt-12 text-center transition-all duration-700 delay-500 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
+        <div className="mt-12 text-center">
           <p className="text-muted-foreground">
             * Données mises à jour en temps réel | Source: AJE Tchad
           </p>

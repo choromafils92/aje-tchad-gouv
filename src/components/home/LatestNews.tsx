@@ -73,9 +73,7 @@ const LatestNews = () => {
   return (
     <section ref={ref} className="py-8 bg-background">
       <div className="container mx-auto px-4">
-        <div className={`flex justify-between items-center mb-8 transition-all duration-700 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
+        <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
               Dernières publications
@@ -95,14 +93,10 @@ const LatestNews = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {news.map((item, index) => {
             const IconComponent = getTypeIcon(item.type);
-            const delay = index * 150;
             return (
               <Card 
                 key={item.id} 
-                className={`group hover:shadow-lg transition-all duration-500 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${delay}ms` }}
+                className="group hover:shadow-lg transition-all duration-500"
               >
                 <CardHeader className="space-y-3">
                   <div className="flex items-start justify-between">
