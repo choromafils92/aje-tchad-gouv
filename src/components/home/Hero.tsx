@@ -139,18 +139,18 @@ const Hero = () => {
                         className="w-28 h-28 object-contain"
                       />
                       <div className="text-center">
-                        <p className="text-sm font-semibold text-white drop-shadow-md">
-                          {currentDateTime.toLocaleDateString('fr-FR', { 
-                            day: '2-digit', 
-                            month: '2-digit', 
-                            year: 'numeric' 
-                          })}
-                        </p>
-                        <p className="text-lg font-bold text-white drop-shadow-md">
+                        <p className="text-lg font-bold text-white drop-shadow-md font-nagasaki">
                           {currentDateTime.toLocaleTimeString('fr-FR', { 
                             hour: '2-digit', 
                             minute: '2-digit', 
                             second: '2-digit' 
+                          })}
+                        </p>
+                        <p className="text-sm font-semibold text-white drop-shadow-md font-nagasaki">
+                          {currentDateTime.toLocaleDateString('fr-FR', { 
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric' 
                           })}
                         </p>
                       </div>

@@ -21,6 +21,7 @@ export default {
 			fontFamily: {
 				'merriweather': ['Merriweather', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
+				'nagasaki': ['Nagasaki', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
