@@ -126,11 +126,11 @@ const Hero = () => {
                         {t("hero.motto")}
                       </p>
                     </div>
-                  <div className="flex items-start justify-center space-x-6">
+                  <div className="flex items-center justify-center space-x-6">
                     <img 
                       src={drapeauTchad} 
                       alt="Drapeau du Tchad"
-                      className="w-28 h-20 object-cover rounded shadow-md"
+                      className="w-28 h-28 object-contain rounded shadow-md"
                     />
                     <div className="flex flex-col items-center space-y-2">
                       <img 
