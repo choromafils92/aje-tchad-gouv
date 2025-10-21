@@ -54,7 +54,7 @@ const StatsDashboard = () => {
   if (!stats || stats.length === 0) return null;
 
   return (
-    <section ref={ref} className="py-20 bg-gradient-to-br from-secondary via-background to-secondary">
+    <section ref={ref} className="py-8 bg-gradient-to-br from-secondary via-background to-secondary">
       <div className="container mx-auto px-4">
         <div className={`text-center mb-12 transition-all duration-700 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
