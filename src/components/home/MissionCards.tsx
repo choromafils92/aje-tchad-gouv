@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Scale, Users, FileText, ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { Link } from "react-router-dom";
 
 const MissionCards = () => {
   const { ref, isVisible } = useScrollAnimation();
@@ -74,10 +75,10 @@ const MissionCards = () => {
                     className="text-accent hover:text-accent-foreground hover:bg-accent group"
                     asChild
                   >
-                    <a href={mission.link}>
+                    <Link to={mission.link}>
                       En savoir plus
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -86,9 +87,11 @@ const MissionCards = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            Découvrir toutes nos missions
-            <ArrowRight className="ml-2 h-5 w-5" />
+          <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+            <Link to="/missions">
+              Découvrir toutes nos missions
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </div>

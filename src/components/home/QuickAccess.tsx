@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, HelpCircle, Send, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const QuickAccess = () => {
   const quickLinks = [
@@ -73,10 +74,10 @@ const QuickAccess = () => {
                     className="text-accent hover:text-accent-foreground hover:bg-accent group w-full"
                     asChild
                   >
-                    <a href={link.link}>
+                    <Link to={link.link}>
                       {link.action}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
