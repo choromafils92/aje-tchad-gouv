@@ -543,7 +543,7 @@ const Services = () => {
                       <LucideIcons.Loader2 className="h-8 w-8 animate-spin" />
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {contacts.length === 0 ? (
                         <div className="col-span-2 text-center py-8">
                           <p className="text-muted-foreground">
