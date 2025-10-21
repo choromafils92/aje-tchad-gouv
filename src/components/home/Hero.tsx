@@ -136,17 +136,17 @@ const Hero = () => {
                       <img 
                         src={drapeauTchad} 
                         alt="Drapeau du Tchad"
-                        className="w-28 h-28 object-contain rounded shadow-md hover-scale animate-bounce-in"
+                        className="w-32 h-32 object-contain rounded shadow-md hover-scale animate-bounce-in"
                       />
                       <img 
                         src={armoirieTchad} 
                         alt="Armoirie du Tchad"
-                        className="w-28 h-28 object-contain hover-scale animate-bounce-in [animation-delay:200ms]"
+                        className="w-32 h-32 object-contain hover-scale animate-bounce-in [animation-delay:200ms]"
                       />
                       <img 
                         src={logoAje} 
                         alt="Logo AJE"
-                        className="w-28 h-28 object-contain hover-scale animate-bounce-in [animation-delay:400ms]"
+                        className="w-32 h-32 object-contain hover-scale animate-bounce-in [animation-delay:400ms]"
                       />
                     </div>
                     <div className="text-center">
