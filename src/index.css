@@ -114,7 +114,43 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
   
-  strong, b {
-    font-weight: 700;
+strong, b {
+  font-weight: 700;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  img {
+    max-width: 100%;
+    height: auto;
   }
+  
+  /* Ensure touch targets are at least 44x44px */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Landscape tablet optimizations */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Reduce vertical spacing in landscape */
+  section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* iOS safe area support */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
 }

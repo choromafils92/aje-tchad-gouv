@@ -78,7 +78,7 @@ const Hero = () => {
                     <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold leading-tight text-center ml-8 text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
                       {heroContent.title}
                     </h1>
-                    <p className="text-base md:text-lg font-extrabold uppercase tracking-wide text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
+                    <p className="text-sm md:text-base font-normal uppercase tracking-wide text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
                       {heroContent.tagline}
                     </p>
                   </div>
@@ -94,7 +94,7 @@ const Hero = () => {
                     <Button 
                       size="lg" 
                       variant="secondary"
-                      className="text-primary hover:text-primary"
+                      className="text-primary hover:text-primary min-h-[44px] min-w-[44px] px-6 py-3"
                       onClick={() => navigate('/missions')}
                     >
                       {t("hero.discoverBtn")}
@@ -103,7 +103,7 @@ const Hero = () => {
                     <Button 
                       size="lg" 
                       variant="secondary"
-                      className="bg-transparent border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                      className="bg-transparent border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary min-h-[44px] min-w-[44px] px-6 py-3"
                       onClick={() => navigate('/textes')}
                     >
                       {t("hero.textsBtn")}
