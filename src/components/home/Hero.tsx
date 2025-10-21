@@ -75,15 +75,15 @@ const Hero = () => {
               <>
                 <div className="space-y-6">
                   <div className="flex flex-col items-center space-y-2">
-                    <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold leading-tight text-center ml-8 text-white drop-shadow-lg">
+                    <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold leading-tight text-center ml-8 text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
                       {heroContent.title}
                     </h1>
-                    <p className="text-base md:text-lg font-bold uppercase tracking-wide text-center text-white drop-shadow-md">
+                    <p className="text-base md:text-lg font-extrabold uppercase tracking-wide text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
                       {heroContent.tagline}
                     </p>
                   </div>
                   
-                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95 text-center">
+                  <p className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_70%),_0_3px_12px_rgb(0_0_0_/_50%)]">
                     {heroContent.description}
                   </p>
                 </div>
@@ -119,10 +119,10 @@ const Hero = () => {
               <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
                   <div className="text-center space-y-6 px-4">
                     <div className="space-y-3">
-                      <h3 className="text-2xl font-extrabold text-white drop-shadow-lg">
+                      <h3 className="text-2xl font-extrabold text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
                         {t("hero.republic")}
                       </h3>
-                      <p className="text-base font-bold text-white drop-shadow-md">
+                      <p className="text-base font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
                         {t("hero.motto")}
                       </p>
                     </div>
@@ -139,14 +139,14 @@ const Hero = () => {
                         className="w-28 h-28 object-contain"
                       />
                       <div className="text-center">
-                        <p className="text-lg font-bold text-white drop-shadow-md font-nagasaki">
+                        <p className="text-lg font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-nagasaki">
                           {currentDateTime.toLocaleTimeString('fr-FR', { 
                             hour: '2-digit', 
                             minute: '2-digit', 
                             second: '2-digit' 
                           })}
                         </p>
-                        <p className="text-sm font-semibold text-white drop-shadow-md font-nagasaki">
+                        <p className="text-sm font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-nagasaki">
                           {currentDateTime.toLocaleDateString('fr-FR', { 
                             day: '2-digit', 
                             month: '2-digit', 
