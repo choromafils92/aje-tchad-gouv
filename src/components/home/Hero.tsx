@@ -126,40 +126,40 @@ const Hero = () => {
                         {t("hero.motto")}
                       </p>
                     </div>
-                  <div className="flex items-center justify-center space-x-6">
-                    <img 
-                      src={drapeauTchad} 
-                      alt="Drapeau du Tchad"
-                      className="w-28 h-28 object-contain rounded shadow-md"
-                    />
-                    <div className="flex flex-col items-center justify-center space-y-2">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-center space-x-6">
+                      <img 
+                        src={drapeauTchad} 
+                        alt="Drapeau du Tchad"
+                        className="w-28 h-28 object-contain rounded shadow-md"
+                      />
                       <img 
                         src={armoirieTchad} 
                         alt="Armoirie du Tchad"
                         className="w-28 h-28 object-contain"
                       />
-                      <div className="text-center">
-                        <p className="text-lg font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-nagasaki">
-                          {currentDateTime.toLocaleTimeString('fr-FR', { 
-                            hour: '2-digit', 
-                            minute: '2-digit', 
-                            second: '2-digit' 
-                          })}
-                        </p>
-                        <p className="text-sm font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-nagasaki">
-                          {currentDateTime.toLocaleDateString('fr-FR', { 
-                            day: '2-digit', 
-                            month: '2-digit', 
-                            year: 'numeric' 
-                          })}
-                        </p>
-                      </div>
+                      <img 
+                        src={logoAje} 
+                        alt="Logo AJE"
+                        className="w-28 h-28 object-contain"
+                      />
                     </div>
-                    <img 
-                      src={logoAje} 
-                      alt="Logo AJE"
-                      className="w-28 h-28 object-contain"
-                    />
+                    <div className="text-center">
+                      <p className="text-lg font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-nagasaki">
+                        {currentDateTime.toLocaleTimeString('fr-FR', { 
+                          hour: '2-digit', 
+                          minute: '2-digit', 
+                          second: '2-digit' 
+                        })}
+                      </p>
+                      <p className="text-sm font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-nagasaki">
+                        {currentDateTime.toLocaleDateString('fr-FR', { 
+                          day: '2-digit', 
+                          month: '2-digit', 
+                          year: 'numeric' 
+                        })}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
