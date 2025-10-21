@@ -63,26 +63,11 @@ const LatestNews = () => {
   };
 
   if (loading) {
-    return (
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-muted-foreground">Chargement des actualités...</p>
-        </div>
-      </section>
-    );
+    return null; // Ne rien afficher pendant le chargement
   }
 
   if (news.length === 0) {
-    return (
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4 text-center">
-            Dernières publications
-          </h2>
-          <p className="text-center text-muted-foreground">Aucune actualité disponible pour le moment.</p>
-        </div>
-      </section>
-    );
+    return null; // Ne rien afficher si pas d'actualités
   }
 
   return (

@@ -61,6 +61,9 @@ const StatsDashboard = () => {
 
   if (loading) return null;
 
+  // Ne rien afficher si aucune statistique
+  if (!stats || stats.length === 0) return null;
+
   return (
     <section ref={ref} className="py-20 bg-gradient-to-br from-secondary via-background to-secondary">
       <div className="container mx-auto px-4">
