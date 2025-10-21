@@ -26,22 +26,11 @@ const StatsDashboard = () => {
       if (data && data.length > 0) {
         setStats(data);
       } else {
-        // Stats par défaut si aucune n'est configurée
-        setStats([
-          { titre: 'Affaires traitées', valeur: '2,500+', evolution: '+15%', icon_name: 'FileText' },
-          { titre: 'Taux de succès', valeur: '87%', evolution: '+5%', icon_name: 'Award' },
-          { titre: 'Conseils juridiques', valeur: '1,200+', evolution: '+20%', icon_name: 'Scale' },
-          { titre: 'Administrations servies', valeur: '150+', evolution: '+10%', icon_name: 'Users' },
-        ]);
+        setStats([]);
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
-      setStats([
-        { titre: 'Affaires traitées', valeur: '2,500+', evolution: '+15%', icon_name: 'FileText' },
-        { titre: 'Taux de succès', valeur: '87%', evolution: '+5%', icon_name: 'Award' },
-        { titre: 'Conseils juridiques', valeur: '1,200+', evolution: '+20%', icon_name: 'Scale' },
-        { titre: 'Administrations servies', valeur: '150+', evolution: '+10%', icon_name: 'Users' },
-      ]);
+      setStats([]);
     } finally {
       setLoading(false);
     }
