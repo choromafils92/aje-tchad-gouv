@@ -71,9 +71,9 @@ const LatestNews = () => {
   }
 
   return (
-    <section ref={ref} className="py-16 bg-background">
+    <section ref={ref} className="py-8 bg-background">
       <div className="container mx-auto px-4">
-        <div className={`flex justify-between items-center mb-12 transition-all duration-700 ${
+        <div className={`flex justify-between items-center mb-8 transition-all duration-700 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div>
