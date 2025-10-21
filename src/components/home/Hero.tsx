@@ -136,7 +136,7 @@ const Hero = () => {
                       <img 
                         src={drapeauTchad} 
                         alt="Drapeau du Tchad"
-                        className="w-48 h-32 object-cover rounded shadow-md hover-scale animate-bounce-in"
+                        className="w-32 h-32 object-contain rounded shadow-md hover-scale animate-bounce-in"
                       />
                       <img 
                         src={armoirieTchad} 
