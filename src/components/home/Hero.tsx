@@ -132,7 +132,7 @@ const Hero = () => {
                       alt="Drapeau du Tchad"
                       className="w-28 h-28 object-contain rounded shadow-md"
                     />
-                    <div className="flex flex-col items-center space-y-2">
+                    <div className="flex flex-col items-center justify-center space-y-2">
                       <img 
                         src={armoirieTchad} 
                         alt="Armoirie du Tchad"
