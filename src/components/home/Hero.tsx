@@ -78,7 +78,7 @@ const Hero = () => {
                     <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold leading-tight text-center ml-8 text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
                       {heroContent.title}
                     </h1>
-                    <p className="text-sm md:text-base font-normal uppercase tracking-wide text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
+                    <p className="text-xs md:text-sm font-normal uppercase tracking-wide text-center text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
                       {heroContent.tagline}
                     </p>
                   </div>
