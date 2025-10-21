@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Menu, X, ShieldCheck, LogIn } from "lucide-react";
@@ -9,10 +9,21 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAdmin } = useAuth();
   const { language, setLanguage, t } = useLanguage();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/recherche?q=${encodeURIComponent(searchQuery)}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   const navigationItems = [
     { href: "/", label: t("header.nav.home") },
@@ -83,27 +94,39 @@ const Header = () => {
             {/* Search */}
             <div className="relative">
               {isSearchOpen ? (
-                <div className="flex items-center space-x-2">
+                <form onSubmit={handleSearch} className="flex items-center space-x-2">
                   <Input
                     type="search"
                     placeholder={t("header.search")}
                     className="w-64"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     autoFocus
                   />
                   <Button
+                    type="submit"
                     variant="ghost"
                     size="sm"
-                    onClick={() => setIsSearchOpen(false)}
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      setSearchQuery("");
+                    }}
                   >
                     <X className="h-4 w-4" />
                   </Button>
-                </div>
+                </form>
               ) : (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(true)}
-                  className="hidden md:flex"
+                  className="hidden md:flex min-h-[44px] min-w-[44px]"
                 >
                   <Search className="h-4 w-4" />
                 </Button>
@@ -149,14 +172,21 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-80 overflow-y-auto bg-background">
                 <div className="flex flex-col space-y-4 mt-8 pb-6">
-                  <div className="relative">
+                  <form onSubmit={(e) => {
+                    handleSearch(e);
+                    setIsMobileMenuOpen(false);
+                  }} className="relative">
                     <Input
                       type="search"
                       placeholder={t("header.search")}
                       className="w-full"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <Search className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
-                  </div>
+                    <button type="submit" className="absolute right-3 top-3">
+                      <Search className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  </form>
                   
                   <nav className="flex flex-col space-y-2">
                     {navigationItems.map((item) => (

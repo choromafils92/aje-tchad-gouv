@@ -20,6 +20,7 @@ import Modeles from "./pages/Modeles";
 import RendezVous from "./pages/RendezVous";
 import Carrieres from "./pages/Carrieres";
 import Medias from "./pages/Medias";
+import Recherche from "./pages/Recherche";
 import MentionsLegales from "./pages/MentionsLegales";
 import DonneesPersonnelles from "./pages/DonneesPersonnelles";
 import Accessibilite from "./pages/Accessibilite";
@@ -55,6 +56,7 @@ const App = () => {
               <Route path="/contact/rendez-vous" element={<RendezVous />} />
               <Route path="/carrieres" element={<Carrieres />} />
               <Route path="/medias" element={<Medias />} />
+              <Route path="/recherche" element={<Recherche />} />
               <Route path="/mentions-legales" element={<MentionsLegales />} />
               <Route path="/donnees-personnelles" element={<DonneesPersonnelles />} />
               <Route path="/accessibilite" element={<Accessibilite />} />

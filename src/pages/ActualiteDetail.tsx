@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowLeft, FileText, AlertTriangle, Megaphone, Download } from "lucide-react";
+import SocialShare from "@/components/SocialShare";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
@@ -141,13 +142,19 @@ const ActualiteDetail = () => {
                 {actualite.title}
               </h1>
 
-              <div className="flex items-center text-muted-foreground">
-                <Calendar className="h-4 w-4 mr-2" />
-                {new Date(actualite.created_at).toLocaleDateString("fr-FR", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
+              <div className="flex items-center justify-between text-muted-foreground mb-6">
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  {new Date(actualite.created_at).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </div>
+                <SocialShare 
+                  title={actualite.title}
+                  description={actualite.description}
+                />
               </div>
             </div>
 

@@ -6,6 +6,7 @@ import LatestNews from "@/components/home/LatestNews";
 import QuickAccess from "@/components/home/QuickAccess";
 import DirectorMessage from "@/components/home/DirectorMessage";
 import SubDirectors from "@/components/home/SubDirectors";
+import StatsDashboard from "@/components/home/StatsDashboard";
 import NewsletterSubscription from "@/components/home/NewsletterSubscription";
 
 const Index = () => {
@@ -17,6 +18,7 @@ const Index = () => {
         <DirectorMessage />
         <MissionCards />
         <QuickAccess />
+        <StatsDashboard />
         <LatestNews />
         <SubDirectors />
         <NewsletterSubscription />

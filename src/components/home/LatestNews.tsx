@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, ArrowRight, FileText, AlertTriangle, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 interface Actualite {
   id: string;
@@ -16,6 +17,7 @@ interface Actualite {
 }
 
 const LatestNews = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [news, setNews] = useState<Actualite[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -84,9 +86,11 @@ const LatestNews = () => {
   }
 
   return (
-    <section className="py-16 bg-background">
+    <section ref={ref} className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-12">
+        <div className={`flex justify-between items-center mb-12 transition-all duration-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}>
           <div>
             <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
               Dernières publications
@@ -95,7 +99,7 @@ const LatestNews = () => {
               Consultez nos derniers communiqués, notes et annonces officielles
             </p>
           </div>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg" asChild className="hidden md:flex">
             <Link to="/actualites">
               Toutes les actualités
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -104,10 +108,17 @@ const LatestNews = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {news.map((item) => {
+          {news.map((item, index) => {
             const IconComponent = getTypeIcon(item.type);
+            const delay = index * 150;
             return (
-              <Card key={item.id} className="group hover:shadow-lg transition-all duration-300">
+              <Card 
+                key={item.id} 
+                className={`group hover:shadow-lg transition-all duration-500 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${delay}ms` }}
+              >
                 <CardHeader className="space-y-3">
                   <div className="flex items-start justify-between">
                     <Badge variant={getTypeColor(item.type, item.urgent)} className="text-xs">
