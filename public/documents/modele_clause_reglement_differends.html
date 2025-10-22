@@ -111,6 +111,22 @@
         li {
             margin: 5px 0;
         }
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .print-button.loading .loading-spinner {
+            display: inline-block;
+        }
         @media print {
             body {
                 margin: 0;
@@ -120,9 +136,37 @@
             }
         }
     </style>
+    <script>
+        async function handlePrint(button) {
+            // Empêcher les clics multiples
+            if (button.disabled) return;
+            
+            button.disabled = true;
+            button.classList.add('loading');
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Préparation... <span class="loading-spinner"></span>';
+            
+            // Laisser le navigateur mettre à jour l'UI
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Utiliser requestAnimationFrame pour éviter le blocage
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.print();
+                    
+                    // Restaurer le bouton après l'impression
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('loading');
+                        button.disabled = false;
+                    }, 500);
+                });
+            });
+        }
+    </script>
 </head>
 <body>
-    <button class="print-button" onclick="window.print()">📄 Télécharger en PDF</button>
+    <button class="print-button" onclick="handlePrint(this)">📄 Télécharger en PDF</button>
     
     <div class="header">
         <img src="logo-aje.svg" alt="Logo AJE" class="logo-image">
