@@ -178,6 +178,30 @@ const ActualiteDetail = () => {
               </CardContent>
             </Card>
 
+            {actualite.pdfs && actualite.pdfs.length > 0 && (
+              <Card className="mb-8">
+                <CardContent className="pt-6">
+                  <h3 className="text-xl font-semibold text-primary mb-4">
+                    Documents joints
+                  </h3>
+                  <div className="space-y-3">
+                    {actualite.pdfs.map((pdf, index) => (
+                      <a
+                        key={index}
+                        href={pdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
+                      >
+                        <Download className="h-5 w-5 text-primary" />
+                        <span className="font-medium">Document {index + 1}.pdf</span>
+                      </a>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {actualite.photos && actualite.photos.length > 0 && (
               <Card className="mb-8">
                 <CardContent className="pt-6">
@@ -206,30 +230,6 @@ const ActualiteDetail = () => {
                         <source src={video} />
                         Votre navigateur ne supporte pas la lecture de vidéos.
                       </video>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {actualite.pdfs && actualite.pdfs.length > 0 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold text-primary mb-4">
-                    Documents joints
-                  </h3>
-                  <div className="space-y-3">
-                    {actualite.pdfs.map((pdf, index) => (
-                      <a
-                        key={index}
-                        href={pdf}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
-                      >
-                        <Download className="h-5 w-5 text-primary" />
-                        <span className="font-medium">Document {index + 1}.pdf</span>
-                      </a>
                     ))}
                   </div>
                 </CardContent>
