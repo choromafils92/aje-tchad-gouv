@@ -340,39 +340,112 @@ export default function Medias() {
                     <Loader2 className="h-8 w-8 animate-spin" />
                   </div>
                 ) : (
-                  <div className="grid md:grid-cols-3 gap-6">
-                    {galleryItems.length > 0 ? (
-                      galleryItems.map((item) => (
-                        <Card key={item.id} className="overflow-hidden group cursor-pointer">
-                          <div className="aspect-video bg-muted relative">
-                            <img
-                              src={item.thumbnail_url}
-                              alt={item.title}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={() => handleDownload(item.file_url, item.title)}
-                              >
-                                <Download className="h-4 w-4 mr-2" />
-                                Télécharger
-                              </Button>
-                            </div>
-                          </div>
-                          <CardContent className="pt-4">
-                            <p className="text-sm font-medium">{item.title}</p>
-                            <p className="text-xs text-muted-foreground">{item.resolution}</p>
-                          </CardContent>
-                        </Card>
-                      ))
-                    ) : (
-                      <p className="text-center text-muted-foreground py-8 col-span-3">
-                        Aucune photo disponible
-                      </p>
+                  <>
+                    {/* Documents PDF en haut */}
+                    {galleryItems.filter(item => item.type === 'pdf').length > 0 && (
+                      <div className="mb-8">
+                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                          <FileText className="h-5 w-5 text-primary" />
+                          Documents PDF
+                        </h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {galleryItems
+                            .filter(item => item.type === 'pdf')
+                            .map((item) => (
+                              <Card key={item.id}>
+                                <CardContent className="pt-6">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4 flex-1">
+                                      <div className="p-3 bg-primary/10 rounded-lg">
+                                        <FileText className="h-6 w-6 text-primary" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <p className="font-semibold">{item.title}</p>
+                                        {item.description && (
+                                          <p className="text-sm text-muted-foreground mt-1">
+                                            {item.description}
+                                          </p>
+                                        )}
+                                        {item.file_size && (
+                                          <p className="text-xs text-muted-foreground mt-1">
+                                            {(item.file_size / 1024 / 1024).toFixed(2)} MB
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleDownload(item.file_url, item.title + '.pdf')}
+                                    >
+                                      <Download className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                        </div>
+                      </div>
                     )}
-                  </div>
+
+                    {/* Photos et vidéos */}
+                    <div>
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <Image className="h-5 w-5 text-primary" />
+                        Photos et Vidéos
+                      </h3>
+                      <div className="grid md:grid-cols-3 gap-6">
+                        {galleryItems.filter(item => item.type !== 'pdf').length > 0 ? (
+                          galleryItems
+                            .filter(item => item.type !== 'pdf')
+                            .map((item) => (
+                              <Card key={item.id} className="overflow-hidden group cursor-pointer">
+                                <div className="aspect-video bg-muted relative">
+                                  {item.type === 'video' ? (
+                                    <div className="w-full h-full flex items-center justify-center bg-muted">
+                                      <Video className="h-12 w-12 text-muted-foreground" />
+                                    </div>
+                                  ) : (
+                                    <img
+                                      src={item.thumbnail_url}
+                                      alt={item.title}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  )}
+                                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Button
+                                      variant="secondary"
+                                      size="sm"
+                                      onClick={() => handleDownload(item.file_url, item.title)}
+                                    >
+                                      <Download className="h-4 w-4 mr-2" />
+                                      Télécharger
+                                    </Button>
+                                  </div>
+                                </div>
+                                <CardContent className="pt-4">
+                                  <p className="text-sm font-medium">{item.title}</p>
+                                  {item.description && (
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {item.description}
+                                    </p>
+                                  )}
+                                  {item.resolution && (
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {item.resolution}
+                                    </p>
+                                  )}
+                                </CardContent>
+                              </Card>
+                            ))
+                        ) : (
+                          <p className="text-center text-muted-foreground py-8 col-span-3">
+                            Aucune photo ou vidéo disponible
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </>
                 )}
               </TabsContent>
             </Tabs>

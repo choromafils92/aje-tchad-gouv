@@ -286,6 +286,7 @@ export default function MediaGalleryManagement() {
                 <SelectContent>
                   <SelectItem value="photo">Photo</SelectItem>
                   <SelectItem value="video">Vidéo</SelectItem>
+                  <SelectItem value="pdf">Document PDF</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -310,7 +311,7 @@ export default function MediaGalleryManagement() {
               <Input
                 id="file"
                 type="file"
-                accept="image/*,video/*"
+                accept={formData.type === 'pdf' ? 'application/pdf' : 'image/*,video/*'}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -319,6 +320,11 @@ export default function MediaGalleryManagement() {
                 }}
                 disabled={uploading}
               />
+              {formData.type === 'pdf' && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Seuls les fichiers PDF sont acceptés pour ce type
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <Button 
