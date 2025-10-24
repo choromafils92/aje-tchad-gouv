@@ -11,6 +11,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
 
+interface PdfWithDescription {
+  url: string;
+  description: string;
+}
+
 interface Actualite {
   id: string;
   type: string;
@@ -22,7 +27,7 @@ interface Actualite {
   created_at: string;
   photos: string[] | null;
   videos: string[] | null;
-  pdfs: string[] | null;
+  pdfs: PdfWithDescription[] | null;
 }
 
 const ActualiteDetail = () => {
@@ -188,13 +193,22 @@ const ActualiteDetail = () => {
                     {actualite.pdfs.map((pdf, index) => (
                       <a
                         key={index}
-                        href={pdf}
+                        href={pdf.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
+                        className="flex items-start gap-3 p-4 rounded-lg border hover:bg-accent transition-colors group"
                       >
-                        <Download className="h-5 w-5 text-primary" />
-                        <span className="font-medium">Document {index + 1}.pdf</span>
+                        <Download className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <span className="font-medium block group-hover:text-primary transition-colors">
+                            Document {index + 1}.pdf
+                          </span>
+                          {pdf.description && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {pdf.description}
+                            </p>
+                          )}
+                        </div>
                       </a>
                     ))}
                   </div>

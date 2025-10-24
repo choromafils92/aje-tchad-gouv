@@ -25,6 +25,11 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
 
+interface PdfWithDescription {
+  url: string;
+  description: string;
+}
+
 interface Actualite {
   id: string;
   type: string;
@@ -36,7 +41,7 @@ interface Actualite {
   created_at: string;
   photos?: string[];
   videos?: string[];
-  pdfs?: string[];
+  pdfs?: PdfWithDescription[];
 }
 
 const ActualitesManagement = () => {
@@ -64,7 +69,7 @@ const ActualitesManagement = () => {
   
   const [photos, setPhotos] = useState<string[]>([]);
   const [videos, setVideos] = useState<string[]>([]);
-  const [pdfs, setPdfs] = useState<string[]>([]);
+  const [pdfs, setPdfs] = useState<PdfWithDescription[]>([]);
   
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -170,15 +175,15 @@ const ActualitesManagement = () => {
     
     setUploadingPdfs(true);
     try {
-      const uploadedUrls: string[] = [];
+      const uploadedPdfs: PdfWithDescription[] = [];
       for (const file of Array.from(e.target.files)) {
         const url = await handleFileUpload(file, 'pdfs');
-        uploadedUrls.push(url);
+        uploadedPdfs.push({ url, description: '' });
       }
-      setPdfs([...pdfs, ...uploadedUrls]);
+      setPdfs([...pdfs, ...uploadedPdfs]);
       toast({
         title: 'PDFs uploadés',
-        description: `${uploadedUrls.length} PDF(s) ajouté(s) avec succès.`,
+        description: `${uploadedPdfs.length} PDF(s) ajouté(s) avec succès.`,
       });
     } catch (error) {
       console.error('Error uploading pdfs:', error);
@@ -214,7 +219,7 @@ const ActualitesManagement = () => {
   const handleDrop = (targetIndex: number, type: 'photos' | 'videos' | 'pdfs') => {
     if (draggedIndex === null) return;
 
-    const reorder = (list: string[]) => {
+    const reorder = <T,>(list: T[]) => {
       const result = [...list];
       const [removed] = result.splice(draggedIndex, 1);
       result.splice(targetIndex, 0, removed);
@@ -230,6 +235,12 @@ const ActualitesManagement = () => {
     }
 
     setDraggedIndex(null);
+  };
+
+  const updatePdfDescription = (index: number, description: string) => {
+    const updatedPdfs = [...pdfs];
+    updatedPdfs[index].description = description;
+    setPdfs(updatedPdfs);
   };
 
   const handleDragEnd = () => {
@@ -618,11 +629,11 @@ const ActualitesManagement = () => {
                       disabled={uploadingPdfs}
                     />
                     {pdfs.length > 0 && (
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <p className="text-sm text-muted-foreground">
                           Glissez-déposez pour réordonner les PDFs
                         </p>
-                        {pdfs.map((url, index) => (
+                        {pdfs.map((pdf, index) => (
                           <div
                             key={index}
                             draggable
@@ -630,24 +641,39 @@ const ActualitesManagement = () => {
                             onDragOver={handleDragOver}
                             onDrop={() => handleDrop(index, 'pdfs')}
                             onDragEnd={handleDragEnd}
-                            className={`flex items-center justify-between p-3 border-2 rounded cursor-move transition-all ${
+                            className={`space-y-2 p-3 border-2 rounded cursor-move transition-all ${
                               draggedIndex === index 
                                 ? 'opacity-50 border-dashed' 
                                 : 'border-solid hover:border-primary'
                             }`}
                           >
-                            <div className="flex items-center gap-2">
-                              <FileText className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm font-medium">PDF {index + 1}</span>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm font-medium">PDF {index + 1}</span>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeMedia('pdfs', index)}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
                             </div>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeMedia('pdfs', index)}
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
+                            <div className="space-y-1">
+                              <Label htmlFor={`pdf-description-${index}`} className="text-xs">
+                                Description du PDF
+                              </Label>
+                              <Textarea
+                                id={`pdf-description-${index}`}
+                                value={pdf.description}
+                                onChange={(e) => updatePdfDescription(index, e.target.value)}
+                                placeholder="Décrivez ce document PDF..."
+                                rows={2}
+                                className="text-sm"
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
