@@ -22,6 +22,7 @@ export default {
 				'merriweather': ['Merriweather', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
 				'nagasaki': ['Nagasaki', 'sans-serif'],
+				'digital': ['Orbitron', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

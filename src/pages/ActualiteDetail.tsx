@@ -150,11 +150,18 @@ const ActualiteDetail = () => {
               <div className="flex items-center justify-between text-muted-foreground mb-6">
                 <div className="flex items-center">
                   <Calendar className="h-4 w-4 mr-2" />
-                  {new Date(actualite.created_at).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  <span className="font-digital text-lg tracking-wider">
+                    {new Date(actualite.created_at).toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                    {" "}
+                    {new Date(actualite.created_at).toLocaleTimeString("fr-FR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
                 <SocialShare 
                   title={actualite.title}
@@ -190,27 +197,32 @@ const ActualiteDetail = () => {
                     Documents joints
                   </h3>
                   <div className="space-y-3">
-                    {actualite.pdfs.map((pdf, index) => (
-                      <a
-                        key={index}
-                        href={pdf.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-start gap-3 p-4 rounded-lg border hover:bg-accent transition-colors group"
-                      >
-                        <Download className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <span className="font-medium block group-hover:text-primary transition-colors">
-                            Document {index + 1}.pdf
-                          </span>
-                          {pdf.description && (
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {pdf.description}
-                            </p>
-                          )}
-                        </div>
-                      </a>
-                    ))}
+                    {actualite.pdfs.map((pdf, index) => {
+                      const fileName = pdf.description 
+                        ? `${pdf.description}.pdf` 
+                        : `Document_${index + 1}.pdf`;
+                      
+                      return (
+                        <a
+                          key={index}
+                          href={pdf.url}
+                          download={fileName}
+                          className="flex items-start gap-3 p-4 rounded-lg border hover:bg-accent transition-colors group"
+                        >
+                          <Download className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                          <div className="flex-1">
+                            <span className="font-medium block group-hover:text-primary transition-colors">
+                              {fileName}
+                            </span>
+                            {pdf.description && (
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {pdf.description}
+                              </p>
+                            )}
+                          </div>
+                        </a>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>

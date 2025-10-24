@@ -150,19 +150,20 @@ const Hero = () => {
                       />
                     </div>
                     <div className="text-center">
-                      <p className="text-lg font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-nagasaki">
+                      <p className="text-4xl font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-digital tracking-wider">
                         {currentDateTime.toLocaleTimeString('fr-FR', { 
                           hour: '2-digit', 
                           minute: '2-digit', 
                           second: '2-digit' 
                         })}
                       </p>
-                      <p className="text-sm font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-nagasaki">
+                      <p className="text-xl font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-digital tracking-wider mt-2">
                         {currentDateTime.toLocaleDateString('fr-FR', { 
+                          weekday: 'long',
                           day: '2-digit', 
-                          month: '2-digit', 
+                          month: 'long', 
                           year: 'numeric' 
-                        })}
+                        }).toUpperCase()}
                       </p>
                     </div>
                   </div>

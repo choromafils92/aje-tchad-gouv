@@ -174,11 +174,13 @@ const Actualites = () => {
                               </div>
                               <div className="flex items-center text-sm text-muted-foreground">
                                 <Calendar className="h-4 w-4 mr-2" />
-                                {new Date(actu.created_at).toLocaleDateString('fr-FR', {
-                                  day: 'numeric',
-                                  month: 'long',
-                                  year: 'numeric'
-                                })}
+                                <span className="font-digital tracking-wider">
+                                  {new Date(actu.created_at).toLocaleDateString('fr-FR', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                  })}
+                                </span>
                               </div>
                             </div>
                             <CardTitle className="text-xl lg:text-2xl leading-tight">
