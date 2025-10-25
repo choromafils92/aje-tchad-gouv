@@ -72,12 +72,20 @@ const ContactForm = () => {
         urgence: formData.urgence
       });
 
+      // Générer la référence via la fonction
+      const refResponse = await supabase.functions.invoke('generate-reference', {
+        body: { formType: 'contact', formCode: 'CT' }
+      });
+
+      const numeroReference = refResponse.data?.reference || `CT-${Date.now().toString().slice(-6)}`;
+
       const { error } = await (supabase as any).from('contacts').insert({
         nom: `${validatedData.prenom} ${validatedData.nom}`,
         email: validatedData.email,
         telephone: validatedData.telephone,
         sujet: validatedData.sujet,
         message: validatedData.message,
+        numero_reference: numeroReference,
         statut: 'nouveau'
       });
 
@@ -85,7 +93,7 @@ const ContactForm = () => {
 
       toast({
         title: "Message envoyé",
-        description: "Votre message a été envoyé avec succès !",
+        description: `Votre message a été envoyé avec succès!\nRéférence: ${numeroReference}`,
       });
       
       setFormData({

@@ -26,7 +26,13 @@ export const DemanderConsultationDialog = () => {
     setIsSubmitting(true);
 
     try {
-      const numeroReference = `CON-${Date.now().toString().slice(-6)}`;
+      // Générer la référence via la fonction
+      const refResponse = await supabase.functions.invoke('generate-reference', {
+        body: { formType: 'consultation', formCode: 'CJ' }
+      });
+
+      const numeroReference = refResponse.data?.reference || `CJ-${Date.now().toString().slice(-6)}`;
+      
       const { error } = await supabase
         .from("consultations_juridiques" as any)
         .insert({

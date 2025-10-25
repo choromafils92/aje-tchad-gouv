@@ -31,6 +31,7 @@ import DomainesContentieuxManagement from '@/components/admin/DomainesContentieu
 import StatistiquesContentieuxManagement from '@/components/admin/StatistiquesContentieuxManagement';
 import ProceduresContentieuxManagement from '@/components/admin/ProceduresContentieuxManagement';
 import JurisprudencesManagement from '@/components/admin/JurisprudencesManagement';
+import { NotificationsManagement } from '@/components/admin/NotificationsManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -77,8 +78,9 @@ const Admin = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="actualites" className="w-full">
+        <Tabs defaultValue="notifications" className="w-full">
           <TabsList className="flex flex-wrap justify-start h-auto gap-1">
+            <TabsTrigger value="notifications">🔔 Notifications</TabsTrigger>
             <TabsTrigger value="actualites">Actualités</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="textes">Textes</TabsTrigger>
@@ -106,6 +108,10 @@ const Admin = () => {
             <TabsTrigger value="admins">Admins</TabsTrigger>
           </TabsList>
           
+          <TabsContent value="notifications" className="mt-6">
+            <NotificationsManagement />
+          </TabsContent>
+
           <TabsContent value="actualites" className="mt-6">
             <ActualitesManagement />
           </TabsContent>

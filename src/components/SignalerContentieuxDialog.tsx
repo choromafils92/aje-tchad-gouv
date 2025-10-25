@@ -24,11 +24,17 @@ export const SignalerContentieuxDialog = () => {
     setIsSubmitting(true);
 
     try {
-      const numeroDossier = `CU-${Date.now().toString().slice(-6)}`;
+      // Générer la référence via la fonction
+      const refResponse = await supabase.functions.invoke('generate-reference', {
+        body: { formType: 'signalement', formCode: 'SC' }
+      });
+
+      const numeroReference = refResponse.data?.reference || `SC-${Date.now().toString().slice(-6)}`;
+      
       const { error } = await supabase
         .from("signalements_contentieux" as any)
         .insert({
-          numero_dossier: numeroDossier,
+          numero_dossier: numeroReference,
           organisme: formData.organisme,
           nom_demandeur: formData.nom,
           email: formData.email,
@@ -39,7 +45,7 @@ export const SignalerContentieuxDialog = () => {
 
       if (error) throw error;
       
-      toast.success(`Contentieux signalé avec succès!\nNuméro de dossier: ${numeroDossier}`);
+      toast.success(`Contentieux signalé avec succès!\nRéférence: ${numeroReference}`);
       setOpen(false);
       setFormData({
         organisme: "",

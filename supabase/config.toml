@@ -1,1 +1,4 @@
 project_id = "aupfurarzgbdocgtdomy"
+
+[functions.generate-reference]
+verify_jwt = false

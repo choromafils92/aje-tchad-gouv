@@ -75,10 +75,15 @@ const AvisJuridiqueForm = () => {
     }));
   };
 
-  const generatePDF = () => {
+  const generatePDF = async (numeroReference?: string) => {
+    const reference = numeroReference || `DA-${Date.now().toString().slice(-8)}`;
     const pdfContent = `
 DEMANDE D'AVIS JURIDIQUE
 Agence Judiciaire de l'État du Tchad
+
+=====================================
+
+RÉFÉRENCE: ${reference}
 
 =====================================
 
@@ -113,15 +118,15 @@ ${formData.documentsFournis.map(doc => `- ${doc}`).join('\n')}
 =====================================
 
 Date de la demande: ${new Date().toLocaleDateString('fr-FR')}
-Référence: AJ-${Date.now().toString().slice(-8)}
 
 Cette demande sera traitée conformément aux procédures de l'AJE.
+Pour toute question, merci de mentionner la référence ci-dessus.
     `;
 
     const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `Demande_Avis_Juridique_${Date.now()}.txt`;
+    link.download = `Demande_Avis_Juridique_${reference}.txt`;
     link.click();
   };
 
@@ -146,6 +151,13 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
         confirmationLecture: formData.confirmationLecture
       });
 
+      // Générer la référence via la fonction
+      const refResponse = await supabase.functions.invoke('generate-reference', {
+        body: { formType: 'demande_avis', formCode: 'DA' }
+      });
+
+      const numeroReference = refResponse.data?.reference || `DA-${Date.now().toString().slice(-6)}`;
+
       const { error } = await (supabase as any).from('demandes_avis').insert({
         nom_complet: validatedData.demandeur,
         email: validatedData.email,
@@ -153,6 +165,7 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
         organisme: validatedData.organisation,
         objet: validatedData.objet,
         description: `${validatedData.contexte}\n\nQuestion juridique: ${validatedData.questionJuridique}`,
+        numero_reference: numeroReference,
         statut: 'en_attente'
       });
 
@@ -160,10 +173,10 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
 
       toast({
         title: "Demande enregistrée",
-        description: "Votre demande d'avis juridique a été enregistrée avec succès !",
+        description: `Votre demande a été enregistrée avec succès!\nRéférence: ${numeroReference}`,
       });
       
-      generatePDF();
+      generatePDF(numeroReference);
       
       setFormData({
         organisation: "",
@@ -432,7 +445,7 @@ Cette demande sera traitée conformément aux procédures de l'AJE.
             type="button" 
             variant="outline" 
             size="lg"
-            onClick={generatePDF}
+            onClick={() => generatePDF()}
             disabled={!formData.objet}
           >
             <Download className="w-4 h-4 mr-2" />

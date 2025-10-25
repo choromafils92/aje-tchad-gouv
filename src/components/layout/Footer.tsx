@@ -199,7 +199,7 @@ const Footer = () => {
             <h4 className="font-bold text-sm text-white">{t("footer.services")}</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="/services/demande-avis" className="hover:opacity-75 transition-opacity">Demander un avis juridique</a></li>
-              <li><a href="/services/modeles" className="hover:opacity-75 transition-opacity">Modèles et guides</a></li>
+              <li><a href="/modeles" className="hover:opacity-75 transition-opacity">Modèles et guides</a></li>
               <li><a href="/contact/rendez-vous" className="hover:opacity-75 transition-opacity">Prendre rendez-vous</a></li>
               <li><a href="/carrieres" className="hover:opacity-75 transition-opacity">Carrières</a></li>
               <li><a href="/medias" className="hover:opacity-75 transition-opacity">Espace Médias</a></li>
