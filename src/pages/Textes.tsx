@@ -7,10 +7,45 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Search, Download, FileText, Scale, BookOpen, HelpCircle, Calendar, Filter, Eye } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Textes = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [faqItems, setFaqItems] = useState<Array<{question: string; answer: string}>>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchFAQs();
+  }, []);
+
+  const fetchFAQs = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("faq")
+        .select("*")
+        .eq("published", true)
+        .order("ordre", { ascending: true });
+
+      if (error) throw error;
+      
+      setFaqItems(((data as any) || []).map((item: any) => ({
+        question: item.question,
+        answer: item.answer
+      })));
+    } catch (error: any) {
+      console.error("Error fetching FAQs:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les FAQ",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const textesFoundamentaux = [
     {
@@ -58,41 +93,6 @@ const Textes = () => {
       format: "HTML",
       size: "2.1 MB",
       downloadUrl: "/documents/guide_marches_publics.html"
-    }
-  ];
-
-  const faqItems = [
-    {
-      question: "Qui peut saisir l'Agence Judiciaire de l'État ?",
-      answer: "Seules les administrations publiques (ministères, établissements publics, collectivités territoriales) peuvent saisir l'AJE. Les particuliers ne peuvent pas directement saisir l'AJE mais doivent passer par leur administration de tutelle."
-    },
-    {
-      question: "Quels sont les délais de réponse de l'AJE ?",
-      answer: "Les délais varient selon l'urgence : 24h pour les urgences absolues, 7 jours pour les dossiers urgents, 15 jours pour les avis standards, et 30 jours pour les dossiers complexes nécessitant une analyse approfondie."
-    },
-    {
-      question: "L'avis de l'AJE est-il obligatoire ?",
-      answer: "Oui, l'avis de l'AJE est obligatoire pour tous les contrats publics d'un montant supérieur à 50 millions FCFA, les projets de lois et décrets, et avant tout engagement d'une procédure contentieuse."
-    },
-    {
-      question: "Comment suivre l'avancement de ma demande ?",
-      answer: "Chaque demande reçoit un numéro de suivi. Vous pouvez suivre l'avancement en contactant notre service client au +235 22 XX XX XX ou par email à suivi@aje.td (service en cours de développement)."
-    },
-    {
-      question: "L'AJE peut-elle représenter les collectivités territoriales ?",
-      answer: "Oui, l'AJE peut représenter les collectivités territoriales dans leurs contentieux, sous réserve d'une convention spécifique et du respect des procédures de saisine appropriées."
-    },
-    {
-      question: "Quelle est la différence entre avis et représentation ?",
-      answer: "L'avis est un conseil juridique préventif donné avant une action, tandis que la représentation est l'intervention directe de l'AJE devant une juridiction pour défendre les intérêts de l'État."
-    },
-    {
-      question: "L'AJE intervient-elle en matière pénale ?",
-      answer: "L'AJE peut intervenir dans les procédures pénales lorsque l'État est partie civile ou lorsque ses intérêts patrimoniaux sont en jeu, mais elle ne se substitue pas au ministère public."
-    },
-    {
-      question: "Comment obtenir une copie d'un jugement impliquant l'État ?",
-      answer: "Les administrations peuvent demander copie des jugements auprès de l'AJE en justifiant de leur intérêt légitime. La demande doit être adressée par écrit au service contentieux."
     }
   ];
 

@@ -47,6 +47,24 @@ export const DemanderConsultationDialog = () => {
         });
 
       if (error) throw error;
+
+      // Envoyer l'email de confirmation automatique
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            type: 'consultation',
+            email: formData.email,
+            nom: formData.nom,
+            reference: numeroReference,
+            data: {
+              organisme: formData.organisme,
+              objet: formData.objet
+            }
+          }
+        });
+      } catch (emailError) {
+        console.error('Erreur email confirmation:', emailError);
+      }
       
       toast.success(`Consultation enregistrée!\nRéférence: ${numeroReference}\nNous vous contacterons sous 48h.`);
       setOpen(false);

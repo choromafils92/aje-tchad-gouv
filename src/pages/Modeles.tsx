@@ -16,6 +16,8 @@ interface ResourceDocument {
   file_size: string | null;
   ordre: number;
   published: boolean;
+  file_url?: string;
+  category?: string;
 }
 
 const Modeles = () => {
@@ -29,14 +31,39 @@ const Modeles = () => {
 
   const fetchDocuments = async () => {
     try {
-      const { data, error } = await supabase
-        .from('resource_documents' as any)
-        .select('*')
-        .eq('published', true)
-        .order('ordre', { ascending: true });
+      // Fetch from both tables
+      const [resourceDocs, regularDocs] = await Promise.all([
+        supabase
+          .from('resource_documents' as any)
+          .select('*')
+          .eq('published', true)
+          .order('ordre', { ascending: true }),
+        supabase
+          .from('documents' as any)
+          .select('*')
+          .eq('published', true)
+          .order('created_at', { ascending: false })
+      ]);
 
-      if (error) throw error;
-      setDocuments((data as any) || []);
+      if (resourceDocs.error) throw resourceDocs.error;
+      if (regularDocs.error) throw regularDocs.error;
+
+      // Combine and normalize both document types
+      const combinedDocs = [
+        ...(resourceDocs.data || []),
+        ...(regularDocs.data || []).map((doc: any) => ({
+          id: doc.id,
+          title: doc.title,
+          description: doc.description || '',
+          pdf_url: doc.file_url,
+          word_url: null,
+          file_size: doc.file_size ? `${Math.round(doc.file_size / 1024)} KB` : null,
+          ordre: 999,
+          published: doc.published,
+        }))
+      ];
+
+      setDocuments(combinedDocs as any);
     } catch (error: any) {
       console.error('Error fetching documents:', error);
       toast({

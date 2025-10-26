@@ -171,6 +171,25 @@ Pour toute question, merci de mentionner la référence ci-dessus.
 
       if (error) throw error;
 
+      // Envoyer l'email de confirmation automatique
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            type: 'avis',
+            email: validatedData.email,
+            nom: validatedData.demandeur,
+            reference: numeroReference,
+            data: {
+              organisme: validatedData.organisation,
+              objet: validatedData.objet,
+              urgence: validatedData.urgence
+            }
+          }
+        });
+      } catch (emailError) {
+        console.error('Erreur email confirmation:', emailError);
+      }
+
       toast({
         title: "Demande enregistrée",
         description: `Votre demande a été enregistrée avec succès!\nRéférence: ${numeroReference}`,

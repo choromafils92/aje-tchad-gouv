@@ -44,6 +44,24 @@ export const SignalerContentieuxDialog = () => {
         });
 
       if (error) throw error;
+
+      // Envoyer l'email de confirmation automatique
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            type: 'signalement',
+            email: formData.email,
+            nom: formData.nom,
+            reference: numeroReference,
+            data: {
+              organisme: formData.organisme,
+              description: formData.description
+            }
+          }
+        });
+      } catch (emailError) {
+        console.error('Erreur email confirmation:', emailError);
+      }
       
       toast.success(`Contentieux signalé avec succès!\nRéférence: ${numeroReference}`);
       setOpen(false);

@@ -32,6 +32,7 @@ import StatistiquesContentieuxManagement from '@/components/admin/StatistiquesCo
 import ProceduresContentieuxManagement from '@/components/admin/ProceduresContentieuxManagement';
 import JurisprudencesManagement from '@/components/admin/JurisprudencesManagement';
 import { NotificationsManagement } from '@/components/admin/NotificationsManagement';
+import NewsletterManagement from '@/components/admin/NewsletterManagement';
 import { LogOut } from 'lucide-react';
 
 const Admin = () => {
@@ -103,6 +104,7 @@ const Admin = () => {
             <TabsTrigger value="procedures-contentieux">Procédures Contentieux</TabsTrigger>
             <TabsTrigger value="stats-contentieux">Stats Contentieux</TabsTrigger>
             <TabsTrigger value="jurisprudences">Jurisprudences</TabsTrigger>
+            <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
@@ -210,6 +212,10 @@ const Admin = () => {
 
           <TabsContent value="jurisprudences" className="mt-6">
             <JurisprudencesManagement />
+          </TabsContent>
+
+          <TabsContent value="newsletter" className="mt-6">
+            <NewsletterManagement />
           </TabsContent>
         </Tabs>
       </main>

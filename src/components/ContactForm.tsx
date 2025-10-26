@@ -91,6 +91,25 @@ const ContactForm = () => {
 
       if (error) throw error;
 
+      // Envoyer l'email de confirmation automatique
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            type: 'contact',
+            email: validatedData.email,
+            nom: `${validatedData.prenom} ${validatedData.nom}`,
+            reference: numeroReference,
+            data: {
+              sujet: validatedData.sujet,
+              message: validatedData.message
+            }
+          }
+        });
+      } catch (emailError) {
+        console.error('Erreur email confirmation:', emailError);
+        // Ne pas bloquer si l'email échoue
+      }
+
       toast({
         title: "Message envoyé",
         description: `Votre message a été envoyé avec succès!\nRéférence: ${numeroReference}`,
