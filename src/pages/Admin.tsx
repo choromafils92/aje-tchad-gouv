@@ -86,11 +86,8 @@ const Admin = () => {
             <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="textes">Textes</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
-            <TabsTrigger value="avis">Avis</TabsTrigger>
-            <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="contact-settings">Paramètres Contact</TabsTrigger>
             <TabsTrigger value="offres">Offres d'emploi</TabsTrigger>
-            <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
             <TabsTrigger value="media-contact">Contact Presse</TabsTrigger>
             <TabsTrigger value="accreditations">Accréditations</TabsTrigger>
             <TabsTrigger value="communiques">Communiqués</TabsTrigger>
@@ -130,20 +127,8 @@ const Admin = () => {
             <FAQManagement />
           </TabsContent>
           
-          <TabsContent value="avis" className="mt-6">
-            <DemandesAvisManagement />
-          </TabsContent>
-          
-          <TabsContent value="contacts" className="mt-6">
-            <ContactsManagement />
-          </TabsContent>
-          
           <TabsContent value="offres" className="mt-6">
             <JobOffersManagement />
-          </TabsContent>
-          
-          <TabsContent value="candidatures" className="mt-6">
-            <JobApplicationsManagement />
           </TabsContent>
           
           <TabsContent value="analytics" className="mt-6">

@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import MissionCards from "@/components/home/MissionCards";
 import LatestNews from "@/components/home/LatestNews";
+import LatestVideos from "@/components/home/LatestVideos";
 import QuickAccess from "@/components/home/QuickAccess";
 import DirectorMessage from "@/components/home/DirectorMessage";
 import SubDirectors from "@/components/home/SubDirectors";
@@ -20,6 +21,7 @@ const Index = () => {
         <QuickAccess />
         <StatsDashboard />
         <LatestNews />
+        <LatestVideos />
         <SubDirectors />
         <NewsletterSubscription />
       </main>

@@ -18,7 +18,7 @@ const QuickAccess = () => {
       title: "Modèles de saisine",
       description: "Téléchargez les formulaires types pour vos demandes d'avis juridique",
       action: "Télécharger",
-      link: "/services/modeles",
+      link: "/modeles",
       color: "bg-accent/10 text-accent"
     },
     {

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, Mail, FileText, AlertCircle, Calendar, Eye, CheckCircle, Download, Printer } from "lucide-react";
+import { Bell, Mail, FileText, AlertCircle, Calendar, Eye, CheckCircle, Download, Printer, Users } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -13,14 +13,18 @@ interface Notification {
   id: string;
   type: string;
   numero_reference?: string;
-  nom: string;
+  nom?: string;
+  prenom?: string;
+  nom_complet?: string;
   email: string;
   sujet?: string;
   objet?: string;
   created_at: string;
-  lu: boolean;
-  repondu: boolean;
+  lu?: boolean;
+  repondu?: boolean;
   statut?: string;
+  job_offer_id?: string;
+  is_spontaneous?: boolean;
 }
 
 export const NotificationsManagement = () => {
@@ -28,6 +32,7 @@ export const NotificationsManagement = () => {
   const [demandesAvis, setDemandesAvis] = useState<Notification[]>([]);
   const [consultations, setConsultations] = useState<Notification[]>([]);
   const [signalements, setSignalements] = useState<Notification[]>([]);
+  const [candidatures, setCandidatures] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -40,28 +45,30 @@ export const NotificationsManagement = () => {
 
   const fetchNotifications = async () => {
     try {
-      const [contactsRes, avisRes, consultationsRes, signalementsRes] = await Promise.all([
+      const [contactsRes, avisRes, consultationsRes, signalementsRes, candidaturesRes] = await Promise.all([
         supabase.from("contacts" as any).select("*").order("created_at", { ascending: false }),
         supabase.from("demandes_avis" as any).select("*").order("created_at", { ascending: false }),
         supabase.from("consultations_juridiques" as any).select("*").order("created_at", { ascending: false }),
         supabase.from("signalements_contentieux" as any).select("*").order("created_at", { ascending: false }),
+        supabase.from("job_applications" as any).select("*").order("created_at", { ascending: false }),
       ]);
 
       if (contactsRes.data) setContacts(contactsRes.data as any);
       if (avisRes.data) setDemandesAvis(avisRes.data as any);
       if (consultationsRes.data) setConsultations(consultationsRes.data as any);
       if (signalementsRes.data) setSignalements(signalementsRes.data as any);
+      if (candidaturesRes.data) setCandidatures(candidaturesRes.data as any);
 
-      // Calculer le nombre total de non lus
-      const allItems: any[] = [
-        ...(contactsRes.data || []),
-        ...(avisRes.data || []),
-        ...(consultationsRes.data || []),
-        ...(signalementsRes.data || []),
+      // Calculer le nombre total de non lus/nouveaux
+      const unreadItems = [
+        ...(contactsRes.data || []).filter((i: any) => !i.lu),
+        ...(avisRes.data || []).filter((i: any) => !i.lu),
+        ...(consultationsRes.data || []).filter((i: any) => !i.lu),
+        ...(signalementsRes.data || []).filter((i: any) => !i.lu),
+        ...(candidaturesRes.data || []).filter((i: any) => i.statut === 'nouveau'),
       ];
-      const unread = allItems.filter((item: any) => !item.lu).length;
       
-      setUnreadCount(unread);
+      setUnreadCount(unreadItems.length);
     } catch (error) {
       console.error("Error fetching notifications:", error);
       toast.error("Erreur lors du chargement des notifications");
@@ -170,8 +177,12 @@ Pour traiter cette demande, connectez-vous à l'administration.
     }
   };
 
-  const renderNotificationCard = (item: Notification, type: string, table: string) => (
-    <Card key={item.id} className={`relative ${!item.lu ? 'border-2 border-primary' : ''}`}>
+  const renderNotificationCard = (item: Notification, type: string, table: string) => {
+    const displayName = item.nom_complet || item.nom || (item.prenom && item.nom ? `${item.prenom} ${item.nom}` : 'Sans nom');
+    const isNew = table === 'job_applications' ? item.statut === 'nouveau' : !item.lu;
+    
+    return (
+    <Card key={item.id} className={`relative ${isNew ? 'border-2 border-primary' : ''}`}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -182,8 +193,13 @@ Pour traiter cette demande, connectez-vous à l'administration.
                   {item.numero_reference}
                 </Badge>
               )}
+              {item.is_spontaneous && (
+                <Badge variant="secondary" className="text-xs">
+                  Spontanée
+                </Badge>
+              )}
             </div>
-            <CardTitle className="text-lg">{item.nom}</CardTitle>
+            <CardTitle className="text-lg">{displayName}</CardTitle>
             <CardDescription className="mt-1">
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="h-3 w-3" />
@@ -229,6 +245,7 @@ Pour traiter cette demande, connectez-vous à l'administration.
       </CardContent>
     </Card>
   );
+  };
 
   if (loading) {
     return <div className="text-center py-8">Chargement des notifications...</div>;
@@ -256,7 +273,7 @@ Pour traiter cette demande, connectez-vous à l'administration.
       </Card>
 
       <Tabs defaultValue="contacts" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="contacts" className="relative">
             <Mail className="h-4 w-4 mr-2" />
             Contacts
@@ -268,7 +285,7 @@ Pour traiter cette demande, connectez-vous à l'administration.
           </TabsTrigger>
           <TabsTrigger value="avis" className="relative">
             <FileText className="h-4 w-4 mr-2" />
-            Demandes d'avis
+            Avis
             {demandesAvis.filter(d => !d.lu).length > 0 && (
               <Badge className="ml-2 bg-red-500 text-white" variant="secondary">
                 {demandesAvis.filter(d => !d.lu).length}
@@ -290,6 +307,15 @@ Pour traiter cette demande, connectez-vous à l'administration.
             {signalements.filter(s => !s.lu).length > 0 && (
               <Badge className="ml-2 bg-red-500 text-white" variant="secondary">
                 {signalements.filter(s => !s.lu).length}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="candidatures" className="relative">
+            <Users className="h-4 w-4 mr-2" />
+            Candidatures
+            {candidatures.filter(c => c.statut === 'nouveau').length > 0 && (
+              <Badge className="ml-2 bg-red-500 text-white" variant="secondary">
+                {candidatures.filter(c => c.statut === 'nouveau').length}
               </Badge>
             )}
           </TabsTrigger>
@@ -324,6 +350,14 @@ Pour traiter cette demande, connectez-vous à l'administration.
             <Card><CardContent className="py-8 text-center text-muted-foreground">Aucun signalement</CardContent></Card>
           ) : (
             signalements.map(item => renderNotificationCard(item, "signalement", "signalements_contentieux"))
+          )}
+        </TabsContent>
+
+        <TabsContent value="candidatures" className="space-y-4">
+          {candidatures.length === 0 ? (
+            <Card><CardContent className="py-8 text-center text-muted-foreground">Aucune candidature</CardContent></Card>
+          ) : (
+            candidatures.map(item => renderNotificationCard(item, "candidature", "job_applications"))
           )}
         </TabsContent>
       </Tabs>

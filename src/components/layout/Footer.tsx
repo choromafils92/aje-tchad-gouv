@@ -146,12 +146,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Carte du Tchad */}
           <div className="space-y-4">
-            <h4 className="font-bold text-sm text-white">République du Tchad</h4>
-            <div className="relative">
+            <h4 className="font-bold text-lg text-white">République du Tchad</h4>
+            <div className="relative h-64">
               <img 
                 src={carteTchad} 
                 alt="Carte du Tchad"
-                className="w-full max-w-[200px] h-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-opacity"
               />
             </div>
           </div>

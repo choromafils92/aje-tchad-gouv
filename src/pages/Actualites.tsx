@@ -17,6 +17,8 @@ interface Actualite {
   description: string;
   created_at: string;
   urgent: boolean;
+  original_id?: string;
+  category?: 'job' | 'press' | string;
 }
 
 const Actualites = () => {
@@ -28,14 +30,58 @@ const Actualites = () => {
   useEffect(() => {
     const fetchActualites = async () => {
       try {
-        const { data, error } = await supabase
-          .from("actualites")
-          .select("id, type, title, description, created_at, urgent")
-          .eq("published", true)
-          .order("created_at", { ascending: false });
+        // Fetch actualites, job offers, and press releases
+        const [actualitesRes, jobOffersRes, pressReleasesRes] = await Promise.all([
+          supabase
+            .from("actualites")
+            .select("id, type, title, description, created_at, urgent")
+            .eq("published", true),
+          (supabase as any)
+            .from("job_offers")
+            .select("id, title, department, type, created_at, description")
+            .eq("published", true),
+          (supabase as any)
+            .from("media_press_releases")
+            .select("id, title, category, excerpt, date_publication, created_at")
+            .eq("published", true)
+        ]);
 
-        if (error) throw error;
-        setActualites(data || []);
+        if (actualitesRes.error) throw actualitesRes.error;
+        if (jobOffersRes.error) throw jobOffersRes.error;
+        if (pressReleasesRes.error) throw pressReleasesRes.error;
+
+        // Transform job offers to actualite format
+        const jobOffersFormatted = (jobOffersRes.data || []).map((job: any) => ({
+          id: `job-${job.id}`,
+          type: "Offre d'emploi",
+          title: `${job.title} - ${job.department}`,
+          description: job.description || `Poste de type ${job.type} disponible`,
+          created_at: job.created_at,
+          urgent: false,
+          original_id: job.id,
+          category: 'job'
+        }));
+
+        // Transform press releases to actualite format
+        const pressReleasesFormatted = (pressReleasesRes.data || []).map((press: any) => ({
+          id: `press-${press.id}`,
+          type: "Communiqué de Presse",
+          title: press.title,
+          description: press.excerpt,
+          created_at: press.created_at,
+          urgent: false,
+          original_id: press.id,
+          category: 'press'
+        }));
+
+        // Combine all and sort by date (most recent first)
+        const allNews = [
+          ...(actualitesRes.data || []),
+          ...jobOffersFormatted,
+          ...pressReleasesFormatted
+        ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        setActualites(allNews);
       } catch (error) {
         console.error("Error fetching actualites:", error);
       } finally {
@@ -50,7 +96,9 @@ const Actualites = () => {
     { value: "all", label: "Toutes les catégories" },
     { value: "Communiqué", label: "Communiqué" },
     { value: "Note au public", label: "Note au public" },
-    { value: "Annonce", label: "Annonce" }
+    { value: "Annonce", label: "Annonce" },
+    { value: "Offre d'emploi", label: "Offres d'emploi" },
+    { value: "Communiqué de Presse", label: "Communiqués de Presse" }
   ];
 
   const getTypeColor = (type: string, urgent: boolean) => {
@@ -68,6 +116,8 @@ const Actualites = () => {
       case "Communiqué": return FileText;
       case "Note au public": return AlertTriangle;
       case "Annonce": return Megaphone;
+      case "Offre d'emploi": return Users;
+      case "Communiqué de Presse": return FileText;
       default: return FileText;
     }
   };
@@ -192,16 +242,22 @@ const Actualites = () => {
                               {actu.description}
                             </CardDescription>
                             <div className="pt-4 border-t">
-                              <Button 
-                                variant="outline" 
-                                className="group"
-                                asChild
-                              >
-                                <Link to={`/actualites/${actu.id}`}>
-                                  Lire l'article complet
-                                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                              </Button>
+                            <Button 
+                              variant="outline" 
+                              className="group"
+                              asChild
+                            >
+                              <Link to={
+                                actu.category === 'job' 
+                                  ? `/carrieres#${actu.original_id}` 
+                                  : actu.category === 'press'
+                                  ? `/medias#${actu.original_id}`
+                                  : `/actualites/${actu.id}`
+                              }>
+                                {actu.category === 'job' ? 'Voir l\'offre' : 'Lire l\'article complet'}
+                                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                              </Link>
+                            </Button>
                             </div>
                           </CardContent>
                         </div>

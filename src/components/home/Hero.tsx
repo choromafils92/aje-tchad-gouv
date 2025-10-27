@@ -119,45 +119,45 @@ const Hero = () => {
             )}
           </div>
           
-          <div className="hidden lg:block animate-slide-in-right">
+          <div className="animate-slide-in-right">
             <div className="relative">
-              <div className="w-full h-96 bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm hover-lift">
+              <div className="w-full bg-primary-foreground/10 rounded-lg flex items-center justify-center backdrop-blur-sm hover-lift p-6 lg:h-96">
                   <div className="text-center space-y-6 px-4">
                     <div className="space-y-3">
-                      <h3 className="text-2xl font-extrabold text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
+                      <h3 className="text-xl md:text-2xl font-extrabold text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_80%),_0_4px_20px_rgb(0_0_0_/_60%)]">
                         {t("hero.republic")}
                       </h3>
-                      <p className="text-base font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
+                      <p className="text-sm md:text-base font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)]">
                         {t("hero.motto")}
                       </p>
                     </div>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-center space-x-6">
+                    <div className="flex items-center justify-center space-x-4 md:space-x-6">
                       <img 
                         src={drapeauTchad} 
                         alt="Drapeau du Tchad"
-                        className="w-36 h-36 object-contain hover-scale animate-bounce-in"
+                        className="w-20 h-20 md:w-36 md:h-36 object-contain hover-scale animate-bounce-in"
                       />
                       <img 
                         src={armoirieTchad} 
                         alt="Armoirie du Tchad"
-                        className="w-36 h-36 object-contain hover-scale animate-bounce-in [animation-delay:200ms]"
+                        className="w-20 h-20 md:w-36 md:h-36 object-contain hover-scale animate-bounce-in [animation-delay:200ms]"
                       />
                       <img 
                         src={logoAje} 
                         alt="Logo AJE"
-                        className="w-36 h-36 object-contain hover-scale animate-bounce-in [animation-delay:400ms]"
+                        className="w-20 h-20 md:w-36 md:h-36 object-contain hover-scale animate-bounce-in [animation-delay:400ms]"
                       />
                     </div>
                     <div className="text-center">
-                      <p className="text-4xl font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-digital tracking-wider">
+                      <p className="text-2xl md:text-4xl font-extrabold text-white [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%),_0_4px_16px_rgb(0_0_0_/_60%)] font-digital tracking-wider">
                         {currentDateTime.toLocaleTimeString('fr-FR', { 
                           hour: '2-digit', 
                           minute: '2-digit', 
                           second: '2-digit' 
                         })}
                       </p>
-                      <p className="text-xl font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-digital tracking-wider mt-2">
+                      <p className="text-base md:text-xl font-bold text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_80%),_0_4px_12px_rgb(0_0_0_/_60%)] font-digital tracking-wider mt-2">
                         {currentDateTime.toLocaleDateString('fr-FR', { 
                           weekday: 'long',
                           day: '2-digit', 
