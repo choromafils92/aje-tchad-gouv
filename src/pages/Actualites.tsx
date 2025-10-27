@@ -19,6 +19,8 @@ interface Actualite {
   urgent: boolean;
   original_id?: string;
   category?: 'job' | 'press' | string;
+  videos?: string[];
+  photos?: string[];
 }
 
 const Actualites = () => {
@@ -34,7 +36,7 @@ const Actualites = () => {
         const [actualitesRes, jobOffersRes, pressReleasesRes] = await Promise.all([
           supabase
             .from("actualites")
-            .select("id, type, title, description, created_at, urgent")
+            .select("id, type, title, description, created_at, urgent, videos, photos")
             .eq("published", true),
           (supabase as any)
             .from("job_offers")
@@ -211,6 +213,23 @@ const Actualites = () => {
               <div className="space-y-8">
                 {filteredActualites.map((actu) => {
                   const IconComponent = getTypeIcon(actu.type);
+                  const hasVideo = actu.videos && actu.videos.length > 0;
+                  const hasPhoto = actu.photos && actu.photos.length > 0;
+                  
+                  const getVideoEmbedUrl = (url: string) => {
+                    if (url.includes("youtube.com/watch")) {
+                      const videoId = url.split("v=")[1]?.split("&")[0];
+                      return `https://www.youtube.com/embed/${videoId}`;
+                    } else if (url.includes("youtu.be/")) {
+                      const videoId = url.split("youtu.be/")[1]?.split("?")[0];
+                      return `https://www.youtube.com/embed/${videoId}`;
+                    } else if (url.includes("vimeo.com/")) {
+                      const videoId = url.split("vimeo.com/")[1]?.split("?")[0];
+                      return `https://player.vimeo.com/video/${videoId}`;
+                    }
+                    return url;
+                  };
+
                   return (
                     <Card key={actu.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
@@ -241,6 +260,39 @@ const Actualites = () => {
                             <CardDescription className="text-base text-foreground/80 leading-relaxed">
                               {actu.description}
                             </CardDescription>
+                            
+                            {hasVideo && (
+                              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                                {actu.videos![0]?.endsWith('.mp4') || actu.videos![0]?.endsWith('.webm') ? (
+                                  <video
+                                    src={actu.videos![0]}
+                                    controls
+                                    className="w-full h-full object-cover"
+                                  >
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                  </video>
+                                ) : (
+                                  <iframe
+                                    src={getVideoEmbedUrl(actu.videos![0])}
+                                    title={actu.title}
+                                    className="w-full h-full"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                )}
+                              </div>
+                            )}
+
+                            {hasPhoto && !hasVideo && (
+                              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                                <img 
+                                  src={actu.photos![0]} 
+                                  alt={actu.title}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            )}
+
                             <div className="pt-4 border-t">
                             <Button 
                               variant="outline" 
