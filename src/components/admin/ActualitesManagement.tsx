@@ -558,14 +558,63 @@ const ActualitesManagement = () => {
                 </div>
                 
                 {enableVideos && (
-                  <div className="space-y-2">
-                    <Input
-                      type="file"
-                      accept="video/*"
-                      multiple
-                      onChange={handleVideosUpload}
-                      disabled={uploadingVideos}
-                    />
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="video-url">Ajouter une URL de vidéo (YouTube, Vimeo, etc.)</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="video-url"
+                          type="url"
+                          placeholder="https://www.youtube.com/watch?v=..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              const input = e.currentTarget;
+                              if (input.value.trim()) {
+                                setVideos([...videos, input.value.trim()]);
+                                input.value = '';
+                                toast({
+                                  title: 'URL ajoutée',
+                                  description: 'L\'URL de la vidéo a été ajoutée.',
+                                });
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('video-url') as HTMLInputElement;
+                            if (input && input.value.trim()) {
+                              setVideos([...videos, input.value.trim()]);
+                              input.value = '';
+                              toast({
+                                title: 'URL ajoutée',
+                                description: 'L\'URL de la vidéo a été ajoutée.',
+                              });
+                            }
+                          }}
+                        >
+                          Ajouter
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Formats supportés : YouTube, Vimeo, ou fichiers vidéo directs (.mp4, .webm)
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Ou uploader un fichier vidéo</Label>
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        multiple
+                        onChange={handleVideosUpload}
+                        disabled={uploadingVideos}
+                      />
+                    </div>
+                    
                     {videos.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-sm text-muted-foreground">
@@ -585,9 +634,15 @@ const ActualitesManagement = () => {
                                 : 'border-solid hover:border-primary'
                             }`}
                           >
-                            <div className="flex items-center gap-2">
-                              <Video className="h-4 w-4 text-muted-foreground" />
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <Video className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                               <span className="text-sm font-medium">Vidéo {index + 1}</span>
+                              <span className="text-xs text-muted-foreground truncate ml-2">
+                                {url.includes('youtube.com') || url.includes('youtu.be') ? '(YouTube)' : 
+                                 url.includes('vimeo.com') ? '(Vimeo)' : 
+                                 url.includes('.mp4') || url.includes('.webm') ? '(Fichier)' : 
+                                 '(URL)'}
+                              </span>
                             </div>
                             <Button
                               type="button"
