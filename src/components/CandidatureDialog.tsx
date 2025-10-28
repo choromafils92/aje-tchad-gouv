@@ -35,6 +35,8 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
     telephone: "",
     lettre_motivation: "",
   });
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +46,28 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
       // Validate form data
       const validatedData = candidatureSchema.parse(formData);
 
+      // Upload CV file if provided
+      let cvUrl = null;
+      if (cvFile) {
+        setIsUploading(true);
+        const fileExt = cvFile.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `cv-files/${fileName}`;
+
+        const { error: uploadError, data } = await supabase.storage
+          .from('documents-files')
+          .upload(filePath, cvFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('documents-files')
+          .getPublicUrl(filePath);
+
+        cvUrl = publicUrl;
+        setIsUploading(false);
+      }
+
       const { error } = await (supabase as any).from("job_applications").insert({
         job_offer_id: jobId || null,
         is_spontaneous: isSpontaneous,
@@ -52,6 +76,7 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
         email: validatedData.email,
         telephone: validatedData.telephone,
         lettre_motivation: validatedData.lettre_motivation,
+        cv_url: cvUrl,
         statut: "nouveau",
       });
 
@@ -69,6 +94,7 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
         telephone: "",
         lettre_motivation: "",
       });
+      setCvFile(null);
       setOpen(false);
     } catch (error: any) {
       if (error instanceof z.ZodError) {
@@ -86,6 +112,7 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
       }
     } finally {
       setIsSubmitting(false);
+      setIsUploading(false);
     }
   };
 
@@ -159,18 +186,50 @@ export default function CandidatureDialog({ jobId, jobTitle, isSpontaneous = fal
             />
           </div>
 
-          <div className="bg-muted p-4 rounded-lg text-sm text-muted-foreground">
-            <p className="font-medium mb-1">Note importante :</p>
-            <p>Après validation de ce formulaire, vous recevrez un email avec les instructions pour envoyer votre CV.</p>
+          <div className="space-y-2">
+            <Label htmlFor="cv">Documents (CV, Lettre de motivation, etc.) - Format PDF</Label>
+            <Input
+              id="cv"
+              type="file"
+              accept=".pdf"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  if (file.type !== 'application/pdf') {
+                    toast({
+                      title: "Format invalide",
+                      description: "Veuillez sélectionner un fichier PDF",
+                      variant: "destructive",
+                    });
+                    e.target.value = '';
+                    return;
+                  }
+                  if (file.size > 5 * 1024 * 1024) {
+                    toast({
+                      title: "Fichier trop volumineux",
+                      description: "La taille maximale est de 5 MB",
+                      variant: "destructive",
+                    });
+                    e.target.value = '';
+                    return;
+                  }
+                  setCvFile(file);
+                }
+              }}
+              className="cursor-pointer"
+            />
+            <p className="text-xs text-muted-foreground">
+              Téléchargez vos documents en un seul fichier PDF (max 5 MB)
+            </p>
           </div>
 
           <div className="flex gap-2 justify-end">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Envoyer ma candidature
+            <Button type="submit" disabled={isSubmitting || isUploading}>
+              {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isUploading ? "Téléchargement..." : "Envoyer ma candidature"}
             </Button>
           </div>
         </form>

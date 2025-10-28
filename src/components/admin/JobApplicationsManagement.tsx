@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Eye } from "lucide-react";
+import { Eye, Download } from "lucide-react";
+import * as XLSX from 'xlsx';
 
 interface JobApplication {
   id: string;
@@ -19,6 +20,7 @@ interface JobApplication {
   prenom: string;
   email: string;
   telephone: string;
+  cv_url?: string;
   lettre_motivation: string;
   statut: string;
   notes_internes?: string;
@@ -117,6 +119,41 @@ export default function JobApplicationsManagement() {
     }
   };
 
+  const exportToExcel = () => {
+    try {
+      const exportData = applications.map(app => ({
+        'Prénom': app.prenom,
+        'Nom': app.nom,
+        'Email': app.email,
+        'Téléphone': app.telephone,
+        'Poste': app.is_spontaneous ? 'Candidature spontanée' : app.job_offers?.title || 'N/A',
+        'Type': app.is_spontaneous ? 'Spontanée' : 'Offre',
+        'Statut': getStatusLabel(app.statut),
+        'CV URL': app.cv_url || 'Non fourni',
+        'Date': new Date(app.created_at).toLocaleDateString('fr-FR'),
+        'Notes internes': app.notes_internes || ''
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Candidatures');
+      
+      // Générer le fichier
+      XLSX.writeFile(wb, `candidatures_${new Date().toISOString().split('T')[0]}.xlsx`);
+      
+      toast({
+        title: "Export réussi",
+        description: "Les candidatures ont été exportées en Excel",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de l'export: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) return <div>Chargement...</div>;
 
   return (
@@ -125,10 +162,18 @@ export default function JobApplicationsManagement() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Candidatures reçues</CardTitle>
-          <CardDescription>
-            Gérez les candidatures aux offres d'emploi et les candidatures spontanées
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Candidatures reçues</CardTitle>
+              <CardDescription>
+                Gérez les candidatures aux offres d'emploi et les candidatures spontanées
+              </CardDescription>
+            </div>
+            <Button onClick={exportToExcel} variant="outline">
+              <Download className="mr-2 h-4 w-4" />
+              Exporter en Excel
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>

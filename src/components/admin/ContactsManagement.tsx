@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Eye } from 'lucide-react';
+import { Eye, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 interface Contact {
   id: string;
@@ -99,16 +100,54 @@ export default function ContactsManagement() {
     }
   };
 
+  const exportToExcel = () => {
+    try {
+      const exportData = contacts.map(contact => ({
+        'Nom': contact.nom,
+        'Email': contact.email,
+        'Téléphone': contact.telephone || 'Non fourni',
+        'Sujet': contact.sujet,
+        'Message': contact.message,
+        'Statut': getStatusLabel(contact.statut),
+        'Date': new Date(contact.created_at).toLocaleDateString('fr-FR')
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Contacts');
+      
+      // Générer le fichier
+      XLSX.writeFile(wb, `contacts_${new Date().toISOString().split('T')[0]}.xlsx`);
+      
+      toast({
+        title: "Export réussi",
+        description: "Les contacts ont été exportés en Excel",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de l'export: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return <div>Chargement...</div>;
   }
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
           <CardTitle>Messages de contact</CardTitle>
-        </CardHeader>
+          <Button onClick={exportToExcel} variant="outline">
+            <Download className="mr-2 h-4 w-4" />
+            Exporter en Excel
+          </Button>
+        </div>
+      </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>

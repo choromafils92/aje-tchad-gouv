@@ -58,43 +58,29 @@ const Textes = () => {
     }
   ];
 
-  const modelesTypes = [
-    {
-      title: "Formulaire de demande d'avis juridique",
-      description: "Modèle de formulaire pour soumettre une demande d'avis juridique à l'AJE",
-      format: "HTML",
-      size: "25 KB",
-      downloadUrl: "/documents/modele_demande_avis_juridique.html"
-    },
-    {
-      title: "Modèle de clause de règlement des différends",
-      description: "Clause type à intégrer dans les contrats administratifs",
-      format: "HTML",
-      size: "20 KB",
-      downloadUrl: "/documents/modele_clause_reglement_differends.html"
-    },
-    {
-      title: "Check-list pré-contentieuse",
-      description: "Liste de vérification complète avant engagement d'une procédure",
-      format: "HTML",
-      size: "95 KB",
-      downloadUrl: "/documents/checklist_pre_contentieuse.html"
-    },
-    {
-      title: "Modèle de transaction administrative",
-      description: "Cadre type pour les accords transactionnels",
-      format: "HTML",
-      size: "22 KB",
-      downloadUrl: "/documents/modele_transaction_administrative.html"
-    },
-    {
-      title: "Guide des marchés publics",
-      description: "Guide complet sur la réglementation des marchés publics au Tchad",
-      format: "HTML",
-      size: "2.1 MB",
-      downloadUrl: "/documents/guide_marches_publics.html"
-    }
-  ];
+  const [modelesTypes, setModelesTypes] = useState<any[]>([]);
+  const [loadingModeles, setLoadingModeles] = useState(true);
+
+  useEffect(() => {
+    const fetchModeles = async () => {
+      try {
+        const { data, error } = await (supabase as any)
+          .from("resource_documents")
+          .select("*")
+          .eq("published", true)
+          .order("ordre", { ascending: true });
+
+        if (error) throw error;
+        setModelesTypes(data || []);
+      } catch (error) {
+        console.error("Erreur lors du chargement des modèles:", error);
+      } finally {
+        setLoadingModeles(false);
+      }
+    };
+
+    fetchModeles();
+  }, []);
 
   const filteredTextes = textesFoundamentaux.filter(texte =>
     texte.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -220,56 +206,80 @@ const Textes = () => {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {modelesTypes.map((modele, index) => (
-                    <Card key={index} className="hover:shadow-lg transition-shadow">
-                      <CardHeader className="pb-4">
-                        <div className="flex items-start justify-between mb-3">
-                          <Badge variant="outline" className="text-xs">
-                            {modele.format}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">
-                            {modele.size}
-                          </span>
-                        </div>
-                        <CardTitle className="text-lg">
-                          {modele.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <CardDescription className="text-foreground/80">
-                          {modele.description}
-                        </CardDescription>
-                        <div className="flex gap-2">
-                          <Button 
-                            className="flex-1"
-                            variant="outline"
-                            onClick={() => window.open(modele.downloadUrl, '_blank')}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            Aperçu
-                          </Button>
-                          <Button 
-                            className="flex-1"
-                            onClick={() => {
-                              const printWindow = window.open(modele.downloadUrl, '_blank');
-                              if (printWindow) {
-                                printWindow.onload = () => {
-                                  setTimeout(() => {
-                                    printWindow.print();
-                                  }, 1000);
-                                };
-                              }
-                            }}
-                          >
-                            <Download className="h-4 w-4 mr-2" />
-                            Imprimer PDF
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                {loadingModeles ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Chargement des modèles...</p>
+                  </div>
+                ) : modelesTypes.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Aucun modèle disponible pour le moment.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {modelesTypes.map((modele: any) => (
+                      <Card key={modele.id} className="hover:shadow-lg transition-shadow">
+                        <CardHeader className="pb-4">
+                          <div className="flex items-start justify-between mb-3">
+                            <Badge variant="outline" className="text-xs">
+                              {modele.pdf_url ? 'PDF' : modele.word_url ? 'WORD' : 'Document'}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              {modele.file_size || 'N/A'}
+                            </span>
+                          </div>
+                          <CardTitle className="text-lg">
+                            {modele.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <CardDescription className="text-foreground/80">
+                            {modele.description}
+                          </CardDescription>
+                          <div className="flex gap-2">
+                            {modele.pdf_url && (
+                              <>
+                                <Button 
+                                  className="flex-1"
+                                  variant="outline"
+                                  onClick={() => window.open(modele.pdf_url, '_blank')}
+                                >
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  Aperçu PDF
+                                </Button>
+                                <Button 
+                                  className="flex-1"
+                                  onClick={() => {
+                                    const link = document.createElement('a');
+                                    link.href = modele.pdf_url;
+                                    link.download = `${modele.title}.pdf`;
+                                    link.click();
+                                  }}
+                                >
+                                  <Download className="h-4 w-4 mr-2" />
+                                  Télécharger PDF
+                                </Button>
+                              </>
+                            )}
+                            {modele.word_url && (
+                              <Button 
+                                variant="outline"
+                                onClick={() => {
+                                  const link = document.createElement('a');
+                                  link.href = modele.word_url;
+                                  link.download = `${modele.title}.docx`;
+                                  link.click();
+                                }}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Télécharger Word
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="faq" className="space-y-6">
