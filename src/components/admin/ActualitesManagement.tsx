@@ -127,6 +127,7 @@ const ActualitesManagement = () => {
         uploadedUrls.push(url);
       }
       setPhotos([...photos, ...uploadedUrls]);
+      setEnablePhotos(true); // Activer automatiquement les photos
       toast({
         title: 'Photos uploadées',
         description: `${uploadedUrls.length} photo(s) ajoutée(s) avec succès.`,
@@ -154,6 +155,7 @@ const ActualitesManagement = () => {
         uploadedUrls.push(url);
       }
       setVideos([...videos, ...uploadedUrls]);
+      setEnableVideos(true); // Activer automatiquement les vidéos
       toast({
         title: 'Vidéos uploadées',
         description: `${uploadedUrls.length} vidéo(s) ajoutée(s) avec succès.`,
@@ -181,6 +183,7 @@ const ActualitesManagement = () => {
         uploadedPdfs.push({ url, description: '' });
       }
       setPdfs([...pdfs, ...uploadedPdfs]);
+      setEnablePdfs(true); // Activer automatiquement les PDFs
       toast({
         title: 'PDFs uploadés',
         description: `${uploadedPdfs.length} PDF(s) ajouté(s) avec succès.`,
@@ -572,6 +575,7 @@ const ActualitesManagement = () => {
                               const input = e.currentTarget;
                               if (input.value.trim()) {
                                 setVideos([...videos, input.value.trim()]);
+                                setEnableVideos(true); // Activer automatiquement les vidéos
                                 input.value = '';
                                 toast({
                                   title: 'URL ajoutée',
@@ -588,6 +592,7 @@ const ActualitesManagement = () => {
                             const input = document.getElementById('video-url') as HTMLInputElement;
                             if (input && input.value.trim()) {
                               setVideos([...videos, input.value.trim()]);
+                              setEnableVideos(true); // Activer automatiquement les vidéos
                               input.value = '';
                               toast({
                                 title: 'URL ajoutée',
