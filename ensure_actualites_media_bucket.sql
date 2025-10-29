@@ -7,15 +7,21 @@ VALUES ('actualites-media', 'actualites-media', true)
 ON CONFLICT (id) DO UPDATE
 SET public = true;
 
+-- Supprimer les anciennes politiques si elles existent
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can upload files" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can delete files" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can update files" ON storage.objects;
+
 -- Créer les politiques RLS pour le bucket
 -- Permettre à tout le monde de lire les fichiers
-CREATE POLICY IF NOT EXISTS "Public Access"
+CREATE POLICY "Public Access"
 ON storage.objects FOR SELECT
 TO public
 USING (bucket_id = 'actualites-media');
 
 -- Permettre aux admins de télécharger des fichiers
-CREATE POLICY IF NOT EXISTS "Admins can upload files"
+CREATE POLICY "Admins can upload files"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (
@@ -24,7 +30,7 @@ WITH CHECK (
 );
 
 -- Permettre aux admins de supprimer des fichiers
-CREATE POLICY IF NOT EXISTS "Admins can delete files"
+CREATE POLICY "Admins can delete files"
 ON storage.objects FOR DELETE
 TO authenticated
 USING (
@@ -33,7 +39,7 @@ USING (
 );
 
 -- Permettre aux admins de mettre à jour des fichiers
-CREATE POLICY IF NOT EXISTS "Admins can update files"
+CREATE POLICY "Admins can update files"
 ON storage.objects FOR UPDATE
 TO authenticated
 USING (
