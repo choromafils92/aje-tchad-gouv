@@ -257,9 +257,9 @@ const Actualites = () => {
                             </CardTitle>
                           </CardHeader>
                           <CardContent className="space-y-4">
-                            <CardDescription className="text-base text-foreground/80 leading-relaxed">
+                            <p className="text-base text-foreground/80 leading-relaxed">
                               {actu.description}
-                            </CardDescription>
+                            </p>
                             
                             {hasVideo && (
                               <div className="aspect-video bg-muted rounded-lg overflow-hidden">

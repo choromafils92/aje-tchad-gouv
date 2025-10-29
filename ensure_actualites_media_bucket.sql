@@ -8,45 +8,33 @@ ON CONFLICT (id) DO UPDATE
 SET public = true;
 
 -- Supprimer les anciennes politiques si elles existent
-DROP POLICY IF EXISTS "Public Access" ON storage.objects;
-DROP POLICY IF EXISTS "Admins can upload files" ON storage.objects;
-DROP POLICY IF EXISTS "Admins can delete files" ON storage.objects;
-DROP POLICY IF EXISTS "Admins can update files" ON storage.objects;
+DROP POLICY IF EXISTS "Public Access actualites media" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can upload actualites files" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can delete actualites files" ON storage.objects;
+DROP POLICY IF EXISTS "Admins can update actualites files" ON storage.objects;
 
 -- Créer les politiques RLS pour le bucket
 -- Permettre à tout le monde de lire les fichiers
-CREATE POLICY "Public Access"
+CREATE POLICY "Public Access actualites media"
 ON storage.objects FOR SELECT
 TO public
 USING (bucket_id = 'actualites-media');
 
--- Permettre aux admins de télécharger des fichiers
-CREATE POLICY "Admins can upload files"
+-- Permettre aux admins authentifiés de télécharger des fichiers
+CREATE POLICY "Admins can upload actualites files"
 ON storage.objects FOR INSERT
 TO authenticated
-WITH CHECK (
-  bucket_id = 'actualites-media' 
-  AND has_role(auth.uid(), 'admin'::app_role)
-);
+WITH CHECK (bucket_id = 'actualites-media');
 
--- Permettre aux admins de supprimer des fichiers
-CREATE POLICY "Admins can delete files"
+-- Permettre aux admins authentifiés de supprimer des fichiers
+CREATE POLICY "Admins can delete actualites files"
 ON storage.objects FOR DELETE
 TO authenticated
-USING (
-  bucket_id = 'actualites-media' 
-  AND has_role(auth.uid(), 'admin'::app_role)
-);
+USING (bucket_id = 'actualites-media');
 
--- Permettre aux admins de mettre à jour des fichiers
-CREATE POLICY "Admins can update files"
+-- Permettre aux admins authentifiés de mettre à jour des fichiers
+CREATE POLICY "Admins can update actualites files"
 ON storage.objects FOR UPDATE
 TO authenticated
-USING (
-  bucket_id = 'actualites-media' 
-  AND has_role(auth.uid(), 'admin'::app_role)
-)
-WITH CHECK (
-  bucket_id = 'actualites-media' 
-  AND has_role(auth.uid(), 'admin'::app_role)
-);
+USING (bucket_id = 'actualites-media')
+WITH CHECK (bucket_id = 'actualites-media');

@@ -122,9 +122,9 @@ const LatestVideos = () => {
                 <CardTitle className="text-lg leading-snug group-hover:text-accent transition-colors">
                   {item.title}
                 </CardTitle>
-                <CardDescription className="text-sm leading-relaxed line-clamp-2">
+                <p className="text-sm leading-relaxed line-clamp-2 text-muted-foreground">
                   {item.description}
-                </CardDescription>
+                </p>
                 <div className="flex items-center text-sm text-muted-foreground pt-2 border-t">
                   <Calendar className="h-4 w-4 mr-2" />
                   {new Date(item.created_at).toLocaleDateString('fr-FR', {
