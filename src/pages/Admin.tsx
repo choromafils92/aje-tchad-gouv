@@ -50,16 +50,14 @@ const Admin = () => {
     navigate('/');
   };
 
-  if (loading) {
+  // Show loading state while authentication is being verified
+  // OR if user is not admin (prevent flash of content before redirect)
+  if (loading || !user || !isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Chargement...</p>
       </div>
     );
-  }
-
-  if (!isAdmin) {
-    return null;
   }
 
   return (
