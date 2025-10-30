@@ -58,6 +58,8 @@ const LatestVideos = () => {
     } else if (url.includes("vimeo.com/")) {
       const videoId = url.split("vimeo.com/")[1]?.split("?")[0];
       return `https://player.vimeo.com/video/${videoId}`;
+    } else if (url.includes("facebook.com")) {
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
     }
     // Return as-is if already an embed URL or for direct video files
     return url;
