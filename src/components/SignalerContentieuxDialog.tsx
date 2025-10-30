@@ -7,6 +7,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
+import { z } from "zod";
+
+const signalementSchema = z.object({
+  organisme: z.string().trim().min(1, "L'organisme est requis").max(200, "L'organisme ne peut pas dépasser 200 caractères"),
+  nom: z.string().trim().min(1, "Le nom est requis").max(100, "Le nom ne peut pas dépasser 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email ne peut pas dépasser 255 caractères"),
+  telephone: z.string().trim().max(20, "Le téléphone ne peut pas dépasser 20 caractères").optional(),
+  description: z.string().trim().min(10, "La description doit contenir au moins 10 caractères").max(5000, "La description ne peut pas dépasser 5000 caractères")
+});
 
 export const SignalerContentieuxDialog = () => {
   const [open, setOpen] = useState(false);
@@ -24,6 +33,14 @@ export const SignalerContentieuxDialog = () => {
     setIsSubmitting(true);
 
     try {
+      // Validation des données avec Zod
+      const validatedData = signalementSchema.parse({
+        organisme: formData.organisme,
+        nom: formData.nom,
+        email: formData.email,
+        telephone: formData.telephone || undefined,
+        description: formData.description
+      });
       // Générer la référence via la fonction
       const refResponse = await supabase.functions.invoke('generate-reference', {
         body: { formType: 'signalement', formCode: 'SC' }
@@ -35,11 +52,11 @@ export const SignalerContentieuxDialog = () => {
         .from("signalements_contentieux" as any)
         .insert({
           numero_dossier: numeroReference,
-          organisme: formData.organisme,
-          nom_demandeur: formData.nom,
-          email: formData.email,
-          telephone: formData.telephone,
-          description: formData.description,
+          organisme: validatedData.organisme,
+          nom_demandeur: validatedData.nom,
+          email: validatedData.email,
+          telephone: validatedData.telephone || null,
+          description: validatedData.description,
           priorite: "urgent"
         });
 
@@ -50,17 +67,17 @@ export const SignalerContentieuxDialog = () => {
         await supabase.functions.invoke('send-confirmation-email', {
           body: {
             type: 'signalement',
-            email: formData.email,
-            nom: formData.nom,
+            email: validatedData.email,
+            nom: validatedData.nom,
             reference: numeroReference,
             data: {
-              organisme: formData.organisme,
-              description: formData.description
+              organisme: validatedData.organisme,
+              description: validatedData.description
             }
           }
         });
       } catch (emailError) {
-        console.error('Erreur email confirmation:', emailError);
+        // Email error logging sans PII
       }
       
       toast.success(`Contentieux signalé avec succès!\nRéférence: ${numeroReference}`);
@@ -73,7 +90,12 @@ export const SignalerContentieuxDialog = () => {
         description: ""
       });
     } catch (error: any) {
-      toast.error("Erreur lors du signalement");
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast.error(firstError.message);
+      } else {
+        toast.error("Erreur lors du signalement");
+      }
     } finally {
       setIsSubmitting(false);
     }

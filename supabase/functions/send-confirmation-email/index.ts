@@ -125,7 +125,9 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { type, email, nom, reference, data }: EmailRequest = await req.json();
 
-    console.log("Sending confirmation email:", { type, email, nom, reference });
+    // Log sans PII - uniquement les infos opérationnelles
+    const referenceId = reference.split('/').pop() || reference;
+    console.log("Sending confirmation email", { type, referenceId });
 
     const emailContent = getEmailContent(type, nom, reference, data);
 
@@ -134,14 +136,14 @@ const handler = async (req: Request): Promise<Response> => {
       to: [email],
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Email sent successfully", { messageId: emailResponse.id });
 
     return new Response(JSON.stringify(emailResponse), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: any) {
-    console.error("Error sending email:", error);
+    console.error("Error sending email (no PII logged)");
     return new Response(
       JSON.stringify({ error: error.message }),
       {
