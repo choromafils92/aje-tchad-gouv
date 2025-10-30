@@ -5,6 +5,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Whitelist of allowed form types and codes to prevent abuse
+const ALLOWED_FORM_TYPES = ['demande_avis', 'contact', 'consultation', 'signalement', 'modele_clause', 'checklist', 'transaction', 'guide_marches'];
+const ALLOWED_FORM_CODES = ['DA', 'CT', 'CJ', 'SC', 'MCRDA', 'CLPC', 'MTA', 'GMP'];
+
 interface ReferenceRequest {
   formType: string;
   formCode: string;
@@ -32,6 +36,17 @@ Deno.serve(async (req) => {
     if (!formType || !formCode) {
       return new Response(
         JSON.stringify({ error: 'formType and formCode are required' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    // Validate against whitelist to prevent abuse
+    if (!ALLOWED_FORM_TYPES.includes(formType) || !ALLOWED_FORM_CODES.includes(formCode)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid form type or code' }),
         { 
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }

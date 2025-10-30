@@ -18,6 +18,7 @@ CREATE OR REPLACE FUNCTION get_next_reference(p_form_type text, p_form_code text
 RETURNS text
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_current_year integer;
