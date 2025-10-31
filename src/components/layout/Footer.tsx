@@ -142,9 +142,9 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Logo et Devise */}
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Logo, Devise et Coordonnées */}
+          <div className="space-y-6">
             <div className="flex items-center space-x-3">
               <img 
                 src={logoAje} 
@@ -156,33 +156,32 @@ const Footer = () => {
                 <p className="text-xs opacity-90">{devise}</p>
               </div>
             </div>
-          </div>
 
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h4 className="font-bold text-sm text-white">Coordonnées</h4>
-            {loading ? (
-              <div className="flex justify-center py-4">
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </div>
-            ) : (
-              <div className="space-y-2 text-sm">
-                <div className="flex items-start space-x-2">
-                  <MapPin className="h-4 w-4 mt-0.5 opacity-75" />
-                  <div>
-                    <p className="whitespace-pre-line">{contactInfo.address}</p>
+            <div className="space-y-4">
+              <h4 className="font-bold text-sm text-white">Coordonnées</h4>
+              {loading ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </div>
+              ) : (
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start space-x-2">
+                    <MapPin className="h-4 w-4 mt-0.5 opacity-75 flex-shrink-0" />
+                    <div>
+                      <p className="whitespace-pre-line">{contactInfo.address}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Phone className="h-4 w-4 opacity-75 flex-shrink-0" />
+                    <p>{contactInfo.phone}</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Mail className="h-4 w-4 opacity-75 flex-shrink-0" />
+                    <p className="break-all">{contactInfo.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4 opacity-75" />
-                  <p>{contactInfo.phone}</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 opacity-75" />
-                  <p>{contactInfo.email}</p>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Quick Links */}
