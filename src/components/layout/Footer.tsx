@@ -144,8 +144,8 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo, Devise et Coordonnées */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-3">
+          <div className="space-y-6 flex flex-col items-center text-center">
+            <div className="flex flex-col items-center space-y-2">
               <img 
                 src={logoAje} 
                 alt="Logo AJE"
@@ -157,14 +157,14 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 w-full">
               <h4 className="font-bold text-sm text-white">Coordonnées</h4>
               {loading ? (
                 <div className="flex justify-center py-4">
                   <Loader2 className="h-4 w-4 animate-spin" />
                 </div>
               ) : (
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm text-left inline-block">
                   <div className="flex items-start space-x-2">
                     <MapPin className="h-4 w-4 mt-0.5 opacity-75 flex-shrink-0" />
                     <div>
