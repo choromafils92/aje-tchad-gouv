@@ -6,7 +6,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logoAje from "@/assets/logo-arrondi-vf.png";
-import carteTchad from "@/assets/carte-tchad.png";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -144,7 +143,7 @@ const Footer = () => {
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Logo, Devise et Carte du Tchad */}
+          {/* Logo et Devise */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <img 
@@ -156,15 +155,6 @@ const Footer = () => {
                 <h3 className="font-bold text-sm text-white">{t("header.title")}</h3>
                 <p className="text-xs opacity-90">{devise}</p>
               </div>
-            </div>
-            
-            <h4 className="font-bold text-base text-white pt-2">République du Tchad</h4>
-            <div className="relative h-80 w-full">
-              <img 
-                src={carteTchad} 
-                alt="Carte du Tchad"
-                className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-opacity"
-              />
             </div>
           </div>
 

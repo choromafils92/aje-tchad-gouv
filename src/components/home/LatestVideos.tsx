@@ -86,13 +86,16 @@ const LatestVideos = () => {
             <Card key={item.id} className="group hover:shadow-lg transition-all duration-500">
               <CardHeader className="p-0">
                 <div className="relative aspect-video bg-muted rounded-t-lg overflow-hidden">
-                  {item.videos[0]?.endsWith('.mp4') || item.videos[0]?.endsWith('.webm') ? (
+                  {item.videos[0]?.endsWith('.mp4') || item.videos[0]?.endsWith('.webm') || item.videos[0]?.endsWith('.ogg') || item.videos[0]?.includes('supabase.co/storage') ? (
                     <video
-                      src={item.videos[0]}
                       controls
                       className="w-full h-full object-cover"
-                      poster=""
+                      preload="metadata"
+                      crossOrigin="anonymous"
                     >
+                      <source src={item.videos[0]} type="video/mp4" />
+                      <source src={item.videos[0]} type="video/webm" />
+                      <source src={item.videos[0]} type="video/ogg" />
                       Votre navigateur ne supporte pas la lecture de vidéos.
                     </video>
                   ) : (

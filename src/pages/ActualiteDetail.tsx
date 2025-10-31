@@ -252,8 +252,16 @@ const ActualiteDetail = () => {
                   <h3 className="text-xl font-semibold text-primary mb-4">Vidéos</h3>
                   <div className="space-y-4">
                     {actualite.videos.map((video, index) => (
-                      <video key={index} controls className="w-full rounded-lg">
-                        <source src={video} />
+                      <video 
+                        key={index} 
+                        controls 
+                        className="w-full rounded-lg"
+                        preload="metadata"
+                        crossOrigin="anonymous"
+                      >
+                        <source src={video} type="video/mp4" />
+                        <source src={video} type="video/webm" />
+                        <source src={video} type="video/ogg" />
                         Votre navigateur ne supporte pas la lecture de vidéos.
                       </video>
                     ))}

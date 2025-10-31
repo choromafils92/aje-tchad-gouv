@@ -265,12 +265,16 @@ const Actualites = () => {
                             
                             {hasVideo && (
                               <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                                {actu.videos![0]?.endsWith('.mp4') || actu.videos![0]?.endsWith('.webm') ? (
+                                {actu.videos![0]?.endsWith('.mp4') || actu.videos![0]?.endsWith('.webm') || actu.videos![0]?.endsWith('.ogg') || actu.videos![0]?.includes('supabase.co/storage') ? (
                                   <video
-                                    src={actu.videos![0]}
                                     controls
                                     className="w-full h-full object-cover"
+                                    preload="metadata"
+                                    crossOrigin="anonymous"
                                   >
+                                    <source src={actu.videos![0]} type="video/mp4" />
+                                    <source src={actu.videos![0]} type="video/webm" />
+                                    <source src={actu.videos![0]} type="video/ogg" />
                                     Votre navigateur ne supporte pas la lecture de vidéos.
                                   </video>
                                 ) : (
