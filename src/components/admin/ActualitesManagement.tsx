@@ -150,25 +150,52 @@ const ActualitesManagement = () => {
     setUploadingVideos(true);
     try {
       const uploadedUrls: string[] = [];
-      for (const file of Array.from(e.target.files)) {
-        const url = await handleFileUpload(file, 'videos');
-        uploadedUrls.push(url);
+      const files = Array.from(e.target.files);
+      
+      // Vérifier la taille des fichiers (limite à 50MB)
+      const maxSize = 50 * 1024 * 1024; // 50MB en bytes
+      for (const file of files) {
+        if (file.size > maxSize) {
+          toast({
+            title: 'Fichier trop volumineux',
+            description: `${file.name} dépasse la limite de 50MB.`,
+            variant: 'destructive',
+          });
+          continue;
+        }
+        
+        try {
+          const url = await handleFileUpload(file, 'videos');
+          uploadedUrls.push(url);
+          toast({
+            title: 'Vidéo uploadée',
+            description: `${file.name} a été uploadée avec succès.`,
+          });
+        } catch (error) {
+          console.error(`Error uploading ${file.name}:`, error);
+          toast({
+            title: 'Erreur d\'upload',
+            description: `Impossible d'uploader ${file.name}. Vérifiez que le bucket storage est configuré.`,
+            variant: 'destructive',
+          });
+        }
       }
-      setVideos([...videos, ...uploadedUrls]);
-      setEnableVideos(true); // Activer automatiquement les vidéos
-      toast({
-        title: 'Vidéos uploadées',
-        description: `${uploadedUrls.length} vidéo(s) ajoutée(s) avec succès.`,
-      });
+      
+      if (uploadedUrls.length > 0) {
+        setVideos([...videos, ...uploadedUrls]);
+        setEnableVideos(true);
+      }
     } catch (error) {
       console.error('Error uploading videos:', error);
       toast({
         title: 'Erreur',
-        description: 'Impossible d\'uploader les vidéos.',
+        description: 'Impossible d\'uploader les vidéos. Vérifiez votre connexion et la configuration du storage.',
         variant: 'destructive',
       });
     } finally {
       setUploadingVideos(false);
+      // Réinitialiser l'input file
+      e.target.value = '';
     }
   };
 
@@ -575,7 +602,7 @@ const ActualitesManagement = () => {
                               const input = e.currentTarget;
                               if (input.value.trim()) {
                                 setVideos([...videos, input.value.trim()]);
-                                setEnableVideos(true); // Activer automatiquement les vidéos
+                                setEnableVideos(true);
                                 input.value = '';
                                 toast({
                                   title: 'URL ajoutée',
@@ -592,7 +619,7 @@ const ActualitesManagement = () => {
                             const input = document.getElementById('video-url') as HTMLInputElement;
                             if (input && input.value.trim()) {
                               setVideos([...videos, input.value.trim()]);
-                              setEnableVideos(true); // Activer automatiquement les vidéos
+                              setEnableVideos(true);
                               input.value = '';
                               toast({
                                 title: 'URL ajoutée',
@@ -610,14 +637,31 @@ const ActualitesManagement = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label>Ou uploader un fichier vidéo</Label>
-                      <Input
-                        type="file"
-                        accept="video/*"
-                        multiple
-                        onChange={handleVideosUpload}
-                        disabled={uploadingVideos}
-                      />
+                      <Label htmlFor="video-file">Ou uploader un fichier vidéo local</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="video-file"
+                          type="file"
+                          accept="video/mp4,video/webm,video/ogg"
+                          onChange={handleVideosUpload}
+                          disabled={uploadingVideos}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={uploadingVideos}
+                          onClick={() => {
+                            const input = document.getElementById('video-file') as HTMLInputElement;
+                            input?.click();
+                          }}
+                        >
+                          {uploadingVideos ? 'Upload...' : 'Parcourir'}
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Fichiers acceptés : .mp4, .webm, .ogg (max 50MB recommandé)
+                      </p>
                     </div>
                     
                     {videos.length > 0 && (
