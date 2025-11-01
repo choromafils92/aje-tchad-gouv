@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logoAje from "@/assets/logo-arrondi-vf.png";
+import carteTchad from "@/assets/carte-tchad-coloree.png";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -142,9 +143,9 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Logo, Devise et Coordonnées */}
-          <div className="space-y-6 flex flex-col items-center text-center">
+          <div className="space-y-4 flex flex-col items-center text-center">
             <div className="flex flex-col items-center space-y-2">
               <img 
                 src={logoAje} 
@@ -157,7 +158,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="space-y-4 w-full">
+            <div className="space-y-3 w-full">
               <h4 className="font-bold text-sm text-white">Coordonnées</h4>
               {loading ? (
                 <div className="flex justify-center py-4">
@@ -182,6 +183,16 @@ const Footer = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* République du Tchad */}
+          <div className="space-y-4 flex flex-col items-center text-center">
+            <h4 className="font-bold text-sm text-white">République du Tchad</h4>
+            <img 
+              src={carteTchad} 
+              alt="Carte du Tchad"
+              className="w-32 h-auto object-contain"
+            />
           </div>
 
           {/* Quick Links */}

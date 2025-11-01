@@ -251,20 +251,55 @@ const ActualiteDetail = () => {
                 <CardContent className="pt-6">
                   <h3 className="text-xl font-semibold text-primary mb-4">Vidéos</h3>
                   <div className="space-y-4">
-                    {actualite.videos.map((video, index) => (
-                      <video 
-                        key={index} 
-                        controls 
-                        className="w-full rounded-lg"
-                        preload="metadata"
-                        crossOrigin="anonymous"
-                      >
-                        <source src={video} type="video/mp4" />
-                        <source src={video} type="video/webm" />
-                        <source src={video} type="video/ogg" />
-                        Votre navigateur ne supporte pas la lecture de vidéos.
-                      </video>
-                    ))}
+                    {actualite.videos.map((video, index) => {
+                      // Détecte si c'est une URL externe ou un fichier local
+                      const isYouTube = video.includes('youtube.com') || video.includes('youtu.be');
+                      const isVimeo = video.includes('vimeo.com');
+                      const isFacebook = video.includes('facebook.com') || video.includes('fb.watch');
+                      const isExternalEmbed = isYouTube || isVimeo || isFacebook;
+
+                      if (isExternalEmbed) {
+                        let embedUrl = video;
+                        
+                        if (isYouTube) {
+                          const videoId = video.includes('youtu.be') 
+                            ? video.split('youtu.be/')[1]?.split('?')[0]
+                            : video.split('v=')[1]?.split('&')[0];
+                          embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                        } else if (isVimeo) {
+                          const videoId = video.split('vimeo.com/')[1]?.split('?')[0];
+                          embedUrl = `https://player.vimeo.com/video/${videoId}`;
+                        } else if (isFacebook) {
+                          embedUrl = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(video)}&show_text=0`;
+                        }
+
+                        return (
+                          <iframe
+                            key={index}
+                            src={embedUrl}
+                            className="w-full aspect-video rounded-lg"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        );
+                      }
+
+                      // Fichier vidéo local/direct
+                      return (
+                        <video 
+                          key={index} 
+                          controls 
+                          className="w-full rounded-lg"
+                          preload="metadata"
+                        >
+                          <source src={video} type="video/mp4" />
+                          <source src={video} type="video/webm" />
+                          <source src={video} type="video/ogg" />
+                          Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>

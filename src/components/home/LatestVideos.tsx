@@ -47,6 +47,14 @@ const LatestVideos = () => {
     fetchVideos();
   }, []);
 
+  const isExternalVideo = (url: string): boolean => {
+    return url.includes('youtube.com') || 
+           url.includes('youtu.be') || 
+           url.includes('vimeo.com') || 
+           url.includes('facebook.com') || 
+           url.includes('fb.watch');
+  };
+
   const getVideoEmbedUrl = (url: string) => {
     // Convert various video URL formats to embed URLs
     if (url.includes("youtube.com/watch")) {
@@ -86,12 +94,11 @@ const LatestVideos = () => {
             <Card key={item.id} className="group hover:shadow-lg transition-all duration-500">
               <CardHeader className="p-0">
                 <div className="relative aspect-video bg-muted rounded-t-lg overflow-hidden">
-                  {item.videos[0]?.endsWith('.mp4') || item.videos[0]?.endsWith('.webm') || item.videos[0]?.endsWith('.ogg') || item.videos[0]?.includes('supabase.co/storage') ? (
+                  {!isExternalVideo(item.videos[0]) ? (
                     <video
                       controls
                       className="w-full h-full object-cover"
                       preload="metadata"
-                      crossOrigin="anonymous"
                     >
                       <source src={item.videos[0]} type="video/mp4" />
                       <source src={item.videos[0]} type="video/webm" />
