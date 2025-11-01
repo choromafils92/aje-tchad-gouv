@@ -2,38 +2,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, HelpCircle, Send, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const QuickAccess = () => {
+  const { t } = useLanguage();
+  
   const quickLinks = [
     {
       icon: BookOpen,
-      title: "Textes fondamentaux",
-      description: "Consultez les lois, décrets et conventions qui régissent l'action de l'AJE",
-      action: "Consulter",
+      title: t("home.quickAccess.textes.title"),
+      description: t("home.quickAccess.textes.description"),
+      action: t("home.quickAccess.textes.action"),
       link: "/textes",
       color: "bg-primary/10 text-primary"
     },
     {
       icon: Download,
-      title: "Modèles de saisine",
-      description: "Téléchargez les formulaires types pour vos demandes d'avis juridique",
-      action: "Télécharger",
+      title: t("home.quickAccess.modeles.title"),
+      description: t("home.quickAccess.modeles.description"),
+      action: t("home.quickAccess.modeles.action"),
       link: "/modeles",
       color: "bg-accent/10 text-accent"
     },
     {
       icon: HelpCircle,
-      title: "FAQ Juridique",
-      description: "Trouvez rapidement les réponses aux questions les plus fréquentes",
-      action: "Parcourir",
+      title: t("home.quickAccess.faq.title"),
+      description: t("home.quickAccess.faq.description"),
+      action: t("home.quickAccess.faq.action"),
       link: "/textes/faq",
       color: "bg-secondary/50 text-foreground"
     },
     {
       icon: Send,
-      title: "Demande d'avis",
-      description: "Soumettez votre demande d'avis juridique (réservé aux administrations)",
-      action: "Demander",
+      title: t("home.quickAccess.demande.title"),
+      description: t("home.quickAccess.demande.description"),
+      action: t("home.quickAccess.demande.action"),
       link: "/services/demande-avis",
       color: "bg-primary/10 text-primary"
     }
@@ -44,10 +47,10 @@ const QuickAccess = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-            Accès rapide
+            {t("home.quickAccess.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trouvez rapidement les ressources et services dont vous avez besoin
+            {t("home.quickAccess.subtitle")}
           </p>
         </div>
 
@@ -89,10 +92,10 @@ const QuickAccess = () => {
         <div className="mt-16 p-8 bg-secondary rounded-lg">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-primary mb-3">
-              Comment l'AJE intervient-elle ?
+              {t("home.quickAccess.workflow.title")}
             </h3>
             <p className="text-muted-foreground">
-              Schéma simplifié du processus d'intervention de l'Agence Judiciaire de l'État
+              {t("home.quickAccess.workflow.subtitle")}
             </p>
           </div>
 
@@ -101,8 +104,8 @@ const QuickAccess = () => {
               <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
                 1
               </div>
-              <h4 className="font-semibold text-primary">Administration</h4>
-              <p className="text-sm text-muted-foreground">Saisit l'AJE</p>
+              <h4 className="font-semibold text-primary">{t("home.quickAccess.workflow.step1")}</h4>
+              <p className="text-sm text-muted-foreground">{t("home.quickAccess.workflow.step1desc")}</p>
             </div>
 
             <ArrowRight className="h-6 w-6 text-accent rotate-90 lg:rotate-0" />
@@ -111,8 +114,8 @@ const QuickAccess = () => {
               <div className="w-12 h-12 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold">
                 2
               </div>
-              <h4 className="font-semibold text-primary">AJE</h4>
-              <p className="text-sm text-muted-foreground">Analyse et conseille</p>
+              <h4 className="font-semibold text-primary">{t("home.quickAccess.workflow.step2")}</h4>
+              <p className="text-sm text-muted-foreground">{t("home.quickAccess.workflow.step2desc")}</p>
             </div>
 
             <ArrowRight className="h-6 w-6 text-accent rotate-90 lg:rotate-0" />
@@ -121,8 +124,8 @@ const QuickAccess = () => {
               <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
                 3
               </div>
-              <h4 className="font-semibold text-primary">Juridiction</h4>
-              <p className="text-sm text-muted-foreground">Rend sa décision</p>
+              <h4 className="font-semibold text-primary">{t("home.quickAccess.workflow.step3")}</h4>
+              <p className="text-sm text-muted-foreground">{t("home.quickAccess.workflow.step3desc")}</p>
             </div>
 
             <ArrowRight className="h-6 w-6 text-accent rotate-90 lg:rotate-0" />
@@ -131,8 +134,8 @@ const QuickAccess = () => {
               <div className="w-12 h-12 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold">
                 4
               </div>
-              <h4 className="font-semibold text-primary">Exécution</h4>
-              <p className="text-sm text-muted-foreground">Suivi et mise en œuvre</p>
+              <h4 className="font-semibold text-primary">{t("home.quickAccess.workflow.step4")}</h4>
+              <p className="text-sm text-muted-foreground">{t("home.quickAccess.workflow.step4desc")}</p>
             </div>
           </div>
         </div>

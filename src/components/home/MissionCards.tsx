@@ -3,29 +3,31 @@ import { Button } from "@/components/ui/button";
 import { Scale, Users, FileText, ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const MissionCards = () => {
   const { ref, isVisible } = useScrollAnimation();
+  const { t } = useLanguage();
   
   const missions = [
     {
       icon: Scale,
-      title: "Représentation juridique et judiciaire",
-      description: "Plaider pour l'État, en demande comme en défense, devant juridictions nationales, internationales et arbitrales.",
+      title: t("home.missions.representation.title"),
+      description: t("home.missions.representation.description"),
       link: "/missions#representation",
       color: "text-accent"
     },
     {
       icon: Users,
-      title: "Conseil et assistance juridique",
-      description: "Avis juridiques, prévention des litiges, sécurisation des contrats et conventions publiques.",
+      title: t("home.missions.conseil.title"),
+      description: t("home.missions.conseil.description"),
       link: "/missions#conseil",
       color: "text-primary"
     },
     {
       icon: FileText,
-      title: "Recouvrement de créance contentieuse",
-      description: "Assurer le recouvrement effectif des créances de l'État par des actions contentieuses et suivi rigoureux des procédures d'exécution.",
+      title: t("home.missions.contentieux.title"),
+      description: t("home.missions.contentieux.description"),
       link: "/missions#contentieux",
       color: "text-accent"
     }
@@ -38,10 +40,10 @@ const MissionCards = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-            Nos missions principales
+            {t("home.missions.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            L'AJE exerce ses responsabilités à travers les domaines d'intervention complémentaires pour servir l'État et ses administrations.
+            {t("home.missions.subtitle")}
           </p>
         </div>
 
@@ -76,7 +78,7 @@ const MissionCards = () => {
                     asChild
                   >
                     <Link to={mission.link}>
-                      En savoir plus
+                      {t("home.missions.learnMore")}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
@@ -89,7 +91,7 @@ const MissionCards = () => {
         <div className="text-center mt-12">
           <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
             <Link to="/missions">
-              Découvrir toutes nos missions
+              {t("home.missions.discoverAll")}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

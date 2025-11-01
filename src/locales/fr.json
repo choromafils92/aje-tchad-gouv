@@ -58,5 +58,61 @@
     "download": "Télécharger",
     "upload": "Téléverser",
     "back": "Retour"
+  },
+  "home": {
+    "missions": {
+      "title": "Nos missions principales",
+      "subtitle": "L'AJE exerce ses responsabilités à travers les domaines d'intervention complémentaires pour servir l'État et ses administrations.",
+      "representation": {
+        "title": "Représentation juridique et judiciaire",
+        "description": "Plaider pour l'État, en demande comme en défense, devant juridictions nationales, internationales et arbitrales."
+      },
+      "conseil": {
+        "title": "Conseil et assistance juridique",
+        "description": "Avis juridiques, prévention des litiges, sécurisation des contrats et conventions publiques."
+      },
+      "contentieux": {
+        "title": "Recouvrement de créance contentieuse",
+        "description": "Assurer le recouvrement effectif des créances de l'État par des actions contentieuses et suivi rigoureux des procédures d'exécution."
+      },
+      "learnMore": "En savoir plus",
+      "discoverAll": "Découvrir toutes nos missions"
+    },
+    "quickAccess": {
+      "title": "Accès rapide",
+      "subtitle": "Trouvez rapidement les ressources et services dont vous avez besoin",
+      "textes": {
+        "title": "Textes fondamentaux",
+        "description": "Consultez les lois, décrets et conventions qui régissent l'action de l'AJE",
+        "action": "Consulter"
+      },
+      "modeles": {
+        "title": "Modèles de saisine",
+        "description": "Téléchargez les formulaires types pour vos demandes d'avis juridique",
+        "action": "Télécharger"
+      },
+      "faq": {
+        "title": "FAQ Juridique",
+        "description": "Trouvez rapidement les réponses aux questions les plus fréquentes",
+        "action": "Parcourir"
+      },
+      "demande": {
+        "title": "Demande d'avis",
+        "description": "Soumettez votre demande d'avis juridique (réservé aux administrations)",
+        "action": "Demander"
+      },
+      "workflow": {
+        "title": "Comment l'AJE intervient-elle ?",
+        "subtitle": "Schéma simplifié du processus d'intervention de l'Agence Judiciaire de l'État",
+        "step1": "Administration",
+        "step1desc": "Saisit l'AJE",
+        "step2": "AJE",
+        "step2desc": "Analyse et conseille",
+        "step3": "Juridiction",
+        "step3desc": "Rend sa décision",
+        "step4": "Exécution",
+        "step4desc": "Suivi et mise en œuvre"
+      }
+    }
   }
 }
