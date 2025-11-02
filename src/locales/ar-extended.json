@@ -1,0 +1,273 @@
+{
+  "services": {
+    "title": "الخدمات القانونية",
+    "subtitle": "الوكالة القضائية للدولة في خدمة الإدارات",
+    "description": "تقدم الوكالة القضائية مجموعة من الخدمات القانونية لمساعدة الإدارات العامة.",
+    "forAdmins": "للإدارات فقط",
+    "domains": {
+      "title": "مجالات التدخل",
+      "contracts": "العقود والصفقات العامة",
+      "administrative": "القانون الإداري",
+      "civil": "القانون المدني",
+      "commercial": "القانون التجاري",
+      "penal": "القانون الجنائي",
+      "international": "القانون الدولي"
+    },
+    "requestTypes": {
+      "title": "أنواع الطلبات",
+      "opinion": "رأي قانوني",
+      "consultation": "استشارة",
+      "representation": "تمثيل قضائي",
+      "contract": "مراجعة عقد"
+    },
+    "urgency": {
+      "normal": "عادي",
+      "urgent": "عاجل",
+      "veryUrgent": "عاجل جدا"
+    },
+    "form": {
+      "title": "طلب خدمة قانونية",
+      "administration": "الإدارة",
+      "administrationPlaceholder": "اسم إدارتك",
+      "contact": "جهة الاتصال",
+      "contactPlaceholder": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "domain": "المجال",
+      "requestType": "نوع الطلب",
+      "urgency": "مستوى الإلحاح",
+      "subject": "الموضوع",
+      "description": "الوصف التفصيلي",
+      "descriptionPlaceholder": "صف طلبك بالتفصيل...",
+      "attachments": "مرفقات",
+      "submit": "إرسال الطلب",
+      "success": "تم إرسال طلبك بنجاح",
+      "error": "خطأ في إرسال الطلب"
+    }
+  },
+  "missions": {
+    "title": "مهامنا ودورنا",
+    "subtitle": "الوكالة القضائية للدولة: حماية مصالح الدولة",
+    "description": "تم إنشاء الوكالة القضائية للدولة بموجب المرسوم رقم XXX، وهي مؤسسة عامة ذات طابع إداري مكلفة بالدفاع عن مصالح الدولة.",
+    "keyFigures": {
+      "title": "الأرقام الرئيسية",
+      "cases": "قضية نشطة",
+      "administrations": "إدارة مخدومة",
+      "opinions": "رأي قانوني سنويا",
+      "recovery": "معدل الاسترداد"
+    },
+    "intervention": {
+      "title": "عملية التدخل",
+      "subtitle": "كيف نخدم الإدارات",
+      "step1": {
+        "title": "الإحالة",
+        "description": "تحيل الإدارة القضية إلى الوكالة"
+      },
+      "step2": {
+        "title": "التحليل",
+        "description": "فريقنا يدرس الملف بعناية"
+      },
+      "step3": {
+        "title": "المشورة أو العمل",
+        "description": "نقدم المشورة أو نمثل الدولة"
+      },
+      "step4": {
+        "title": "المتابعة",
+        "description": "نضمن تنفيذ القرارات"
+      }
+    },
+    "domains": {
+      "title": "مجالات الاختصاص",
+      "litigation": "المنازعات الإدارية والمدنية",
+      "contracts": "العقود والصفقات العامة",
+      "recovery": "استرداد الديون",
+      "international": "التحكيم الدولي",
+      "consultation": "المشورة القانونية",
+      "training": "التدريب القانوني"
+    },
+    "cta": {
+      "title": "تحتاج إلى مساعدة قانونية؟",
+      "description": "فرقنا في خدمتكم",
+      "button": "طلب مشورة"
+    }
+  },
+  "texts": {
+    "title": "النصوص والمراجع",
+    "subtitle": "الإطار القانوني للوكالة القضائية",
+    "fundamental": {
+      "title": "النصوص الأساسية",
+      "description": "القوانين والمراسيم المنشئة",
+      "creationDecree": "مرسوم الإنشاء",
+      "organicLaw": "القانون الأساسي",
+      "conventions": "الاتفاقيات الدولية"
+    },
+    "models": {
+      "title": "النماذج والاستمارات",
+      "description": "وثائق للتحميل",
+      "opinionRequest": "نموذج طلب رأي",
+      "litigationNotice": "نموذج إشعار منازعة",
+      "contractReview": "نموذج مراجعة عقد"
+    },
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "description": "أجوبة على أسئلتكم",
+      "search": "ابحث في الأسئلة الشائعة...",
+      "categories": "الفئات",
+      "all": "الكل"
+    },
+    "search": "ابحث في النصوص...",
+    "download": "تحميل",
+    "preview": "معاينة",
+    "category": "الفئة"
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "نحن في خدمتكم",
+    "info": {
+      "title": "معلومات الاتصال",
+      "address": "العنوان",
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "hours": "أوقات العمل",
+      "hoursValue": "الاثنين - الجمعة: 8:00 - 16:00"
+    },
+    "appointment": {
+      "title": "حجز موعد",
+      "description": "احجز موعدا مع مستشارينا",
+      "button": "حجز موعد"
+    },
+    "form": {
+      "title": "نموذج الاتصال",
+      "name": "الاسم الكامل",
+      "namePlaceholder": "اسمك",
+      "organization": "المؤسسة",
+      "organizationPlaceholder": "اسم مؤسستك",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "بريدك الإلكتروني",
+      "phone": "الهاتف",
+      "phonePlaceholder": "رقم هاتفك",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "موضوع رسالتك",
+      "message": "الرسالة",
+      "messagePlaceholder": "رسالتك...",
+      "submit": "إرسال",
+      "success": "تم إرسال رسالتك بنجاح",
+      "error": "خطأ في إرسال الرسالة"
+    }
+  },
+  "careers": {
+    "title": "الوظائف",
+    "subtitle": "انضم إلى فريقنا",
+    "description": "تبحث الوكالة القضائية باستمرار عن مواهب جديدة لتعزيز فرقها.",
+    "whyJoin": {
+      "title": "لماذا تنضم إلينا؟",
+      "reason1": "بيئة عمل محفزة",
+      "reason2": "مهام تحدي",
+      "reason3": "تطوير مهني",
+      "reason4": "فريق خبير"
+    },
+    "openPositions": {
+      "title": "الوظائف المفتوحة",
+      "noPositions": "لا توجد وظائف متاحة حاليا",
+      "reference": "المرجع",
+      "contract": "نوع العقد",
+      "experience": "الخبرة المطلوبة",
+      "deadline": "آخر أجل للتقديم",
+      "apply": "تقديم الطلب",
+      "details": "التفاصيل"
+    },
+    "spontaneous": {
+      "title": "طلب تلقائي",
+      "description": "أرسل طلبك التلقائي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "position": "الوظيفة المرغوبة",
+      "cv": "السيرة الذاتية",
+      "coverLetter": "خطاب التحفيز",
+      "submit": "إرسال الطلب",
+      "success": "تم إرسال طلبك بنجاح",
+      "error": "خطأ في إرسال الطلب"
+    }
+  },
+  "media": {
+    "title": "وسائل الإعلام",
+    "subtitle": "المركز الإعلامي للوكالة القضائية",
+    "press": {
+      "title": "الصحافة",
+      "contacts": "جهات اتصال الصحافة",
+      "releases": "البيانات الصحفية",
+      "kit": "المجموعة الصحفية",
+      "accreditation": "الاعتماد"
+    },
+    "gallery": {
+      "title": "معرض الصور",
+      "photos": "الصور",
+      "videos": "الفيديوهات"
+    },
+    "newsletter": {
+      "title": "النشرة الإخبارية",
+      "subscribe": "اشترك في نشرتنا",
+      "email": "بريدك الإلكتروني",
+      "button": "اشترك"
+    },
+    "download": "تحميل",
+    "view": "عرض"
+  },
+  "news": {
+    "title": "الأخبار",
+    "subtitle": "آخر أخبار الوكالة القضائية",
+    "all": "جميع الأخبار",
+    "urgent": "عاجل",
+    "search": "ابحث في الأخبار...",
+    "filterByCategory": "تصفية حسب الفئة",
+    "categories": {
+      "all": "الكل",
+      "communique": "بيان",
+      "event": "حدث",
+      "workshop": "ورشة عمل",
+      "training": "تدريب",
+      "recruitment": "توظيف",
+      "press": "بيان صحفي"
+    },
+    "readMore": "اقرأ المزيد",
+    "publishedOn": "نُشر في",
+    "noNews": "لا توجد أخبار متاحة",
+    "backToNews": "العودة إلى الأخبار"
+  },
+  "accessibility": {
+    "title": "إمكانية الوصول",
+    "subtitle": "التزامنا بإمكانية الوصول الرقمي",
+    "loading": "جاري التحميل...",
+    "notAvailable": "المحتوى غير متوفر مؤقتا"
+  },
+  "privacy": {
+    "title": "البيانات الشخصية",
+    "subtitle": "سياسة حماية البيانات الشخصية",
+    "loading": "جاري التحميل...",
+    "notAvailable": "المحتوى غير متوفر مؤقتا"
+  },
+  "litigation": {
+    "title": "المنازعات",
+    "subtitle": "إدارة منازعات الدولة",
+    "description": "تتولى الوكالة القضائية إدارة جميع منازعات الدولة وتضمن الدفاع عن مصالحها.",
+    "report": {
+      "title": "الإبلاغ عن منازعة",
+      "button": "الإبلاغ عن منازعة"
+    },
+    "domains": {
+      "title": "مجالات المنازعات",
+      "administrative": "المنازعات الإدارية",
+      "civil": "المنازعات المدنية",
+      "commercial": "المنازعات التجارية",
+      "fiscal": "المنازعات الضريبية"
+    },
+    "statistics": {
+      "title": "الإحصائيات",
+      "pending": "قيد النظر",
+      "resolved": "محلولة",
+      "successRate": "معدل النجاح"
+    }
+  }
+}

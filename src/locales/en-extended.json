@@ -1,0 +1,273 @@
+{
+  "services": {
+    "title": "Legal Services",
+    "subtitle": "The State Judicial Agency at the service of administrations",
+    "description": "The State Judicial Agency offers a range of legal services to assist public administrations.",
+    "forAdmins": "For administrations only",
+    "domains": {
+      "title": "Areas of intervention",
+      "contracts": "Contracts and public procurement",
+      "administrative": "Administrative law",
+      "civil": "Civil law",
+      "commercial": "Commercial law",
+      "penal": "Criminal law",
+      "international": "International law"
+    },
+    "requestTypes": {
+      "title": "Types of requests",
+      "opinion": "Legal opinion",
+      "consultation": "Consultation",
+      "representation": "Judicial representation",
+      "contract": "Contract review"
+    },
+    "urgency": {
+      "normal": "Normal",
+      "urgent": "Urgent",
+      "veryUrgent": "Very urgent"
+    },
+    "form": {
+      "title": "Legal service request",
+      "administration": "Administration",
+      "administrationPlaceholder": "Your administration name",
+      "contact": "Contact person",
+      "contactPlaceholder": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "domain": "Domain",
+      "requestType": "Request type",
+      "urgency": "Urgency level",
+      "subject": "Subject",
+      "description": "Detailed description",
+      "descriptionPlaceholder": "Describe your request in detail...",
+      "attachments": "Attachments",
+      "submit": "Submit request",
+      "success": "Your request has been sent successfully",
+      "error": "Error sending request"
+    }
+  },
+  "missions": {
+    "title": "Our Missions and Role",
+    "subtitle": "State Judicial Agency: Protecting State Interests",
+    "description": "The State Judicial Agency was created by Decree No. XXX. It is a public institution of an administrative nature responsible for defending the interests of the State.",
+    "keyFigures": {
+      "title": "Key Figures",
+      "cases": "Active cases",
+      "administrations": "Administrations served",
+      "opinions": "Legal opinions per year",
+      "recovery": "Recovery rate"
+    },
+    "intervention": {
+      "title": "Intervention Process",
+      "subtitle": "How we serve administrations",
+      "step1": {
+        "title": "Referral",
+        "description": "Administration refers the case to the Agency"
+      },
+      "step2": {
+        "title": "Analysis",
+        "description": "Our team carefully studies the file"
+      },
+      "step3": {
+        "title": "Advice or Action",
+        "description": "We provide advice or represent the State"
+      },
+      "step4": {
+        "title": "Follow-up",
+        "description": "We ensure implementation of decisions"
+      }
+    },
+    "domains": {
+      "title": "Areas of Expertise",
+      "litigation": "Administrative and civil litigation",
+      "contracts": "Contracts and public procurement",
+      "recovery": "Debt recovery",
+      "international": "International arbitration",
+      "consultation": "Legal consultation",
+      "training": "Legal training"
+    },
+    "cta": {
+      "title": "Need legal assistance?",
+      "description": "Our teams are at your service",
+      "button": "Request advice"
+    }
+  },
+  "texts": {
+    "title": "Texts and References",
+    "subtitle": "Legal framework of the State Judicial Agency",
+    "fundamental": {
+      "title": "Fundamental texts",
+      "description": "Founding laws and decrees",
+      "creationDecree": "Creation decree",
+      "organicLaw": "Organic law",
+      "conventions": "International conventions"
+    },
+    "models": {
+      "title": "Templates and forms",
+      "description": "Documents for download",
+      "opinionRequest": "Opinion request template",
+      "litigationNotice": "Litigation notice template",
+      "contractReview": "Contract review template"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Answers to your questions",
+      "search": "Search in FAQs...",
+      "categories": "Categories",
+      "all": "All"
+    },
+    "search": "Search in texts...",
+    "download": "Download",
+    "preview": "Preview",
+    "category": "Category"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are at your service",
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Opening hours",
+      "hoursValue": "Monday - Friday: 8:00 AM - 4:00 PM"
+    },
+    "appointment": {
+      "title": "Book an appointment",
+      "description": "Schedule an appointment with our advisors",
+      "button": "Book appointment"
+    },
+    "form": {
+      "title": "Contact form",
+      "name": "Full name",
+      "namePlaceholder": "Your name",
+      "organization": "Organization",
+      "organizationPlaceholder": "Your organization name",
+      "email": "Email",
+      "emailPlaceholder": "Your email",
+      "phone": "Phone",
+      "phonePlaceholder": "Your phone number",
+      "subject": "Subject",
+      "subjectPlaceholder": "Subject of your message",
+      "message": "Message",
+      "messagePlaceholder": "Your message...",
+      "submit": "Send",
+      "success": "Your message has been sent successfully",
+      "error": "Error sending message"
+    }
+  },
+  "careers": {
+    "title": "Careers",
+    "subtitle": "Join our team",
+    "description": "The State Judicial Agency is constantly looking for new talent to strengthen its teams.",
+    "whyJoin": {
+      "title": "Why join us?",
+      "reason1": "Stimulating work environment",
+      "reason2": "Challenging missions",
+      "reason3": "Professional development",
+      "reason4": "Expert team"
+    },
+    "openPositions": {
+      "title": "Open positions",
+      "noPositions": "No positions currently available",
+      "reference": "Reference",
+      "contract": "Contract type",
+      "experience": "Required experience",
+      "deadline": "Application deadline",
+      "apply": "Apply",
+      "details": "Details"
+    },
+    "spontaneous": {
+      "title": "Spontaneous application",
+      "description": "Send your spontaneous application",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "position": "Desired position",
+      "cv": "Resume",
+      "coverLetter": "Cover letter",
+      "submit": "Submit application",
+      "success": "Your application has been sent successfully",
+      "error": "Error sending application"
+    }
+  },
+  "media": {
+    "title": "Media",
+    "subtitle": "State Judicial Agency Media Center",
+    "press": {
+      "title": "Press",
+      "contacts": "Press contacts",
+      "releases": "Press releases",
+      "kit": "Press kit",
+      "accreditation": "Accreditation"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "photos": "Photos",
+      "videos": "Videos"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "subscribe": "Subscribe to our newsletter",
+      "email": "Your email",
+      "button": "Subscribe"
+    },
+    "download": "Download",
+    "view": "View"
+  },
+  "news": {
+    "title": "News",
+    "subtitle": "Latest news from the State Judicial Agency",
+    "all": "All news",
+    "urgent": "Urgent",
+    "search": "Search news...",
+    "filterByCategory": "Filter by category",
+    "categories": {
+      "all": "All",
+      "communique": "Communiqué",
+      "event": "Event",
+      "workshop": "Workshop",
+      "training": "Training",
+      "recruitment": "Recruitment",
+      "press": "Press release"
+    },
+    "readMore": "Read more",
+    "publishedOn": "Published on",
+    "noNews": "No news available",
+    "backToNews": "Back to news"
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "subtitle": "Our commitment to digital accessibility",
+    "loading": "Loading...",
+    "notAvailable": "Content temporarily unavailable"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "Personal data protection policy",
+    "loading": "Loading...",
+    "notAvailable": "Content temporarily unavailable"
+  },
+  "litigation": {
+    "title": "Litigation",
+    "subtitle": "State litigation management",
+    "description": "The State Judicial Agency manages all State litigation and ensures the defense of its interests.",
+    "report": {
+      "title": "Report litigation",
+      "button": "Report litigation"
+    },
+    "domains": {
+      "title": "Litigation areas",
+      "administrative": "Administrative litigation",
+      "civil": "Civil litigation",
+      "commercial": "Commercial litigation",
+      "fiscal": "Tax litigation"
+    },
+    "statistics": {
+      "title": "Statistics",
+      "pending": "Pending",
+      "resolved": "Resolved",
+      "successRate": "Success rate"
+    }
+  }
+}

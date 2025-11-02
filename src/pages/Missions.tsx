@@ -4,9 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Scale, Users, FileText, ArrowRight, CheckCircle, Shield, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Missions = () => {
-  console.log("Page Missions chargée - Routes disponibles: /services/demande-avis et /textes/faq");
+  const { t } = useLanguage();
   
   const missions = [
     {
@@ -69,14 +70,14 @@ const Missions = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 text-white drop-shadow-lg">
-                Missions et Rôle de l'AJE
+                {t("missions.title")}
               </h1>
               <p className="text-xl lg:text-2xl font-bold mb-8 text-white drop-shadow-md">
-                Trois domaines d'expertise au service de l'État du Tchad
+                {t("missions.subtitle")}
               </p>
               <div className="flex items-center justify-center space-x-2 text-lg">
                 <Shield className="h-6 w-6" />
-                <span>Conseiller-Defendre-Proteger</span>
+                <span>{t("hero.tagline")}</span>
               </div>
             </div>
           </div>
@@ -108,8 +109,7 @@ const Missions = () => {
                 Nos missions en détail
               </h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                L'AJE exerce ses responsabilités à travers trois domaines d'intervention complémentaires, 
-                chacun contribuant à la protection des intérêts de l'État et au respect de l'État de droit.
+                {t("missions.description")}
               </p>
             </div>
 
@@ -156,10 +156,10 @@ const Missions = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-                Comment l'AJE intervient-elle ?
+                {t("missions.intervention.title")}
               </h2>
               <p className="text-lg text-muted-foreground">
-                Processus d'intervention de l'Agence Judiciaire de l'État
+                {t("missions.intervention.subtitle")}
               </p>
             </div>
 
@@ -169,9 +169,9 @@ const Missions = () => {
                   <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
                     1
                   </div>
-                  <h3 className="font-semibold text-primary mb-2">Saisine</h3>
+                  <h3 className="font-semibold text-primary mb-2">{t("missions.intervention.step1.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    L'administration saisit l'AJE pour un avis ou une représentation
+                    {t("missions.intervention.step1.description")}
                   </p>
                 </Card>
 
@@ -181,9 +181,9 @@ const Missions = () => {
                   <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
                     2
                   </div>
-                  <h3 className="font-semibold text-primary mb-2">Analyse</h3>
+                  <h3 className="font-semibold text-primary mb-2">{t("missions.intervention.step2.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Étude juridique approfondie et préparation de la stratégie
+                    {t("missions.intervention.step2.description")}
                   </p>
                 </Card>
 
@@ -193,9 +193,9 @@ const Missions = () => {
                   <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
                     3
                   </div>
-                  <h3 className="font-semibold text-primary mb-2">Action</h3>
+                  <h3 className="font-semibold text-primary mb-2">{t("missions.intervention.step3.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Intervention devant les juridictions ou remise d'avis
+                    {t("missions.intervention.step3.description")}
                   </p>
                 </Card>
               </div>
@@ -205,9 +205,9 @@ const Missions = () => {
                   <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
                     4
                   </div>
-                  <h3 className="font-semibold text-primary mb-2">Suivi</h3>
+                  <h3 className="font-semibold text-primary mb-2">{t("missions.intervention.step4.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Monitoring des procédures et des décisions rendues
+                    {t("missions.intervention.step4.description")}
                   </p>
                 </Card>
 
@@ -230,16 +230,15 @@ const Missions = () => {
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-2xl mx-auto">
               <h2 className="text-3xl font-bold text-primary mb-4">
-                Besoin d'un avis juridique ?
+                {t("missions.cta.title")}
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
-                Les administrations publiques peuvent saisir l'AJE pour obtenir un conseil juridique 
-                ou une représentation dans leurs affaires contentieuses.
+                {t("missions.cta.description")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
                   <Link to="/services/demande-avis">
-                    Demander un avis juridique
+                    {t("missions.cta.button")}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
