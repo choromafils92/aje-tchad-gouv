@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminManagement from '@/components/admin/AdminManagement';
 import ActualitesManagement from '@/components/admin/ActualitesManagement';
+import AuditLogsManagement from '@/components/admin/AuditLogsManagement';
+import SecuritySettingsManagement from '@/components/admin/SecuritySettingsManagement';
 import DocumentsManagement from '@/components/admin/DocumentsManagement';
 import FAQManagement from '@/components/admin/FAQManagement';
 import TextesJuridiquesManagement from '@/components/admin/TextesJuridiquesManagement';
@@ -77,8 +79,10 @@ const Admin = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="notifications" className="w-full">
+        <Tabs defaultValue="security" className="w-full">
           <TabsList className="flex flex-wrap justify-start h-auto gap-1">
+            <TabsTrigger value="security">🔒 Sécurité</TabsTrigger>
+            <TabsTrigger value="audit">📋 Audit</TabsTrigger>
             <TabsTrigger value="notifications">🔔 Notifications</TabsTrigger>
             <TabsTrigger value="actualites">Actualités</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -104,6 +108,14 @@ const Admin = () => {
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
             <TabsTrigger value="admins">Admins</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="security" className="mt-6">
+            <SecuritySettingsManagement />
+          </TabsContent>
+          
+          <TabsContent value="audit" className="mt-6">
+            <AuditLogsManagement />
+          </TabsContent>
           
           <TabsContent value="notifications" className="mt-6">
             <NotificationsManagement />

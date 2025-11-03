@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { checkRateLimit, getRateLimitHeaders } from "../_shared/rate-limit.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -124,6 +125,31 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { type, email, nom, reference, data }: EmailRequest = await req.json();
+    
+    // Rate limiting check
+    const clientIp = req.headers.get('x-forwarded-for') || 'unknown';
+    const rateLimitResult = await checkRateLimit(clientIp, {
+      maxRequests: 5,
+      windowMinutes: 60,
+      endpoint: 'send-confirmation-email'
+    });
+
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Trop de requêtes. Veuillez réessayer plus tard.',
+          resetAt: rateLimitResult.resetAt 
+        }),
+        { 
+          status: 429,
+          headers: { 
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+            ...getRateLimitHeaders(rateLimitResult)
+          }
+        }
+      );
+    }
 
     // Log sans PII - uniquement les infos opérationnelles
     const referenceId = reference.split('/').pop() || reference;
@@ -140,7 +166,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     return new Response(JSON.stringify(emailResponse), {
       status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
     });
   } catch (error: any) {
     console.error("Error sending email (no PII logged)");
