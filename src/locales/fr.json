@@ -114,5 +114,49 @@
         "step4desc": "Suivi et mise en œuvre"
       }
     }
+  },
+  "admin": {
+    "analytics": {
+      "title": "Statistiques du site",
+      "subtitle": "Vue d'ensemble des activités",
+      "downloadReport": "Télécharger le rapport",
+      "errorLoading": "Impossible de charger les statistiques",
+      "totalContacts": "Total Contacts",
+      "legalRequests": "Demandes d'Avis",
+      "litigationReports": "Signalements Contentieux",
+      "consultations": "Consultations",
+      "documents": "Documents",
+      "legalTexts": "Textes Juridiques",
+      "news": "Actualités",
+      "jobApplications": "Candidatures",
+      "newsletter": "Newsletter",
+      "last7Days": "ces 7 derniers jours",
+      "totalReported": "Total signalés",
+      "legalConsultations": "Consultations juridiques",
+      "available": "Disponibles",
+      "published": "Publiés",
+      "articles": "Articles publiés",
+      "openPositions": "postes ouverts",
+      "subscribers": "Abonnés",
+      "monthlyActivity": "Activité mensuelle",
+      "last6Months": "6 derniers mois",
+      "activityDistribution": "Répartition de l'activité",
+      "byCategory": "Par catégorie",
+      "monthlyComparison": "Comparaison mensuelle",
+      "contactsVsRequests": "Contacts vs Demandes",
+      "contentTrend": "Tendance du contenu",
+      "newsPublications": "Publications d'actualités",
+      "recentActivity": "Activité récente",
+      "newContacts": "nouveaux contacts",
+      "newRequests": "nouvelles demandes",
+      "contentLibrary": "Bibliothèque de contenu",
+      "newsArticles": "articles",
+      "jurisprudences": "jurisprudences",
+      "faqItems": "FAQ",
+      "recommendations": "Recommandations",
+      "recommendation1": "Répondre rapidement aux demandes en attente",
+      "recommendation2": "Publier régulièrement du contenu juridique",
+      "recommendation3": "Suivre les indicateurs de performance mensuellement"
+    }
   }
 }

@@ -114,5 +114,49 @@
         "step4desc": "Follow-up and implementation"
       }
     }
+  },
+  "admin": {
+    "analytics": {
+      "title": "Site Statistics",
+      "subtitle": "Overview of activities",
+      "downloadReport": "Download report",
+      "errorLoading": "Unable to load statistics",
+      "totalContacts": "Total Contacts",
+      "legalRequests": "Legal Requests",
+      "litigationReports": "Litigation Reports",
+      "consultations": "Consultations",
+      "documents": "Documents",
+      "legalTexts": "Legal Texts",
+      "news": "News",
+      "jobApplications": "Job Applications",
+      "newsletter": "Newsletter",
+      "last7Days": "last 7 days",
+      "totalReported": "Total reported",
+      "legalConsultations": "Legal consultations",
+      "available": "Available",
+      "published": "Published",
+      "articles": "Articles published",
+      "openPositions": "open positions",
+      "subscribers": "Subscribers",
+      "monthlyActivity": "Monthly activity",
+      "last6Months": "Last 6 months",
+      "activityDistribution": "Activity distribution",
+      "byCategory": "By category",
+      "monthlyComparison": "Monthly comparison",
+      "contactsVsRequests": "Contacts vs Requests",
+      "contentTrend": "Content trend",
+      "newsPublications": "News publications",
+      "recentActivity": "Recent activity",
+      "newContacts": "new contacts",
+      "newRequests": "new requests",
+      "contentLibrary": "Content library",
+      "newsArticles": "articles",
+      "jurisprudences": "jurisprudences",
+      "faqItems": "FAQ",
+      "recommendations": "Recommendations",
+      "recommendation1": "Respond quickly to pending requests",
+      "recommendation2": "Regularly publish legal content",
+      "recommendation3": "Monitor performance indicators monthly"
+    }
   }
 }

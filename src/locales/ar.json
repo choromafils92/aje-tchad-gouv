@@ -114,5 +114,49 @@
         "step4desc": "المتابعة والتطبيق"
       }
     }
+  },
+  "admin": {
+    "analytics": {
+      "title": "إحصائيات الموقع",
+      "subtitle": "نظرة عامة على الأنشطة",
+      "downloadReport": "تحميل التقرير",
+      "errorLoading": "تعذر تحميل الإحصائيات",
+      "totalContacts": "إجمالي الاتصالات",
+      "legalRequests": "طلبات الآراء",
+      "litigationReports": "تقارير المنازعات",
+      "consultations": "الاستشارات",
+      "documents": "المستندات",
+      "legalTexts": "النصوص القانونية",
+      "news": "الأخبار",
+      "jobApplications": "الطلبات الوظيفية",
+      "newsletter": "النشرة الإخبارية",
+      "last7Days": "آخر 7 أيام",
+      "totalReported": "إجمالي المبلغ عنها",
+      "legalConsultations": "الاستشارات القانونية",
+      "available": "متاح",
+      "published": "منشورة",
+      "articles": "مقالات منشورة",
+      "openPositions": "وظائف شاغرة",
+      "subscribers": "المشتركون",
+      "monthlyActivity": "النشاط الشهري",
+      "last6Months": "آخر 6 أشهر",
+      "activityDistribution": "توزيع النشاط",
+      "byCategory": "حسب الفئة",
+      "monthlyComparison": "المقارنة الشهرية",
+      "contactsVsRequests": "الاتصالات مقابل الطلبات",
+      "contentTrend": "اتجاه المحتوى",
+      "newsPublications": "نشر الأخبار",
+      "recentActivity": "النشاط الأخير",
+      "newContacts": "اتصالات جديدة",
+      "newRequests": "طلبات جديدة",
+      "contentLibrary": "مكتبة المحتوى",
+      "newsArticles": "مقالات",
+      "jurisprudences": "السوابق القضائية",
+      "faqItems": "الأسئلة الشائعة",
+      "recommendations": "التوصيات",
+      "recommendation1": "الرد بسرعة على الطلبات المعلقة",
+      "recommendation2": "نشر المحتوى القانوني بانتظام",
+      "recommendation3": "متابعة مؤشرات الأداء شهريًا"
+    }
   }
 }
