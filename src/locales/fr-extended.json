@@ -189,6 +189,35 @@
     "urgent": "Urgent",
     "loading": "Chargement..."
   },
+  "stats": {
+    "title": "Notre Performance en Chiffres",
+    "subtitle": "Des résultats concrets au service de l'État tchadien",
+    "thisYear": "cette année",
+    "updated": "* Données mises à jour en temps réel | Source: AJE Tchad"
+  },
+  "subdirectors": {
+    "title": "Nos Sous-Directeurs",
+    "subtitle": "L'équipe de direction de l'Agence Judiciaire de l'État"
+  },
+  "newsletter": {
+    "title": "Restez informé des dernières actualités",
+    "description": "Abonnez-vous à notre newsletter ou suivez notre flux RSS pour ne manquer aucune publication officielle",
+    "subscribeBtn": "S'abonner à la newsletter",
+    "rssBtn": "Flux RSS"
+  },
+  "latestNews": {
+    "title": "Dernières publications",
+    "subtitle": "Consultez nos derniers communiqués, notes et annonces officielles",
+    "allNews": "Toutes les actualités",
+    "readMore": "Lire plus"
+  },
+  "latestVideos": {
+    "title": "Dernières vidéos",
+    "subtitle": "Retrouvez nos dernières publications vidéo",
+    "video": "Vidéo",
+    "urgent": "🔴 Urgent",
+    "notSupported": "Votre navigateur ne supporte pas la lecture de vidéos."
+  },
   "accessibility": {
     "title": "Accessibilité",
     "loading": "Chargement...",

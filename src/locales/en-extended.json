@@ -236,6 +236,35 @@
     "noNews": "No news available",
     "backToNews": "Back to news"
   },
+  "stats": {
+    "title": "Our Performance in Numbers",
+    "subtitle": "Concrete results serving the Chadian State",
+    "thisYear": "this year",
+    "updated": "* Real-time updated data | Source: AJE Chad"
+  },
+  "subdirectors": {
+    "title": "Our Deputy Directors",
+    "subtitle": "The management team of the State Judicial Agency"
+  },
+  "newsletter": {
+    "title": "Stay informed about the latest news",
+    "description": "Subscribe to our newsletter or follow our RSS feed to not miss any official publication",
+    "subscribeBtn": "Subscribe to newsletter",
+    "rssBtn": "RSS Feed"
+  },
+  "latestNews": {
+    "title": "Latest publications",
+    "subtitle": "Check our latest press releases, public notes and official announcements",
+    "allNews": "All news",
+    "readMore": "Read more"
+  },
+  "latestVideos": {
+    "title": "Latest videos",
+    "subtitle": "Watch our latest video publications",
+    "video": "Video",
+    "urgent": "🔴 Urgent",
+    "notSupported": "Your browser does not support video playback."
+  },
   "accessibility": {
     "title": "Accessibility",
     "subtitle": "Our commitment to digital accessibility",

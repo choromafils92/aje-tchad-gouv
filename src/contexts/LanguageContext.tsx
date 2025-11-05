@@ -2,6 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import translationsFr from '@/locales/fr.json';
 import translationsAr from '@/locales/ar.json';
 import translationsEn from '@/locales/en.json';
+import translationsFrExtended from '@/locales/fr-extended.json';
+import translationsArExtended from '@/locales/ar-extended.json';
+import translationsEnExtended from '@/locales/en-extended.json';
 
 type Language = 'fr' | 'ar' | 'en';
 
@@ -39,9 +42,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   const t = (key: string): string => {
     const translationsMap = {
-      fr: translationsFr,
-      ar: translationsAr,
-      en: translationsEn,
+      fr: { ...translationsFr, ...translationsFrExtended },
+      ar: { ...translationsAr, ...translationsArExtended },
+      en: { ...translationsEn, ...translationsEnExtended },
     };
     
     const translations = translationsMap[language];

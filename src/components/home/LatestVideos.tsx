@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Calendar, PlayCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Actualite {
   id: string;
@@ -15,6 +16,7 @@ interface Actualite {
 }
 
 const LatestVideos = () => {
+  const { t } = useLanguage();
   const [videos, setVideos] = useState<Actualite[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -82,10 +84,10 @@ const LatestVideos = () => {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-            Dernières vidéos
+            {t("latestVideos.title")}
           </h2>
           <p className="text-lg text-muted-foreground">
-            Retrouvez nos dernières publications vidéo
+            {t("latestVideos.subtitle")}
           </p>
         </div>
 
@@ -103,7 +105,7 @@ const LatestVideos = () => {
                       <source src={item.videos[0]} type="video/mp4" />
                       <source src={item.videos[0]} type="video/webm" />
                       <source src={item.videos[0]} type="video/ogg" />
-                      Votre navigateur ne supporte pas la lecture de vidéos.
+                      {t("latestVideos.notSupported")}
                     </video>
                   ) : (
                     <iframe
@@ -116,7 +118,7 @@ const LatestVideos = () => {
                   )}
                   {item.urgent && (
                     <Badge variant="destructive" className="absolute top-2 right-2">
-                      🔴 Urgent
+                      {t("latestVideos.urgent")}
                     </Badge>
                   )}
                 </div>
@@ -125,7 +127,7 @@ const LatestVideos = () => {
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className="text-xs">
                     <PlayCircle className="h-3 w-3 mr-1" />
-                    Vidéo
+                    {t("latestVideos.video")}
                   </Badge>
                   <Badge variant="secondary" className="text-xs">
                     {item.type}

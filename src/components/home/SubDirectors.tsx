@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SubDirector {
   name: string;
@@ -12,6 +13,7 @@ interface SubDirector {
 }
 
 const SubDirectors = () => {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [subdirectors, setSubdirectors] = useState<SubDirector[]>([]);
 
@@ -54,10 +56,10 @@ const SubDirectors = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Nos Sous-Directeurs
+            {t("subdirectors.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            L'équipe de direction de l'Agence Judiciaire de l'État
+            {t("subdirectors.subtitle")}
           </p>
         </div>
 

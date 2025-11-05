@@ -3,9 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Scale, Users, TrendingUp, Award, CheckCircle, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const StatsDashboard = () => {
   const { ref, isVisible } = useScrollAnimation();
+  const { t } = useLanguage();
   const [stats, setStats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -59,10 +61,10 @@ const StatsDashboard = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-primary mb-4">
-            Notre Performance en Chiffres
+            {t("stats.title")}
           </h2>
           <p className="text-xl text-muted-foreground">
-            Des résultats concrets au service de l'État tchadien
+            {t("stats.subtitle")}
           </p>
         </div>
 
@@ -88,7 +90,7 @@ const StatsDashboard = () => {
                   <p className="text-sm text-green-600 font-semibold flex items-center gap-1">
                     <TrendingUp className="h-4 w-4" />
                     {stat.evolution}
-                    <span className="text-muted-foreground font-normal ml-1">cette année</span>
+                    <span className="text-muted-foreground font-normal ml-1">{t("stats.thisYear")}</span>
                   </p>
                 </CardContent>
               </Card>
@@ -98,7 +100,7 @@ const StatsDashboard = () => {
 
         <div className="mt-12 text-center">
           <p className="text-muted-foreground">
-            * Données mises à jour en temps réel | Source: AJE Tchad
+            {t("stats.updated")}
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { Calendar, ArrowRight, FileText, AlertTriangle, Megaphone } from "lucide
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Actualite {
   id: string;
@@ -18,6 +19,7 @@ interface Actualite {
 
 const LatestNews = () => {
   const { ref, isVisible } = useScrollAnimation();
+  const { t } = useLanguage();
   const [news, setNews] = useState<Actualite[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,15 +78,15 @@ const LatestNews = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-              Dernières publications
+              {t("latestNews.title")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Consultez nos derniers communiqués, notes et annonces officielles
+              {t("latestNews.subtitle")}
             </p>
           </div>
           <Button variant="outline" size="lg" asChild className="hidden md:flex">
             <Link to="/actualites">
-              Toutes les actualités
+              {t("latestNews.allNews")}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
@@ -125,7 +127,7 @@ const LatestNews = () => {
                     </div>
                     <Button variant="ghost" size="sm" className="text-accent hover:text-accent-foreground hover:bg-accent" asChild>
                       <Link to={`/actualites/${item.id}`}>
-                        Lire plus
+                        {t("latestNews.readMore")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
