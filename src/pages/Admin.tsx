@@ -103,6 +103,10 @@ const Admin = () => {
             <TabsTrigger value="procedures-contentieux">Procédures Contentieux</TabsTrigger>
             <TabsTrigger value="stats-contentieux">Stats Contentieux</TabsTrigger>
             <TabsTrigger value="jurisprudences">Jurisprudences</TabsTrigger>
+            <TabsTrigger value="missions-principales">🎯 Missions Principales</TabsTrigger>
+            <TabsTrigger value="demandes">Demandes Avis</TabsTrigger>
+            <TabsTrigger value="contacts">Messages Contact</TabsTrigger>
+            <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
             <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
             <TabsTrigger value="analytics">Statistiques</TabsTrigger>
             <TabsTrigger value="parametres">Paramètres</TabsTrigger>
@@ -207,6 +211,22 @@ const Admin = () => {
 
           <TabsContent value="jurisprudences" className="mt-6">
             <JurisprudencesManagement />
+          </TabsContent>
+
+          <TabsContent value="missions-principales" className="mt-6">
+            <MissionsPrincipalesManagement />
+          </TabsContent>
+
+          <TabsContent value="demandes" className="mt-6">
+            <DemandesAvisManagement />
+          </TabsContent>
+
+          <TabsContent value="contacts" className="mt-6">
+            <ContactsManagement />
+          </TabsContent>
+
+          <TabsContent value="candidatures" className="mt-6">
+            <JobApplicationsManagement />
           </TabsContent>
 
           <TabsContent value="newsletter" className="mt-6">

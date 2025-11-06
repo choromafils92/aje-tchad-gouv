@@ -1,64 +1,82 @@
+import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scale, Users, FileText, ArrowRight, CheckCircle, Shield, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import DOMPurify from "dompurify";
+import type { MissionPrincipale } from "@/types/missions";
+
+interface MissionData {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  content: string;
+  details: string[];
+  icon_name: string;
+  color_class: string;
+  ordre: number;
+}
+
+const iconMap: Record<string, any> = {
+  Scale,
+  Users,
+  FileText
+};
 
 const Missions = () => {
-  const { t } = useLanguage();
-  
-  const missions = [
-    {
-      id: "representation",
-      icon: Scale,
-      title: "Représentation juridique de l'État",
-      description: "Défendre et représenter l'État du Tchad devant toutes les juridictions nationales et internationales",
-      details: [
-        "Représentation devant les juridictions civiles, commerciales, administratives et pénales",
-        "Défense des intérêts de l'État dans les procédures d'arbitrage national et international",
-        "Intervention dans les contentieux constitutionnels et électoraux",
-        "Représentation devant les cours et tribunaux internationaux",
-        "Assistance dans les procédures d'exécution des décisions de justice"
-      ],
-      color: "bg-primary/10 text-primary"
-    },
-    {
-      id: "conseil",
-      icon: Users,
-      title: "Conseil aux administrations publiques",
-      description: "Fournir un appui juridique aux ministères et organismes publics pour prévenir les litiges",
-      details: [
-        "Avis juridiques sur les projets de lois, décrets et arrêtés",
-        "Assistance dans la rédaction et la négociation des contrats publics",
-        "Conseil en matière de marchés publics et de partenariats public-privé",
-        "Formation juridique des agents des administrations publiques",
-        "Veille juridique et diffusion de l'information juridique"
-      ],
-      color: "bg-accent/10 text-accent"
-    },
-    {
-      id: "contentieux",
-      icon: FileText,
-      title: "Gestion centralisée du contentieux",
-      description: "Coordonner et superviser l'ensemble du contentieux impliquant l'État du Tchad",
-      details: [
-        "Centralisation de tous les dossiers contentieux de l'État",
-        "Suivi statistique et analyse des tendances contentieuses",
-        "Coordination avec les avocats externes et les conseils juridiques",
-        "Gestion des procédures d'urgence et des référés",
-        "Exécution et suivi des décisions de justice favorables à l'État"
-      ],
-      color: "bg-secondary/50 text-foreground"
+  const { t, language } = useLanguage();
+  const [missions, setMissions] = useState<MissionData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMissions();
+  }, [language]);
+
+  const fetchMissions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('missions_principales' as any)
+        .select('*')
+        .eq('published', true)
+        .order('ordre');
+
+      if (error) throw error;
+
+      // Map data based on current language
+      const missionsData = (data || []) as any[];
+      const mappedMissions = missionsData.map((mission: any) => ({
+        id: mission.code,
+        code: mission.code,
+        title: mission[`title_${language}`] || mission.title_fr,
+        description: mission[`description_${language}`] || mission.description_fr,
+        content: mission[`content_${language}`] || mission.content_fr,
+        details: mission[`details_${language}`] || mission.details_fr || [],
+        icon_name: mission.icon_name,
+        color_class: mission.color_class,
+        ordre: mission.ordre
+      }));
+
+      setMissions(mappedMissions);
+    } catch (error: any) {
+      console.error('Error fetching missions:', error);
+      toast.error(language === 'fr' ? 'Erreur lors du chargement des missions' : 
+                  language === 'ar' ? 'خطأ في تحميل المهام' : 'Error loading missions');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const keyFigures = [
-    { number: "2500+", label: "Dossiers traités annuellement" },
-    { number: "85%", label: "Taux de réussite en contentieux" },
-    { number: "150+", label: "Administrations conseillées" },
-    { number: "24h", label: "Délai moyen de réponse urgente" }
+    { number: "2500+", label: t("missions.casesProcessed") },
+    { number: "85%", label: t("missions.successRate") },
+    { number: "150+", label: t("missions.administrations") },
+    { number: "24h", label: t("missions.responseTime") }
   ];
 
   return (
@@ -106,48 +124,76 @@ const Missions = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-                Nos missions en détail
+                {t("missions.detailsTitle")}
               </h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                {t("missions.description")}
+                {t("missions.detailsSubtitle")}
               </p>
             </div>
 
-            <div className="space-y-12">
-              {missions.map((mission, index) => {
-                const IconComponent = mission.icon;
-                return (
-                  <Card key={mission.id} id={mission.id} className="overflow-hidden">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                      <div className={`${mission.color} p-8 flex flex-col justify-center`}>
-                        <div className="text-center lg:text-left">
-                          <IconComponent className="h-16 w-16 mx-auto lg:mx-0 mb-4" />
-                          <h3 className="text-2xl font-bold mb-4">
-                            {mission.title}
-                          </h3>
-                          <p className="text-lg opacity-90">
-                            {mission.description}
-                          </p>
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">{language === 'fr' ? 'Chargement...' : language === 'ar' ? 'جار التحميل...' : 'Loading...'}</p>
+              </div>
+            ) : missions.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">
+                  {language === 'fr' ? 'Aucune mission disponible' : language === 'ar' ? 'لا توجد مهام متاحة' : 'No missions available'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-12">
+                {missions.map((mission) => {
+                  const IconComponent = iconMap[mission.icon_name] || Scale;
+                  return (
+                    <Card key={mission.id} id={mission.id} className="overflow-hidden">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                        <div className={`${mission.color_class} p-8 flex flex-col justify-center`}>
+                          <div className="text-center lg:text-left">
+                            <IconComponent className="h-16 w-16 mx-auto lg:mx-0 mb-4" />
+                            <h3 className="text-2xl font-bold mb-4">
+                              {mission.title}
+                            </h3>
+                            <p className="text-lg opacity-90">
+                              {mission.description}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="lg:col-span-2 p-8">
+                          {/* HTML Content */}
+                          {mission.content && (
+                            <div 
+                              className="prose prose-sm max-w-none mb-6"
+                              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(mission.content) }}
+                              dir={language === 'ar' ? 'rtl' : 'ltr'}
+                            />
+                          )}
+                          
+                          {/* Intervention Details */}
+                          {mission.details && mission.details.length > 0 && (
+                            <>
+                              <h4 className="text-xl font-semibold text-primary mb-6">
+                                {language === 'fr' ? "Domaines d'intervention" :
+                                 language === 'ar' ? 'مجالات التدخل' :
+                                 'Areas of Intervention'}
+                              </h4>
+                              <div className="space-y-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                                {mission.details.map((detail, detailIndex) => (
+                                  <div key={detailIndex} className="flex items-start space-x-3">
+                                    <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
+                                    <span className="text-foreground/80">{detail}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
-                      <div className="lg:col-span-2 p-8">
-                        <h4 className="text-xl font-semibold text-primary mb-6">
-                          Domaines d'intervention
-                        </h4>
-                        <div className="space-y-4">
-                          {mission.details.map((detail, detailIndex) => (
-                            <div key={detailIndex} className="flex items-start space-x-3">
-                              <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
-                              <span className="text-foreground/80">{detail}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
 
@@ -245,7 +291,7 @@ const Missions = () => {
                 <Button size="lg" variant="outline" asChild>
                   <Link to="/textes/faq">
                     <BookOpen className="mr-2 h-5 w-5" />
-                    Consulter la FAQ
+                    {t("missions.consultFAQ")}
                   </Link>
                 </Button>
               </div>

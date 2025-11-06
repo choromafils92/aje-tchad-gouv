@@ -89,7 +89,10 @@
       "title": "Need legal assistance?",
       "description": "Our teams are at your service",
       "button": "Request advice"
-    }
+    },
+    "consultFAQ": "Consult FAQ",
+    "detailsTitle": "Our missions in detail",
+    "detailsSubtitle": "The AJE exercises its responsibilities through complementary areas of intervention to serve the State and its administrations."
   },
   "texts": {
     "title": "Texts and References",
