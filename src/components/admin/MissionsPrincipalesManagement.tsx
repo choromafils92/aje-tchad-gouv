@@ -38,7 +38,7 @@ const MissionsPrincipalesManagement = () => {
   const fetchMissions = async () => {
     try {
       const { data, error } = await supabase
-        .from('missions_principales' as any)
+        .from('aje_missions_content' as any)
         .select('*')
         .order('ordre');
 
@@ -105,14 +105,14 @@ const MissionsPrincipalesManagement = () => {
 
       if (isCreating) {
         const { error } = await supabase
-          .from('missions_principales' as any)
+          .from('aje_missions_content' as any)
           .insert([{ ...missionData, created_by: (await supabase.auth.getUser()).data.user?.id }]);
         
         if (error) throw error;
         toast.success("Mission créée avec succès");
       } else {
         const { error } = await supabase
-          .from('missions_principales' as any)
+          .from('aje_missions_content' as any)
           .update(missionData)
           .eq('id', editingMission.id);
         
@@ -134,7 +134,7 @@ const MissionsPrincipalesManagement = () => {
 
     try {
       const { error } = await supabase
-        .from('missions_principales' as any)
+        .from('aje_missions_content' as any)
         .delete()
         .eq('id', id);
 
