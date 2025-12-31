@@ -33,6 +33,7 @@ import DomainesContentieuxManagement from '@/components/admin/DomainesContentieu
 import StatistiquesContentieuxManagement from '@/components/admin/StatistiquesContentieuxManagement';
 import ProceduresContentieuxManagement from '@/components/admin/ProceduresContentieuxManagement';
 import JurisprudencesManagement from '@/components/admin/JurisprudencesManagement';
+import MissionsPrincipalesManagement from '@/components/admin/MissionsPrincipalesManagement';
 import { NotificationsManagement } from '@/components/admin/NotificationsManagement';
 import NewsletterManagement from '@/components/admin/NewsletterManagement';
 import { LogOut } from 'lucide-react';

@@ -85,7 +85,19 @@ const ActualitesManagement = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setActualites(data || []);
+      
+      // Map data to handle pdfs type conversion
+      const mappedData: Actualite[] = (data || []).map(item => ({
+        ...item,
+        pdfs: Array.isArray(item.pdfs) ? (item.pdfs as unknown as PdfWithDescription[]) : [],
+        photos: item.photos || [],
+        videos: item.videos || [],
+        urgent: item.urgent || false,
+        published: item.published || false,
+        content: item.content || null
+      }));
+      
+      setActualites(mappedData);
     } catch (error) {
       console.error('Error fetching actualites:', error);
       toast({
@@ -287,7 +299,7 @@ const ActualitesManagement = () => {
         ...formData,
         photos: enablePhotos ? photos : [],
         videos: enableVideos ? videos : [],
-        pdfs: enablePdfs ? pdfs : [],
+        pdfs: enablePdfs ? JSON.parse(JSON.stringify(pdfs)) : [],
       };
 
       if (editingId) {
