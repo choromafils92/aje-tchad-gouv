@@ -62,6 +62,75 @@ export type Database = {
         }
         Relationships: []
       }
+      aje_missions_content: {
+        Row: {
+          code: string
+          color_class: string | null
+          content_ar: string
+          content_en: string
+          content_fr: string
+          created_at: string | null
+          description_ar: string
+          description_en: string
+          description_fr: string
+          details_ar: Json | null
+          details_en: Json | null
+          details_fr: Json | null
+          icon_name: string | null
+          id: string
+          ordre: number
+          published: boolean | null
+          title_ar: string
+          title_en: string
+          title_fr: string
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          color_class?: string | null
+          content_ar: string
+          content_en: string
+          content_fr: string
+          created_at?: string | null
+          description_ar: string
+          description_en: string
+          description_fr: string
+          details_ar?: Json | null
+          details_en?: Json | null
+          details_fr?: Json | null
+          icon_name?: string | null
+          id?: string
+          ordre?: number
+          published?: boolean | null
+          title_ar: string
+          title_en: string
+          title_fr: string
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          color_class?: string | null
+          content_ar?: string
+          content_en?: string
+          content_fr?: string
+          created_at?: string | null
+          description_ar?: string
+          description_en?: string
+          description_fr?: string
+          details_ar?: Json | null
+          details_en?: Json | null
+          details_fr?: Json | null
+          icon_name?: string | null
+          id?: string
+          ordre?: number
+          published?: boolean | null
+          title_ar?: string
+          title_en?: string
+          title_fr?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
