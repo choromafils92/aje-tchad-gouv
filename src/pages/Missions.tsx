@@ -41,7 +41,7 @@ const Missions = () => {
   const fetchMissions = async () => {
     try {
       const { data, error } = await supabase
-        .from('missions_principales' as any)
+        .from('aje_missions_content' as any)
         .select('*')
         .eq('published', true)
         .order('ordre');
